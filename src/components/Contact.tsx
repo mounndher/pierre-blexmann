@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, CheckCircle2, ChevronDown, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, ChevronDown, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CONTACT, SITE } from "@/content/site";
 import { Reveal, Section } from "@/components/ui";
@@ -48,12 +48,36 @@ const fieldClass = (invalid: boolean) =>
     invalid ? "border-red-700/70" : "border-ink/25 hover:border-ink/50"
   }`;
 
+/**
+ * The site is fully static: nothing is sent to a server and no data is stored.
+ * Submitting opens the visitor's own mail client with a pre-filled message.
+ */
+function buildMailtoUrl(values: Fields): string {
+  const subject = `Demande de contact — ${values.sujet}`;
+  const lines = [
+    `Nom et prénom : ${values.nom}`,
+    `Adresse électronique : ${values.email}`,
+    values.telephone.trim() ? `Téléphone : ${values.telephone}` : "",
+    values.societe.trim() ? `Société : ${values.societe}` : "",
+    `Objet : ${values.sujet}`,
+    "",
+    "Situation :",
+    values.message,
+    "",
+    "— Message préparé depuis le site blexmann-avocats.fr",
+  ].filter(Boolean);
+
+  return `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+    lines.join("\n"),
+  )}`;
+}
+
 export default function Contact() {
   const [values, setValues] = useState<Fields>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
-  const [serverMessage, setServerMessage] = useState<string>("");
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [composedHref, setComposedHref] = useState<string>("");
 
   useEffect(() => {
     const onSelectSubject = (event: Event) => {
@@ -85,7 +109,7 @@ export default function Contact() {
     setErrors((prev) => ({ ...prev, [key]: err[key] }));
   };
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const found = validate(values);
     setErrors(found);
@@ -106,40 +130,12 @@ export default function Contact() {
       return;
     }
 
-    setStatus("sending");
-    setServerMessage("");
+    const href = buildMailtoUrl(values);
+    setComposedHref(href);
+    setStatus("success");
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      const data = (await res.json()) as { ok?: boolean; message?: string; errors?: Errors };
-
-      if (!res.ok) {
-        if (data.errors) setErrors(data.errors);
-        setStatus("error");
-        setServerMessage(
-          data.message ??
-            `Votre message n'a pas pu être transmis. Vous pouvez réessayer ou joindre le cabinet au ${SITE.phone}.`,
-        );
-        return;
-      }
-
-      setStatus("success");
-      setServerMessage(
-        data.message ??
-          "Après réception de votre demande, le cabinet en prend connaissance et vous indique les suites envisageables.",
-      );
-      setValues(EMPTY);
-      setTouched({});
-    } catch {
-      setStatus("error");
-      setServerMessage(
-        `Connexion impossible. Veuillez réessayer ultérieurement ou écrire directement à ${SITE.email}.`,
-      );
-    }
+    // Opens the visitor's mail client — nothing is transmitted to this site.
+    window.location.href = href;
   }
 
   const err = (key: keyof Fields) => (touched[key] ? errors[key] : undefined);
@@ -215,7 +211,7 @@ export default function Contact() {
 
               <div aria-live="polite" className="mt-5">
                 {status === "success" && (
-                  <p
+                  <div
                     role="status"
                     className="flex items-start gap-3 border border-navy/20 bg-ivory px-4 py-4 text-sm leading-relaxed text-navy"
                   >
@@ -225,14 +221,29 @@ export default function Contact() {
                       aria-hidden="true"
                       className="mt-0.5 shrink-0"
                     />
-                    <span>
-                      {serverMessage}
-                      <br />
-                      <span className="text-mute">
-                        Cet envoi ne crée pas automatiquement de relation avocat-client.
-                      </span>
-                    </span>
-                  </p>
+                    <div>
+                      <p>
+                        Votre logiciel de messagerie vient de s&apos;ouvrir avec votre message
+                        pré-rempli. Après réception, le cabinet en prend connaissance et vous indique
+                        les suites envisageables.
+                      </p>
+                      <p className="mt-2 text-mute">
+                        Rien ne s&apos;est ouvert ?{" "}
+                        <a href={composedHref} className="link-underline text-navy">
+                          Ouvrir le message dans ma messagerie
+                        </a>{" "}
+                        ou écrivez à{" "}
+                        <a href={`mailto:${SITE.email}`} className="link-underline text-navy">
+                          {SITE.email}
+                        </a>
+                        .
+                      </p>
+                      <p className="mt-2 text-mute">
+                        Aucune donnée n&apos;est enregistrée sur ce site&nbsp;; cet envoi ne crée pas
+                        automatiquement de relation avocat-client.
+                      </p>
+                    </div>
+                  </div>
                 )}
                 {status === "error" && (
                   <p
@@ -245,7 +256,9 @@ export default function Contact() {
                       aria-hidden="true"
                       className="mt-0.5 shrink-0"
                     />
-                    <span>{serverMessage}</span>
+                    <span>
+                      Merci de corriger les champs signalés avant de préparer votre message.
+                    </span>
                   </p>
                 )}
               </div>
@@ -450,30 +463,16 @@ export default function Contact() {
                 </p>
                 <button
                   type="submit"
-                  disabled={status === "sending"}
-                  className="eyebrow group inline-flex shrink-0 items-center justify-center gap-3 bg-navy px-7 py-4 text-ivory transition-colors duration-300 hover:bg-navytint disabled:cursor-not-allowed disabled:opacity-60"
+                  className="eyebrow group inline-flex shrink-0 items-center justify-center gap-3 bg-navy px-7 py-4 text-ivory transition-colors duration-300 hover:bg-navytint"
                 >
-                  {status === "sending" ? (
-                    <>
-                      <Loader2
-                        size={15}
-                        strokeWidth={1.75}
-                        aria-hidden="true"
-                        className="animate-spin"
-                      />
-                      Envoi en cours
-                    </>
-                  ) : (
-                    <>
-                      Envoyer ma demande
-                      <span
-                        aria-hidden="true"
-                        className="transition-transform duration-300 group-hover:translate-x-1"
-                      >
-                        →
-                      </span>
-                    </>
-                  )}
+                  <Mail size={15} strokeWidth={1.75} aria-hidden="true" />
+                  Préparer mon message
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
                 </button>
               </div>
             </form>

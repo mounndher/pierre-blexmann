@@ -1,13 +1,8 @@
-import { db } from "@/db";
-import { sql } from "drizzle-orm";
+/**
+ * Stateless healthcheck — the site is fully static and uses no database.
+ */
+export const dynamic = "force-static";
 
-export const dynamic = "force-dynamic";
-
-export async function GET() {
-  try {
-    await db.execute(sql`select 1`);
-    return Response.json({ ok: true });
-  } catch {
-    return Response.json({ ok: false }, { status: 500 });
-  }
+export function GET() {
+  return Response.json({ ok: true, mode: "static" });
 }

@@ -307,9 +307,9 @@ export const NEWS = {
 export const CONTACT = {
   eyebrow: "Contact",
   title: "Commençons par les faits.",
-  body: "Quelques lignes suffisent pour engager un premier échange : le contexte du différend, les parties concernées et vos éventuelles échéances procédurales. Après réception de votre demande, le cabinet en prend connaissance et vous indique les suites envisageables.",
+  body: "Quelques lignes suffisent pour engager un premier échange : le contexte du différend, les parties concernées et vos éventuelles échéances procédurales. Après réception de votre demande, le cabinet en prend connaissance et vous indique les suites envisageables. Vous pouvez également joindre directement le cabinet par téléphone ou par courriel.",
   formNote:
-    "L'envoi de ce formulaire ne crée pas, en soi, de relation avocat-client ; celle-ci ne peut être établie qu'après acceptation expresse du dossier par le cabinet. Les informations transmises sont traitées de manière confidentielle, conformément aux obligations déontologiques applicables et à la politique de confidentialité.",
+    "Ce formulaire fonctionne sans serveur : il prépare un courriel dans votre logiciel de messagerie et aucune donnée n'est enregistrée sur ce site. L'envoi ne crée pas, en soi, de relation avocat-client ; celle-ci suppose l'acceptation expresse du dossier par le cabinet.",
   subjects: CONTACT_SUBJECTS,
 } as const;
 
