@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function LegalArticle({
   title,
@@ -22,9 +21,8 @@ export default function LegalArticle({
     <>
       <Header />
       <main id="main" className="bg-ivory">
-        <article className="mx-auto w-full max-w-[92rem] px-5 pb-24 pt-10 sm:px-8 lg:px-12 lg:pb-32 lg:pt-14">
-          <Breadcrumbs items={[{ label: "Accueil", href: "/" }, { label: title }]} />
-          <p className="eyebrow mt-10 text-bronze">{eyebrow}</p>
+        <article className="mx-auto w-full max-w-[92rem] px-5 pb-24 pt-14 sm:px-8 lg:px-12 lg:pb-32 lg:pt-20">
+          <p className="eyebrow text-bronze">{eyebrow}</p>
           <h1 className="display-lg mt-6 max-w-[22ch] font-display text-navy">{title}</h1>
           <div aria-hidden="true" className="mt-8 h-px w-full max-w-[28rem] bg-gold" />
           <p className="eyebrow mt-6 text-mute">Mise à jour — {updated}</p>

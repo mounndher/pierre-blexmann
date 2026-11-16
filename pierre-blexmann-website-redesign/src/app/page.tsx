@@ -1,13 +1,12 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Expertises from "@/components/Expertises";
-import QuandFaireAppel from "@/components/QuandFaireAppel";
-import Approche from "@/components/Approche";
-import Cabinet from "@/components/Cabinet";
+import QuandConsulter from "@/components/QuandConsulter";
+import ApprochePourquoi from "@/components/ApprochePourquoi";
 import Actualites from "@/components/Actualites";
-import Conversion from "@/components/Conversion";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import { SITE } from "@/content/site";
 
 export default function HomePage() {
   return (
@@ -22,11 +21,9 @@ export default function HomePage() {
       <main id="main">
         <Hero />
         <Expertises />
-        <QuandFaireAppel />
-        <Approche />
-        <Cabinet />
+        <QuandConsulter />
+        <ApprochePourquoi />
         <Actualites />
-        <Conversion />
         <Contact />
       </main>
       <Footer />

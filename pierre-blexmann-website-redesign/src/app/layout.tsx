@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
 import { SITE } from "@/content/site";
-import MobileCtaBar from "@/components/MobileCtaBar";
+import StickyMobileBar from "@/components/StickyMobileBar";
+import LegacyAnchorRedirect from "@/components/LegacyAnchorRedirect";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -20,20 +21,29 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const TITLE = "Avocat contentieux des affaires Paris | Cabinet Blexmann";
+/**
+ * Canonical production domain. The vercel.app preview domain is marked
+ * `noindex` so it is never indexed in place of the production site.
+ */
+const PROD_HOST = "blexmann-avocats.fr";
+const IS_PREVIEW = process.env.VERCEL_URL?.endsWith("vercel.app") ?? false;
+
+/** Kept under 60 characters (659 px safe limit ≈ 60 chars). */
+const TITLE = "Avocat contentieux des affaires à Paris | Blexmann Avocats";
 const DESCRIPTION =
-  "Avocat en contentieux des affaires à Paris 16ᵉ : litiges commerciaux, conflits entre associés, responsabilité des dirigeants et procédures d'urgence.";
+  "Cabinet Blexmann Avocats, avocat au Barreau de Paris : litiges commerciaux, conflits entre associés, responsabilité des dirigeants, procédures d'urgence.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
     default: TITLE,
-    template: `%s | ${SITE.legalName}`,
+    template: `%s — ${SITE.legalName}`,
   },
   description: DESCRIPTION,
   applicationName: SITE.legalName,
   authors: [{ name: SITE.legalName }],
   alternates: { canonical: "/" },
+  // Meta keywords intentionally removed (not used by modern search engines).
   openGraph: {
     type: "website",
     locale: "fr_FR",
@@ -46,7 +56,7 @@ export const metadata: Metadata = {
         url: "/images/hero-facade.jpg",
         width: 1536,
         height: 1024,
-        alt: "Façade haussmannienne parisienne à Paris 16ᵉ — Cabinet Blexmann Avocats",
+        alt: "Façade haussmannienne à Paris 16ᵉ, près du 53 avenue Victor Hugo où exerce le Cabinet Blexmann Avocats",
       },
     ],
   },
@@ -57,9 +67,9 @@ export const metadata: Metadata = {
     images: ["/images/hero-facade.jpg"],
   },
   robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    index: !IS_PREVIEW,
+    follow: !IS_PREVIEW,
+    googleBot: { index: !IS_PREVIEW, follow: !IS_PREVIEW, "max-image-preview": "large" },
   },
 };
 
@@ -72,22 +82,28 @@ export const viewport: Viewport = {
 const legalServiceJsonLd = {
   "@context": "https://schema.org",
   "@type": "LegalService",
+  "@id": `${SITE.url}/#legalservice`,
   name: SITE.legalName,
-  alternateName: "Maître Pierre Blexmann, avocat au Barreau de Paris",
+  alternateName: `${SITE.wordmark} ${SITE.wordmarkSuffix}`,
   url: SITE.url,
   image: `${SITE.url}/images/hero-facade.jpg`,
   description: DESCRIPTION,
   foundingDate: String(SITE.founded),
-  areaServed: ["Paris", "Île-de-France", "France"],
+  areaServed: [
+    { "@type": "City", name: "Paris" },
+    { "@type": "AdministrativeArea", name: "Île-de-France" },
+    { "@type": "Country", name: "France" },
+  ],
   knowsAbout: [
     "Contentieux commercial et contractuel",
     "Conflits entre associés et actionnaires",
     "Responsabilité des dirigeants",
     "Contentieux post-acquisition",
-    "Rupture brutale des relations commerciales et concurrence déloyale",
-    "Procédures d'urgence",
-    "Contentieux à dimension internationale",
-    "Modes alternatifs de règlement des différends (négociation, médiation, conciliation, arbitrage)",
+    "Rupture brutale des relations commerciales",
+    "Concurrence déloyale",
+    "Procédures d'urgence et référés",
+    "Contentieux commercial international",
+    "Modes alternatifs de règlement des différends",
   ],
   address: {
     "@type": "PostalAddress",
@@ -98,11 +114,13 @@ const legalServiceJsonLd = {
   },
   telephone: SITE.phone,
   email: SITE.email,
+  /** [À CONFIRMER] TODO: date de serment et numéro de toque à valider par le cabinet. */
   founder: {
-    "@type": "Person",
+    "@type": "Attorney",
     name: "Pierre Blexmann",
     jobTitle: "Avocat au Barreau de Paris",
-    worksFor: { "@type": "Organization", name: SITE.legalName },
+    worksFor: { "@type": "LegalService", name: SITE.legalName },
+    url: `${SITE.url}/le-cabinet`,
   },
 };
 
@@ -118,9 +136,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <noscript>
           <style>{`[style*="opacity:0"]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
+        <LegacyAnchorRedirect />
         {children}
-        <MobileCtaBar />
+        <StickyMobileBar />
       </body>
     </html>
   );
 }
+
+export { IS_PREVIEW, PROD_HOST };
