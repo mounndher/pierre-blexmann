@@ -84,7 +84,7 @@ export default function Header() {
 
         <div className="flex items-center gap-3">
           <a
-            href="/contact"
+            href="/#contact"
             className="eyebrow hidden bg-navy px-5 py-3 text-ivory transition-colors duration-300 hover:bg-navytint sm:inline-block"
           >
             {CTA.primary}
@@ -111,7 +111,7 @@ export default function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="max-h-[80vh] overflow-y-auto border-t border-rule bg-ivory xl:hidden"
+            className="overflow-hidden border-t border-rule bg-ivory xl:hidden"
           >
             <nav aria-label="Navigation mobile" className="px-5 pb-8 pt-2 sm:px-8">
               <ul>
@@ -131,19 +131,21 @@ export default function Header() {
                 ))}
               </ul>
               <a
-                href="/contact"
+                href="/#contact"
                 onClick={close}
                 className="eyebrow mt-6 flex items-center justify-center gap-3 bg-navy px-6 py-4 text-ivory"
               >
                 {CTA.primary}
               </a>
-              <a
-                href={SITE.phoneHref}
-                onClick={close}
-                className="eyebrow mt-3 flex items-center justify-center gap-3 border border-ink/30 px-6 py-4 text-ink"
-              >
-                {CTA.call} · {SITE.phone}
-              </a>
+              <p className="mt-5 text-sm text-mute">
+                <a href={SITE.phoneHref} className="link-underline">
+                  {SITE.phone}
+                </a>
+                <span aria-hidden="true"> · </span>
+                <a href={`mailto:${SITE.email}`} className="link-underline break-all">
+                  {SITE.email}
+                </a>
+              </p>
             </nav>
           </motion.div>
         )}

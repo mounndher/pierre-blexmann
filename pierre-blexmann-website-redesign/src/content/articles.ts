@@ -1,12 +1,10 @@
 /**
- * Editorial content for the Actualités section.
+ * Editorial content for the publications section.
  *
  * Strict editorial integrity:
  * - Only verified external publications actually authored and published by
- *   Maître Pierre Blexmann carry a publication date and destination URL.
- * - Editorial notes not yet written/published by the firm are presented
- *   exclusively as forthcoming topics (« À paraître »), with no fake link
- *   and no fabricated publication date.
+ *   Maître Pierre Blexmann are listed, each with its publication date and
+ *   destination URL. No forthcoming or planned item is displayed.
  */
 
 export type ExternalPublication = {
@@ -18,14 +16,6 @@ export type ExternalPublication = {
   author: string;
   excerpt: string;
   href: string;
-};
-
-export type ForthcomingTopic = {
-  id: string;
-  status: "À paraître";
-  domain: string;
-  title: string;
-  summary: string;
 };
 
 /**
@@ -68,36 +58,5 @@ export const EXTERNAL_PUBLICATIONS: ExternalPublication[] = [
     excerpt:
       "Analyse du rôle des différents acteurs et institutions susceptibles de concourir à l'apport des éléments de preuve dans le contentieux de la discrimination au travail.",
     href: "https://www.village-justice.com/articles/comment-prouver-discrimination-dans-cadre-des-relations-travail-3eme-partie,35663.html",
-  },
-];
-
-/**
- * Planned editorial topics — not yet published by the firm.
- * Displayed without fabricated dates or links.
- */
-export const FORTHCOMING_TOPICS: ForthcomingTopic[] = [
-  {
-    id: "rupture-brutale-preavis",
-    status: "À paraître",
-    domain: "Droit économique",
-    title: "Rupture brutale d'une relation commerciale établie : apprécier le préavis et le préjudice",
-    summary:
-      "Critères d'ancienneté, dépendance économique, formalisation écrite et réflexes probatoires dès l'annonce de la rupture.",
-  },
-  {
-    id: "conflit-associes-gouvernance",
-    status: "À paraître",
-    domain: "Droit des sociétés",
-    title: "Conflit entre associés : sortir du blocage tout en préservant l'entreprise",
-    summary:
-      "Arbitrage entre négociation encadrée, médiation et voie judiciaire pour sécuriser la gouvernance ou organiser une séparation.",
-  },
-  {
-    id: "proces-ou-mard",
-    status: "À paraître",
-    domain: "Résolution des litiges",
-    title: "Procédure judiciaire ou modes alternatifs : choisir la voie adaptée à l'enjeu",
-    summary:
-      "Coût, délais, exécution et confidentialité : les critères pratiques pour orienter un contentieux d'affaires.",
   },
 ];

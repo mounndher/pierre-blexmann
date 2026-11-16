@@ -1,6 +1,5 @@
 /**
- * Static, database-free health endpoint (platform monitoring only).
- * The site stores nothing: no ORM, no PostgreSQL, no server-side persistence.
+ * Stateless healthcheck — the site is fully static and uses no database.
  */
 export const dynamic = "force-static";
 

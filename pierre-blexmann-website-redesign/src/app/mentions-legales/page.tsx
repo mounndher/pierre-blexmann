@@ -12,13 +12,13 @@ export const metadata: Metadata = {
 
 export default function MentionsLegalesPage() {
   return (
-    <LegalArticle title="Mentions légales" updated="Mentions légales">
+    <LegalArticle title="Mentions légales" updated="Novembre 2026">
       <h2>1. Éditeur du site</h2>
       <p>Le présent site internet (le «&nbsp;Site&nbsp;») est édité par&nbsp;:</p>
       <p>
         <strong>{SITE.legalName}</strong>
         <br />
-        Cabinet d&apos;avocats inscrit au {SITE.barreau} (Toque {SITE.toque})
+        Avocat inscrit au {SITE.barreau} (Toque {SITE.toque})
         <br />
         Forme d&apos;exercice&nbsp;: exercice individuel
         <br />
@@ -35,7 +35,7 @@ export default function MentionsLegalesPage() {
           {SITE.email}
         </a>
         <br />
-        {SITE.registration}
+        {SITE.siren}
         <br />
         Directeur de la publication&nbsp;: Maître Pierre {SITE.wordmark}, avocat inscrit au{" "}
         {SITE.barreau}
@@ -43,11 +43,8 @@ export default function MentionsLegalesPage() {
 
       <h2>2. Statut professionnel</h2>
       <p>
-        {/* Exercice individuel : la mention « Les avocats membres du cabinet » ne correspond
-            pas à la forme d'exercice du cabinet. */}
-        Maître Pierre Blexmann exerce en forme individuelle, inscrit auprès du {SITE.barreau}, et
-        exerce sa profession conformément aux dispositions légales et réglementaires applicables,
-        notamment&nbsp;:
+        Maître Pierre {SITE.wordmark} exerce la profession d&apos;avocat à titre individuel,
+        conformément aux dispositions légales et réglementaires applicables, notamment&nbsp;:
       </p>
       <ul>
         <li>
@@ -84,8 +81,8 @@ export default function MentionsLegalesPage() {
 
       <h2>3. Hébergement du site</h2>
       <p>
-        Le Site est hébergé par Vercel Inc., 440 N Barranca Ave #4171, Covina, CA 91723,
-        États-Unis&nbsp;:{" "}
+        Le Site est hébergé par Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723,
+        États-Unis —{" "}
         <a
           href="https://vercel.com"
           target="_blank"
@@ -115,34 +112,26 @@ export default function MentionsLegalesPage() {
         L&apos;utilisation du Site ou l&apos;envoi d&apos;un message au cabinet via le formulaire de
         contact ou par courrier électronique ne crée pas, en soi, de relation avocat-client. Une
         telle relation ne peut être établie qu&apos;après acceptation expresse du dossier par le
-        cabinet, après vérification notamment de l&apos;absence de conflit d&apos;intérêts.
+        cabinet.
       </p>
 
-      <h2>6. Honoraires</h2>
-      {/* [À CONFIRMER] TODO: détail des modalités d'honoraires à valider par l'avocat
-          (convention écrite, base de facturation, provisions éventuelles). */}
-      <p>
-        Les modalités d&apos;honoraires sont présentées avant toute intervention, afin que leur
-        champ et leur coût soient clairement définis avant la mise en œuvre du dossier.
-      </p>
-
-      <h2>7. Responsabilité</h2>
+      <h2>6. Responsabilité</h2>
       <p>
         Le cabinet s&apos;efforce d&apos;assurer l&apos;exactitude et la mise à jour des
-        informations diffusées sur le Site, sans pouvoir garantir leur exhaustivité ni leur
-        actualité. L&apos;utilisateur reconnaît utiliser ces informations sous sa responsabilité
-        exclusive.
+        informations diffusées sur le Site, sans pouvoir en assurer l&apos;exhaustivité ni
+        l&apos;actualité en toute circonstance. L&apos;utilisateur reconnaît utiliser ces
+        informations sous sa responsabilité exclusive.
       </p>
 
-      <h2>8. Liens hypertextes</h2>
+      <h2>7. Liens hypertextes</h2>
       <p>
-        Le Site peut contenir des liens vers des sites tiers (notamment des publications externes),
+        Le Site peut contenir des liens vers des sites tiers (tels que des publications externes),
         fournis à titre informatif. Le cabinet ne dispose d&apos;aucun contrôle sur ces sites et
         décline toute responsabilité quant à leur contenu ou à leurs politiques de protection des
         données.
       </p>
 
-      <h2>9. Propriété intellectuelle</h2>
+      <h2>8. Propriété intellectuelle</h2>
       <p>
         L&apos;ensemble des éléments composant le Site — textes, documents, images, graphismes,
         logos et structure générale — est protégé par le Code de la propriété intellectuelle. Toute
@@ -150,7 +139,7 @@ export default function MentionsLegalesPage() {
         écrite du cabinet, est interdite.
       </p>
 
-      <h2>10. Protection des données personnelles</h2>
+      <h2>9. Protection des données personnelles</h2>
       <p>
         Les traitements de données réalisés via le Site sont effectués dans le respect du Règlement
         (UE) 2016/679 du 27&nbsp;avril&nbsp;2016 (RGPD) et de la loi «&nbsp;Informatique et
@@ -160,6 +149,11 @@ export default function MentionsLegalesPage() {
         </a>
         .
       </p>
+
+      {/* TODO [À CONFIRMER] Mention « Honoraires » : périmètre et formulation exacte à valider
+          par le cabinet avant publication définitive. */}
+      <h2>10. Honoraires</h2>
+      <p>Les modalités d&apos;honoraires sont présentées avant toute intervention.</p>
 
       <h2>11. Cookies</h2>
       <p>

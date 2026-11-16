@@ -1,87 +1,145 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Contact from "@/components/Contact";
-import { Reveal, Section } from "@/components/ui";
-import { CTA, SITE } from "@/content/site";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import ContactForm from "@/components/ContactForm";
+import { SITE } from "@/content/site";
+
+const TITLE = "Contact — Cabinet Blexmann Avocats | Paris 16e";
+const DESCRIPTION =
+  "Exposer votre situation au Cabinet Blexmann Avocats, 53 avenue Victor Hugo, Paris 16e : formulaire, téléphone et courriel.";
+const PATH = "/contact";
 
 export const metadata: Metadata = {
-  title: { absolute: "Contact | Cabinet Blexmann Avocats, avocat à Paris" },
-  description:
-    "Contacter le Cabinet Blexmann Avocats, Paris 16ᵉ : formulaire, téléphone et adresse pour exposer votre litige d'affaires.",
-  alternates: { canonical: "/contact" },
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
+  alternates: { canonical: PATH },
   openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: `${SITE.url}/contact`,
+    title: TITLE,
+    description: DESCRIPTION,
+    url: `${SITE.url}${PATH}`,
     siteName: SITE.legalName,
-    title: "Contact | Cabinet Blexmann Avocats, avocat à Paris",
-    description:
-      "Contacter le Cabinet Blexmann Avocats, Paris 16ᵉ : formulaire, téléphone et adresse pour exposer votre litige d'affaires.",
+    locale: "fr_FR",
+    type: "website",
   },
 };
 
-/**
- * Static page: the optional `?objet=` pre-selection is read client-side by the
- * <Contact /> component (a static export cannot read search params on the server).
- */
-export default function ContactPage() {
-  const breadcrumbJsonLd = {
+const FAQS = [
+  {
+    q: "Les informations transmises restent-elles confidentielles ?",
+    a: "Les demandes adressées au cabinet sont examinées de manière confidentielle. Les échanges conduits avec un avocat relèvent du secret professionnel dans les conditions prévues par la loi et le Règlement intérieur national.",
+  },
+  {
+    q: "L'envoi du formulaire crée-t-il une relation avocat-client ?",
+    a: "Non. L'envoi du formulaire ne crée pas, en soi, de relation avocat-client : celle-ci suppose l'acceptation expresse du dossier par le cabinet, après vérification notamment de l'absence de conflit d'intérêts.",
+  },
+  {
+    q: "Que faut-il préparer avant d'écrire au cabinet ?",
+    a: "Quelques lignes suffisent : les parties concernées, les faits, les montants en jeu si vous les connaissez et toute échéance en cours (mise en demeure, assignation, audience). Il n'est pas nécessaire de transmettre de documents sensibles à ce stade.",
+  },
+];
+
+export default function Page() {
+  const faqJsonLd = {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE.url },
-      { "@type": "ListItem", position: 2, name: "Contact", item: `${SITE.url}/contact` },
-    ],
+    "@type": "FAQPage",
+    mainEntity: FAQS.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: { "@type": "Answer", text: faq.a },
+    })),
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <a
-        href="#main"
-        className="eyebrow sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-navy focus:px-4 focus:py-3 focus:text-ivory"
-      >
-        Aller au contenu
-      </a>
       <Header />
-
       <main id="main" className="bg-ivory">
-        <nav aria-label="Fil d'ariane" className="border-b border-rule bg-ivory">
-          <ol className="mx-auto flex w-full max-w-[92rem] flex-wrap items-center gap-x-2 px-5 py-3 sm:px-8 lg:px-12">
-            <li>
-              <a href="/" className="eyebrow link-underline text-mute hover:text-navy">
-                Accueil
-              </a>
-            </li>
-            <li aria-hidden="true" className="text-mute">
-              /
-            </li>
-            <li>
-              <span className="eyebrow text-navy">Contact</span>
-            </li>
-          </ol>
-        </nav>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <div className="mx-auto w-full max-w-[92rem] px-5 pb-24 pt-10 sm:px-8 lg:px-12 lg:pb-32 lg:pt-14">
+          <Breadcrumbs items={[{ label: "Accueil", href: "/" }, { label: "Contact" }]} />
+          <p className="eyebrow mt-10 text-bronze">Contact</p>
+          <h1 className="display-lg mt-6 max-w-[22ch] font-display text-navy">
+            Exposer ma situation
+          </h1>
+          <div aria-hidden="true" className="mt-8 h-px w-full max-w-[28rem] bg-gold" />
+          <p className="measure mt-8 text-[1.0625rem] leading-[1.75] text-ink/85">
+            Quelques lignes suffisent pour engager un premier échange : le contexte du différend,
+            les parties concernées et vos éventuelles échéances procédurales. Après réception de
+            votre demande, le cabinet en prend connaissance et vous indique les suites
+            envisageables.
+          </p>
 
-        <Section id="intro" index="—" label="Contact">
-          <Reveal>
-            <h1 id="contact-page-title" className="display-lg max-w-[22ch] font-display text-navy">
-              Contacter le Cabinet Blexmann Avocats
-            </h1>
-            <div aria-hidden="true" className="mt-8 h-px w-full max-w-[28rem] bg-gold" />
-            <p className="measure mt-8 text-[1.0625rem] leading-[1.75] text-ink/85 sm:text-lg">
-              Quelques lignes sur les faits, les parties concernées et les échéances connues
-              suffisent pour un premier échange. Le cabinet examine chaque demande et vous indique
-              les suites envisageables.
-            </p>
-            <p className="mt-6 text-sm text-mute">{CTA.heroNote}</p>
-          </Reveal>
-        </Section>
+          <div className="mt-12 grid grid-cols-12 gap-x-6 gap-y-12">
+            <div className="col-span-12 lg:col-span-4">
+              <dl className="rule-double space-y-6 pt-7">
+                <div>
+                  <dt className="eyebrow text-mute">Cabinet à Paris 16ᵉ</dt>
+                  <dd className="mt-2 font-display text-lg leading-snug text-navy">
+                    {SITE.address.street}
+                    <br />
+                    {SITE.address.postalCode} {SITE.address.locality}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="eyebrow text-mute">Téléphone</dt>
+                  <dd className="mt-2">
+                    <a
+                      href={SITE.phoneHref}
+                      className="link-underline font-display text-lg text-navy hover:text-bronze"
+                    >
+                      {SITE.phone}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="eyebrow text-mute">Adresse électronique</dt>
+                  <dd className="mt-2">
+                    <a
+                      href={`mailto:${SITE.email}`}
+                      className="link-underline break-all font-display text-lg text-navy hover:text-bronze"
+                    >
+                      {SITE.email}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="eyebrow text-mute">Rattachement</dt>
+                  <dd className="mt-2 font-display text-lg text-navy">
+                    {SITE.barreau} · Toque {SITE.toque}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div className="col-span-12 lg:col-span-7 lg:col-start-6">
+              <ContactForm formId="c" />
+            </div>
+          </div>
 
-        <Contact />
+          <h2 className="mt-20 font-display text-[1.6rem] leading-snug text-navy">
+            Questions fréquentes
+          </h2>
+          <div className="rule-double mt-6 max-w-[68ch] border-b border-rule">
+            {FAQS.map((faq) => (
+              <details key={faq.q.slice(0, 24)} className="group border-t border-rule py-5">
+                <summary className="cursor-pointer list-none font-display text-[1.1rem] leading-snug text-navy transition-colors marker:hidden hover:text-bronze [&::-webkit-details-marker]:hidden">
+                  <span className="flex items-baseline justify-between gap-4">
+                    {faq.q}
+                    <span
+                      aria-hidden="true"
+                      className="shrink-0 text-bronze transition-transform duration-300 group-open:rotate-45"
+                    >
+                      +
+                    </span>
+                  </span>
+                </summary>
+                <p className="measure mt-3 text-[0.95rem] leading-[1.75] text-ink/80">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
       </main>
       <Footer />
     </>
