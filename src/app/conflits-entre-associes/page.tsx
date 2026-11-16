@@ -69,6 +69,7 @@ const DATA: ExpertisePageData = {
     { label: "Contentieux commercial international à Paris", href: "/contentieux-international" },
     { label: "Maître Pierre Blexmann, avocat au Barreau de Paris", href: "/le-cabinet" },
   ],
+  contactSubject: "Conflits entre associés ou actionnaires",
 };
 
 export default function Page() {

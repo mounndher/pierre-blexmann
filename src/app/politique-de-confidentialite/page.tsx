@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   description:
     "Politique de confidentialité du Cabinet Blexmann Avocats : site statique sans base de données, contact par messagerie, finalités et droits RGPD.",
   alternates: { canonical: "/politique-de-confidentialite" },
+  openGraph: {
+    title: "Politique de confidentialité | Cabinet Blexmann Avocats",
+    description:
+      "Politique de confidentialité du Cabinet Blexmann Avocats : site statique sans base de données, contact par messagerie, finalités et droits RGPD.",
+    url: `${SITE.url}/politique-de-confidentialite`,
+    siteName: SITE.legalName,
+    locale: "fr_FR",
+    type: "article",
+  },
   robots: { index: true, follow: true },
 };
 

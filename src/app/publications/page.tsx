@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import FaqList from "@/components/FaqList";
 import { EXTERNAL_PUBLICATIONS } from "@/content/articles";
 import { CTA, SITE } from "@/content/site";
 
@@ -130,31 +132,14 @@ export default function Page() {
           <h2 className="mt-14 font-display text-[1.6rem] leading-snug text-navy">
             Questions fréquentes
           </h2>
-          <div className="rule-double mt-6 max-w-[68ch] border-b border-rule">
-            {FAQS.map((faq) => (
-              <details key={faq.q.slice(0, 24)} className="group border-t border-rule py-5">
-                <summary className="cursor-pointer list-none font-display text-[1.1rem] leading-snug text-navy transition-colors marker:hidden hover:text-bronze [&::-webkit-details-marker]:hidden">
-                  <span className="flex items-baseline justify-between gap-4">
-                    {faq.q}
-                    <span
-                      aria-hidden="true"
-                      className="shrink-0 text-bronze transition-transform duration-300 group-open:rotate-45"
-                    >
-                      +
-                    </span>
-                  </span>
-                </summary>
-                <p className="measure mt-3 text-[0.95rem] leading-[1.75] text-ink/80">{faq.a}</p>
-              </details>
-            ))}
-          </div>
+          <FaqList items={FAQS} maxWidth />
 
           <div className="mt-20 bg-navy px-6 py-12 sm:px-10">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-[40ch] font-display text-2xl leading-snug text-ivory">
                 Une question propre à votre situation&nbsp;? Exposez les faits au cabinet.
               </p>
-              <a
+              <Link
                 href="/contact"
                 className="eyebrow group inline-flex shrink-0 items-center justify-center gap-3 bg-ivory px-7 py-4 text-navy transition-colors duration-300 hover:bg-goldsoft"
               >
@@ -165,7 +150,7 @@ export default function Page() {
                 >
                   →
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </article>

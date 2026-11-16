@@ -287,7 +287,7 @@ export const WHY = {
       // TODO [À CONFIRMER] Formulation d'origine à valider par le cabinet : « L'avocat qui
       // analyse votre dossier en assure le suivi et la défense, de la première consultation
       // à l'audience ». Texte publié volontairement adouci ci-dessous.
-      body: "L'avocat qui analyse votre dossier en assure le suivi. Vous disposez d'un interlocuteur constant, informé des pièces, du calendrier et des choix successifs du dossier.",
+      body: "L'avocat qui analyse votre dossier en assure le suivi. Vous disposez d'un interlocuteur constant, informé des pièces, du calendrier et des choix successifs de la procédure.",
     },
     {
       index: "02",

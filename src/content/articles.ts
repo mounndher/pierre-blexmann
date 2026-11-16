@@ -44,7 +44,7 @@ export const EXTERNAL_PUBLICATIONS: ExternalPublication[] = [
       "Comment prouver la discrimination dans le cadre des relations de travail ? (2e partie)",
     author: "Pierre Blexmann, avocat",
     excerpt:
-      "Examen des modes et moyens de preuve recevables devant le juge : preuve directe, éléments comparatifs, recevabilité des attestations et exigences procédurales.",
+      "Examen des modes et moyens de preuve recevables devant le juge : preuve directe, éléments comparatifs, forme et portée des attestations, et exigences procédurales.",
     href: "https://www.village-justice.com/articles/comment-prouver-discrimination-dans-cadre-des-relations-travail-2eme-partie,35197.html",
   },
   {

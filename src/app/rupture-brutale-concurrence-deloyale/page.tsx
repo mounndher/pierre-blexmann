@@ -34,9 +34,9 @@ const DATA: ExpertisePageData = {
   ],
   situationsTitle: "Les situations traitées",
   situationsText:
-    "L'article L. 442-1 du Code de commerce sanctionne la rupture brutale d'une relation commerciale établie sans préavis écrit suffisant. La concurrence déloyale, elle, se démontre par des faits précis : dénigrement, désorganisation, parasitisme.",
+    "L'article L. 442-1, II du Code de commerce sanctionne la rupture brutale d'une relation commerciale établie sans préavis écrit suffisant. La concurrence déloyale, elle, se démontre par des faits précis : dénigrement, désorganisation, parasitisme.",
   situationsBullets: [
-    "Rupture brutale de relations commerciales établies (art. L. 442-1 C. com.) : ancienneté de la relation, préavis exigible, marge perdue.",
+    "Rupture brutale de relations commerciales établies (art. L. 442-1, II C. com.) : ancienneté de la relation, préavis exigible, marge perdue.",
     "Concurrence déloyale, dénigrement et parasitisme : actes fautifs, lien avec le préjudice, cessation du trouble.",
     "Débauchage fautif et détournement de clientèle : départs organisés, violation d'obligations, réparation.",
   ],
@@ -69,6 +69,7 @@ const DATA: ExpertisePageData = {
     { label: "Contentieux commercial international à Paris", href: "/contentieux-international" },
     { label: "Maître Pierre Blexmann, avocat au Barreau de Paris", href: "/le-cabinet" },
   ],
+  contactSubject: "Rupture brutale ou concurrence déloyale",
 };
 
 export default function Page() {

@@ -72,6 +72,7 @@ const DATA: ExpertisePageData = {
     { label: "Conflits entre associés et actionnaires à Paris", href: "/conflits-entre-associes" },
     { label: "Maître Pierre Blexmann, avocat au Barreau de Paris", href: "/le-cabinet" },
   ],
+  contactSubject: "Procédure d'urgence",
 };
 
 export default function Page() {

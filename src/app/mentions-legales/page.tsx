@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   description:
     "Mentions légales du Cabinet Blexmann Avocats, avocat inscrit au Barreau de Paris, 53 avenue Victor Hugo, 75116 Paris.",
   alternates: { canonical: "/mentions-legales" },
+  openGraph: {
+    title: "Mentions légales | Cabinet Blexmann Avocats",
+    description:
+      "Mentions légales du Cabinet Blexmann Avocats, avocat inscrit au Barreau de Paris, 53 avenue Victor Hugo, 75116 Paris.",
+    url: `${SITE.url}/mentions-legales`,
+    siteName: SITE.legalName,
+    locale: "fr_FR",
+    type: "article",
+  },
   robots: { index: true, follow: true },
 };
 

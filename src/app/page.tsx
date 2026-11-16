@@ -12,12 +12,6 @@ import Footer from "@/components/Footer";
 export default function HomePage() {
   return (
     <>
-      <a
-        href="#main"
-        className="eyebrow sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-navy focus:px-4 focus:py-3 focus:text-ivory"
-      >
-        Aller au contenu
-      </a>
       <Header />
       <main id="main">
         <Hero />

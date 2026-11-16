@@ -1,6 +1,7 @@
 "use client";
 
-import { AlertCircle, CheckCircle2, ChevronDown, Mail } from "lucide-react";
+import Link from "next/link";
+import { AlertCircle, Check, CheckCircle2, ChevronDown, Copy, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CONTACT, SITE } from "@/content/site";
 
@@ -57,27 +58,31 @@ const fieldClass = (invalid: boolean) =>
     invalid ? "border-red-700/70" : "border-ink/25 hover:border-ink/50"
   }`;
 
+function formatPlainBody(values: Fields): string {
+  return [
+    `Nom et prénom : ${values.nom.trim()}`,
+    `Adresse électronique : ${values.email.trim()}`,
+    values.telephone.trim() ? `Téléphone : ${values.telephone.trim()}` : "",
+    values.societe.trim() ? `Société : ${values.societe.trim()}` : "",
+    `Nature du dossier : ${values.sujet}`,
+    "",
+    "Situation :",
+    values.message.trim(),
+    "",
+    `— Message préparé depuis le site ${SITE.domain}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
 /**
  * Site 100 % statique : aucun serveur, aucune base de données.
  * Le formulaire compose un courriel dans la messagerie du visiteur.
  */
 function buildMailtoUrl(values: Fields): string {
   const subject = `Demande de contact — ${values.sujet}`;
-  const lines = [
-    `Nom et prénom : ${values.nom}`,
-    `Adresse électronique : ${values.email}`,
-    values.telephone.trim() ? `Téléphone : ${values.telephone}` : "",
-    values.societe.trim() ? `Société : ${values.societe}` : "",
-    `Nature du dossier : ${values.sujet}`,
-    "",
-    "Situation :",
-    values.message,
-    "",
-    `— Message préparé depuis le site ${SITE.domain}`,
-  ].filter(Boolean);
-
   return `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-    lines.join("\n"),
+    formatPlainBody(values),
   )}`;
 }
 
@@ -87,6 +92,8 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [composedHref, setComposedHref] = useState<string>("");
+  const [composedText, setComposedText] = useState<string>("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const applySubject = (subject: unknown) => {
@@ -98,7 +105,6 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
         setErrors((prev) => ({ ...prev, sujet: undefined }));
       }
     };
-    // Preselect from inner-page links: /contact?sujet=…
     try {
       const param = new URLSearchParams(window.location.search).get("sujet");
       if (param) applySubject(param);
@@ -148,11 +154,29 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
       return;
     }
 
-    const href = buildMailtoUrl(values);
-    setComposedHref(href);
-    setStatus("success");
-    // Opens the visitor's mail client — nothing is transmitted to this site.
-    window.location.href = href;
+    try {
+      const href = buildMailtoUrl(values);
+      setComposedHref(href);
+      setComposedText(
+        `Destinataire : ${SITE.email}\nObjet : Demande de contact — ${values.sujet}\n\n${formatPlainBody(values)}`,
+      );
+      setCopied(false);
+      setStatus("success");
+      window.location.href = href;
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  async function onCopy() {
+    if (!composedText) return;
+    try {
+      await navigator.clipboard.writeText(composedText);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 3000);
+    } catch {
+      setCopied(false);
+    }
   }
 
   const err = (key: keyof Fields) => (touched[key] ? errors[key] : undefined);
@@ -161,10 +185,11 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
 
   return (
     <form
+      id="contact-form"
       onSubmit={onSubmit}
       noValidate
       aria-describedby={`${formId}-form-note`}
-      className="bg-paper/60 p-6 sm:p-9"
+      className="scroll-mt-24 bg-paper/60 p-6 sm:p-9"
     >
       <p className="eyebrow text-bronze">Exposer ma situation</p>
       <p className="mt-3 text-sm leading-relaxed text-mute">
@@ -178,20 +203,39 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
             role="status"
             className="flex items-start gap-3 border border-navy/20 bg-ivory px-4 py-4 text-sm leading-relaxed text-navy"
           >
-            <CheckCircle2 size={17} strokeWidth={1.5} aria-hidden="true" className="mt-0.5 shrink-0" />
+            <CheckCircle2
+              size={17}
+              strokeWidth={1.5}
+              aria-hidden="true"
+              className="mt-0.5 shrink-0"
+            />
             <div>
               <p>{SUCCESS_MESSAGE}</p>
-              <p className="mt-2 text-mute">
-                Rien ne s&apos;est ouvert&nbsp;?{" "}
+              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-mute">
                 <a href={composedHref} className="link-underline text-navy">
                   Ouvrir le message dans ma messagerie
-                </a>{" "}
-                ou écrivez à{" "}
+                </a>
+                <button
+                  type="button"
+                  onClick={onCopy}
+                  className="inline-flex items-center gap-1.5 text-navy transition-colors hover:text-bronze"
+                >
+                  {copied ? (
+                    <>
+                      <Check size={14} strokeWidth={1.75} aria-hidden="true" />
+                      Message copié
+                    </>
+                  ) : (
+                    <>
+                      <Copy size={14} strokeWidth={1.5} aria-hidden="true" />
+                      Copier le récapitulatif
+                    </>
+                  )}
+                </button>
                 <a href={`mailto:${SITE.email}`} className="link-underline text-navy">
                   {SITE.email}
                 </a>
-                .
-              </p>
+              </div>
             </div>
           </div>
         )}
@@ -200,7 +244,12 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
             role="alert"
             className="flex items-start gap-3 border border-red-800/30 bg-red-50 px-4 py-4 text-sm leading-relaxed text-red-900"
           >
-            <AlertCircle size={17} strokeWidth={1.5} aria-hidden="true" className="mt-0.5 shrink-0" />
+            <AlertCircle
+              size={17}
+              strokeWidth={1.5}
+              aria-hidden="true"
+              className="mt-0.5 shrink-0"
+            />
             <span>{ERROR_MESSAGE}</span>
           </p>
         )}
@@ -396,12 +445,12 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
             <label htmlFor={`${formId}-consent`} className="text-sm leading-relaxed text-ink/80">
               J&apos;accepte que les informations transmises soient traitées par le cabinet pour
               examiner ma demande, conformément à la{" "}
-              <a
+              <Link
                 href="/politique-de-confidentialite"
                 className="link-underline text-navy underline-offset-2"
               >
                 politique de confidentialité
-              </a>
+              </Link>
               .
             </label>
           </div>

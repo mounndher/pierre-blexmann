@@ -52,7 +52,7 @@ const DATA: ExpertisePageData = {
     },
     {
       q: "Que faire face à des factures durablement impayées ?",
-      a: "Après relances et mise en demeure, plusieurs voies existent : injonction de payer pour les créances contractuelles non sérieusement contestables, assignation au fond ou négociation d'un échéancier. Le choix dépend du montant, des pièces et de la solvabilité du débiteur.",
+      a: "Après relances et mise en demeure, plusieurs voies existent : injonction de payer pour les créances certaines, liquides et exigibles issues d'un contrat, référé-provision lorsque l'obligation n'est pas sérieusement contestable, assignation au fond ou négociation d'un échéancier. Le choix dépend du montant, des pièces et de la solvabilité du débiteur.",
     },
     {
       q: "Un contrat oral ou un simple échange de courriels peut-il être invoqué ?",
@@ -72,6 +72,7 @@ const DATA: ExpertisePageData = {
     { label: "Référé et procédures d'urgence à Paris", href: "/procedures-d-urgence" },
     { label: "Maître Pierre Blexmann, avocat au Barreau de Paris", href: "/le-cabinet" },
   ],
+  contactSubject: "Contentieux commercial et contractuel",
 };
 
 export default function Page() {

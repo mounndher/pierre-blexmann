@@ -69,6 +69,7 @@ const DATA: ExpertisePageData = {
     { label: "Référé et procédures d'urgence à Paris", href: "/procedures-d-urgence" },
     { label: "Maître Pierre Blexmann, avocat au Barreau de Paris", href: "/le-cabinet" },
   ],
+  contactSubject: "Responsabilité des dirigeants",
 };
 
 export default function Page() {

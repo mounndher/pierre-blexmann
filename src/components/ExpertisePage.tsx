@@ -1,9 +1,11 @@
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { CTA, SITE } from "@/content/site";
+import FaqList, { type FaqItem } from "@/components/FaqList";
+import { CTA, SITE, type ContactSubject } from "@/content/site";
 
-export type Faq = { q: string; a: string };
+export type Faq = FaqItem;
 
 export type ExpertisePageData = {
   path: string;
@@ -18,6 +20,7 @@ export type ExpertisePageData = {
   conduiteParagraphs: string[];
   faqs: Faq[];
   related: { label: string; href: string }[];
+  contactSubject: ContactSubject;
 };
 
 export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
@@ -30,6 +33,8 @@ export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
       acceptedAnswer: { "@type": "Answer", text: faq.a },
     })),
   };
+
+  const contactHref = `/contact?sujet=${encodeURIComponent(data.contactSubject)}`;
 
   return (
     <>
@@ -88,29 +93,7 @@ export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
               <h2 className="mt-14 font-display text-[1.6rem] leading-snug text-navy">
                 Questions fréquentes
               </h2>
-              <div className="rule-double mt-6 border-b border-rule">
-                {data.faqs.map((faq) => (
-                  <details
-                    key={faq.q.slice(0, 32)}
-                    className="group border-t border-rule py-5"
-                  >
-                    <summary className="cursor-pointer list-none font-display text-[1.1rem] leading-snug text-navy transition-colors marker:hidden hover:text-bronze [&::-webkit-details-marker]:hidden">
-                      <span className="flex items-baseline justify-between gap-4">
-                        {faq.q}
-                        <span
-                          aria-hidden="true"
-                          className="shrink-0 text-bronze transition-transform duration-300 group-open:rotate-45"
-                        >
-                          +
-                        </span>
-                      </span>
-                    </summary>
-                    <p className="measure mt-3 text-[0.95rem] leading-[1.75] text-ink/80">
-                      {faq.a}
-                    </p>
-                  </details>
-                ))}
-              </div>
+              <FaqList items={data.faqs} />
             </div>
 
             <aside className="col-span-12 mt-14 lg:col-span-4 lg:mt-0">
@@ -119,12 +102,12 @@ export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
                 <ul className="mt-5 space-y-4">
                   {data.related.map((link) => (
                     <li key={link.href}>
-                      <a
+                      <Link
                         href={link.href}
                         className="link-underline font-display text-[1.05rem] leading-snug text-navy hover:text-bronze"
                       >
                         {link.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -156,8 +139,8 @@ export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
                   lecture ne crée aucune relation avocat-client.
                 </p>
               </div>
-              <a
-                href="/contact"
+              <Link
+                href={contactHref}
                 className="eyebrow group inline-flex shrink-0 items-center justify-center gap-3 bg-ivory px-7 py-4 text-navy transition-colors duration-300 hover:bg-goldsoft"
               >
                 {CTA.primary}
@@ -167,7 +150,7 @@ export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
                 >
                   →
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </article>

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -9,7 +11,7 @@ function Wordmark({ tone = "dark" }: { tone?: "dark" | "light" }) {
   const main = tone === "dark" ? "text-navy" : "text-ivory";
   const sub = tone === "dark" ? "text-bronze" : "text-goldsoft";
   return (
-    <a
+    <Link
       href="/"
       className="flex items-baseline gap-2.5 sm:gap-3"
       aria-label={`${SITE.name} — accueil`}
@@ -26,7 +28,7 @@ function Wordmark({ tone = "dark" }: { tone?: "dark" | "light" }) {
       <span className={`eyebrow text-[0.6rem] sm:text-[0.65rem] ${sub}`}>
         {SITE.wordmarkSuffix}
       </span>
-    </a>
+    </Link>
   );
 }
 
@@ -34,8 +36,11 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
+  const pathname = usePathname();
 
   const close = useCallback(() => setOpen(false), []);
+  const ctaHref =
+    pathname === "/" ? "#contact" : pathname === "/contact" ? "#contact-form" : "/contact";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -71,24 +76,30 @@ export default function Header() {
           aria-label="Navigation principale"
           className="hidden items-center gap-6 xl:flex xl:gap-8"
         >
-          {NAV.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="eyebrow link-underline text-ink/75 transition-colors hover:text-navy focus-visible:text-navy"
-            >
-              {item.label}
-            </a>
-          ))}
+          {NAV.map((item) => {
+            const isActive = !item.href.includes("#") && pathname === item.href;
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={`eyebrow link-underline transition-colors hover:text-navy focus-visible:text-navy ${
+                  isActive ? "text-navy" : "text-ink/75"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
-            href="/#contact"
+          <Link
+            href={ctaHref}
             className="eyebrow hidden bg-navy px-5 py-3 text-ivory transition-colors duration-300 hover:bg-navytint sm:inline-block"
           >
             {CTA.primary}
-          </a>
+          </Link>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -115,28 +126,32 @@ export default function Header() {
           >
             <nav aria-label="Navigation mobile" className="px-5 pb-8 pt-2 sm:px-8">
               <ul>
-                {NAV.map((item, i) => (
-                  <li key={item.label} className="border-b border-rule">
-                    <a
-                      href={item.href}
-                      onClick={close}
-                      className="flex items-baseline justify-between gap-4 py-4 font-display text-2xl text-navy transition-colors hover:text-bronze"
-                    >
-                      {item.label}
-                      <span className="eyebrow text-bronze">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </a>
-                  </li>
-                ))}
+                {NAV.map((item, i) => {
+                  const isActive = !item.href.includes("#") && pathname === item.href;
+                  return (
+                    <li key={item.label} className="border-b border-rule">
+                      <Link
+                        href={item.href}
+                        onClick={close}
+                        aria-current={isActive ? "page" : undefined}
+                        className="flex items-baseline justify-between gap-4 py-4 font-display text-2xl text-navy transition-colors hover:text-bronze"
+                      >
+                        {item.label}
+                        <span className="eyebrow text-bronze">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
-              <a
-                href="/#contact"
+              <Link
+                href={ctaHref}
                 onClick={close}
                 className="eyebrow mt-6 flex items-center justify-center gap-3 bg-navy px-6 py-4 text-ivory"
               >
                 {CTA.primary}
-              </a>
+              </Link>
               <p className="mt-5 text-sm text-mute">
                 <a href={SITE.phoneHref} className="link-underline">
                   {SITE.phone}

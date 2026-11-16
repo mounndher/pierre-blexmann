@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CTA, FOOTER, SITE } from "@/content/site";
 
 export default function Footer() {
@@ -42,12 +43,12 @@ export default function Footer() {
               <ul className="mt-5 space-y-3">
                 {col.items.map((item) => (
                   <li key={item.label}>
-                    <a
+                    <Link
                       href={item.href}
                       className="link-underline text-sm text-ivory/75 transition-colors hover:text-ivory"
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -59,12 +60,12 @@ export default function Footer() {
             <p className="mt-5 text-sm leading-relaxed text-ivory/70">
               Sur rendez-vous au cabinet ({SITE.address.locality} 16ᵉ).
             </p>
-            <a
-              href="/#contact"
+            <Link
+              href="/contact"
               className="eyebrow mt-5 inline-flex items-center gap-3 border border-ivory/40 px-4 py-3 text-ivory transition-colors hover:border-ivory hover:bg-ivory hover:text-navy"
             >
               {CTA.primary}
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -77,12 +78,12 @@ export default function Footer() {
               © {year} {SITE.legalName} — {SITE.barreau} · {SITE.siren}
             </p>
             <p className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              <a href="/mentions-legales" className="link-underline hover:text-ivory">
+              <Link href="/mentions-legales" className="link-underline hover:text-ivory">
                 Mentions légales
-              </a>
-              <a href="/politique-de-confidentialite" className="link-underline hover:text-ivory">
+              </Link>
+              <Link href="/politique-de-confidentialite" className="link-underline hover:text-ivory">
                 Politique de confidentialité
-              </a>
+              </Link>
             </p>
           </div>
         </div>

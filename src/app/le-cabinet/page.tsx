@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import FaqList from "@/components/FaqList";
 import { ABOUT, CTA, EXPERTISES, SITE } from "@/content/site";
 
 const TITLE = "Maître Pierre Blexmann, avocat au Barreau de Paris";
@@ -89,12 +91,12 @@ export default function Page() {
                 {EXPERTISES.map((e) => (
                   <li key={e.id} className="flex items-start gap-3">
                     <span aria-hidden="true" className="mt-2.5 h-px w-5 shrink-0 bg-gold" />
-                    <a
+                    <Link
                       href={e.href}
                       className="link-underline text-[1rem] leading-[1.7] text-navy hover:text-bronze"
                     >
                       {e.pageLinkText}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -107,7 +109,7 @@ export default function Page() {
                 articles consacrés à la preuve de la discrimination dans les relations de travail.
               </p>
               <p className="mt-4">
-                <a
+                <Link
                   href="/publications"
                   className="eyebrow group inline-flex items-center gap-3 border-b border-gold pb-2 text-navy transition-colors hover:text-bronze"
                 >
@@ -118,32 +120,13 @@ export default function Page() {
                   >
                     →
                   </span>
-                </a>
+                </Link>
               </p>
 
               <h2 className="mt-14 font-display text-[1.6rem] leading-snug text-navy">
                 Questions fréquentes
               </h2>
-              <div className="rule-double mt-6 border-b border-rule">
-                {FAQS.map((faq) => (
-                  <details key={faq.q.slice(0, 24)} className="group border-t border-rule py-5">
-                    <summary className="cursor-pointer list-none font-display text-[1.1rem] leading-snug text-navy transition-colors marker:hidden hover:text-bronze [&::-webkit-details-marker]:hidden">
-                      <span className="flex items-baseline justify-between gap-4">
-                        {faq.q}
-                        <span
-                          aria-hidden="true"
-                          className="shrink-0 text-bronze transition-transform duration-300 group-open:rotate-45"
-                        >
-                          +
-                        </span>
-                      </span>
-                    </summary>
-                    <p className="measure mt-3 text-[0.95rem] leading-[1.75] text-ink/80">
-                      {faq.a}
-                    </p>
-                  </details>
-                ))}
-              </div>
+              <FaqList items={FAQS} />
             </div>
 
             <div className="col-span-12 lg:col-span-4 lg:col-start-9">
@@ -180,7 +163,7 @@ export default function Page() {
               <p className="max-w-[40ch] font-display text-2xl leading-snug text-ivory">
                 Quelques lignes sur les faits suffisent pour engager l&apos;examen de votre dossier.
               </p>
-              <a
+              <Link
                 href="/contact"
                 className="eyebrow group inline-flex shrink-0 items-center justify-center gap-3 bg-ivory px-7 py-4 text-navy transition-colors duration-300 hover:bg-goldsoft"
               >
@@ -191,7 +174,7 @@ export default function Page() {
                 >
                   →
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </article>

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { NEWS } from "@/content/site";
 import { EXTERNAL_PUBLICATIONS } from "@/content/articles";
 import { Reveal, Section } from "@/components/ui";
@@ -20,7 +21,7 @@ export default function Actualites() {
               Les publications ci-dessous renvoient vers les articles publiés par Maître Pierre
               Blexmann sur Village de la Justice. Contenus à portée strictement informative.
             </p>
-            <a
+            <Link
               href="/publications"
               className="eyebrow group mt-5 inline-flex items-center gap-3 border-b border-gold pb-2 text-navy transition-colors hover:text-bronze"
             >
@@ -31,7 +32,7 @@ export default function Actualites() {
               >
                 →
               </span>
-            </a>
+            </Link>
           </div>
         </Reveal>
       </div>
@@ -44,8 +45,8 @@ export default function Actualites() {
         </Reveal>
         <ul className="rule-double mt-5 border-b border-rule">
           {EXTERNAL_PUBLICATIONS.map((pub, i) => (
-            <Reveal key={pub.id} delay={0.05 * i}>
-              <li className="border-t border-rule first:border-t-0">
+            <li key={pub.id} className="border-t border-rule first:border-t-0">
+              <Reveal delay={0.05 * i}>
                 <article className="grid grid-cols-12 gap-x-4 gap-y-3 py-8 sm:py-9">
                   <div className="col-span-12 sm:col-span-2">
                     <span className="font-display text-lg italic text-bronze">
@@ -92,8 +93,8 @@ export default function Actualites() {
                     </a>
                   </div>
                 </article>
-              </li>
-            </Reveal>
+              </Reveal>
+            </li>
           ))}
         </ul>
         <p className="mt-6 text-xs leading-relaxed text-mute">

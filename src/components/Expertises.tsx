@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -85,7 +86,7 @@ function Row({
                   {item.intervention}
                 </p>
                 <div className="mt-7 flex flex-col items-start gap-4">
-                  <a
+                  <Link
                     href={item.href}
                     className="eyebrow group inline-flex items-center gap-3 border-b border-gold pb-2 text-navy transition-colors hover:text-bronze"
                   >
@@ -96,7 +97,7 @@ function Row({
                     >
                       →
                     </span>
-                  </a>
+                  </Link>
                   <a
                     href="#contact"
                     onClick={handleCtaClick}

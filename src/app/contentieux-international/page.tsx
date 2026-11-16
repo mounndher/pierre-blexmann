@@ -72,6 +72,7 @@ const DATA: ExpertisePageData = {
     },
     { label: "Maître Pierre Blexmann, avocat au Barreau de Paris", href: "/le-cabinet" },
   ],
+  contactSubject: "Contentieux international",
 };
 
 export default function Page() {
