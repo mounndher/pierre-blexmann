@@ -1,24 +1,33 @@
 import type { Metadata } from "next";
+import AuditComment from "@/components/AuditComment";
 import LegalArticle from "@/components/LegalArticle";
 import { SITE } from "@/content/site";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Politique de confidentialité",
-  description:
-    "Politique de confidentialité du Cabinet Blexmann Avocats : contact par messagerie, prise de rendez-vous, finalités et droits RGPD.",
-  alternates: { canonical: "/politique-de-confidentialite" },
-  robots: { index: true, follow: true },
-};
+const TITLE = "Politique de confidentialité | Blexmann Avocats";
+const DESCRIPTION =
+  "Politique de confidentialité de Blexmann Avocats à Paris 16ᵉ : prise de contact par messagerie électronique, finalités RGPD et exercice des droits.";
+const PATH = "/politique-de-confidentialite";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: TITLE,
+  description: DESCRIPTION,
+  path: PATH,
+  type: "article",
+});
 
 export default function PolitiqueConfidentialitePage() {
   return (
-    <LegalArticle title="Politique de confidentialité" updated="Novembre 2026">
+    <LegalArticle title="Politique de confidentialité" updated="Avril 2026">
       <h2>1. Responsable du traitement</h2>
+      {/* TODO: Verify with lawyer: Phone and SIREN */}
+      <AuditComment text="TODO: Verify with lawyer: Phone and SIREN" />
       <p>
-        Le responsable du traitement des données personnelles est&nbsp;:
+        Le responsable du traitement des données personnelles reçues dans le cadre d&rsquo;une prise
+        de contact est&nbsp;:
         <br />
-        <strong>{SITE.legalName}</strong>, {SITE.address.street}, {SITE.address.postalCode}{" "}
-        {SITE.address.locality} — {SITE.siren}
+        <strong>{SITE.name}</strong> (Maître Pierre {SITE.wordmark}, exercice individuel),{" "}
+        {SITE.address.street}, {SITE.address.postalCode} {SITE.address.locality} — {SITE.siren}
         <br />
         Contact&nbsp;:{" "}
         <a href={`mailto:${SITE.email}`} className="link-underline">
@@ -30,97 +39,99 @@ export default function PolitiqueConfidentialitePage() {
         </a>
       </p>
 
-      <h2>2. Modalités de prise de contact et de rendez-vous</h2>
+      <h2>2. Modalités de prise de contact depuis le Site</h2>
       <p>
-        Le Site ne comporte ni base de données, ni espace client, ni formulaire transmettant des
-        données à un serveur du Site. Le formulaire de contact fonctionne
-        localement dans votre navigateur&nbsp;: il prépare un courriel dans votre propre logiciel de
-        messagerie, que vous restez libre d&apos;envoyer, de modifier ou d&apos;abandonner.
+        Le formulaire de contact proposé sur le Site pré-remplit directement un courrier
+        électronique dans l&rsquo;application de messagerie du visiteur afin de lui permettre de
+        relire sa demande avant de l&rsquo;adresser au cabinet. Aucune saisie n&rsquo;est
+        enregistrée dans une base de données du Site ni transmise tant que le visiteur
+        n&rsquo;expédie pas lui-même le courriel depuis sa propre messagerie.
       </p>
       <p>
-        Aucune donnée saisie dans ce formulaire n&apos;est enregistrée, transmise ou lue par le
-        cabinet tant que vous n&apos;avez pas vous-même envoyé le message depuis votre messagerie.
-      </p>
-
-      <p>
-        Vous pouvez aussi demander un rendez-vous (cabinet, visioconférence ou téléphone) via le
-        service de réservation Cal.com, vers lequel le Site renvoie par un lien. Les informations
-        saisies sur ce service (nom, adresse électronique, créneau choisi et réponses aux questions
-        posées) sont traitées par Cal.com en qualité de sous-traitant du cabinet, pour la seule
-        organisation du rendez-vous. Le rendez-vous est confirmé par le cabinet après vérification,
-        notamment, de l&apos;absence de conflit d&apos;intérêts.
+        Comme pour toute consultation de site internet, l&rsquo;hébergeur traite uniquement les
+        journaux techniques de connexion strictement nécessaires au bon affichage et à la sécurité
+        du service.
       </p>
 
-      <h2>3. Données effectivement reçues par le cabinet</h2>
+      <h2>3. Données reçues en cas d&rsquo;envoi d&rsquo;un courriel</h2>
       <p>
-        Si vous envoyez le courriel ainsi préparé, le cabinet reçoit uniquement les informations que
-        vous avez choisi d&apos;y faire figurer&nbsp;: nom et prénom, adresse électronique, numéro de
-        téléphone et société le cas échéant, nature du dossier, description de votre situation et, en cas
-        de réservation, le créneau et le mode de rendez-vous choisis.
+        Lorsque vous adressez un courriel à {SITE.name}, le cabinet reçoit exclusivement les
+        informations que vous y mentionnez&nbsp;: nom et prénom, adresse électronique, numéro de
+        téléphone et dénomination sociale lorsqu&rsquo;ils sont renseignés, nature du dossier,
+        modalité de rendez-vous souhaitée et exposé factuel de la situation.
       </p>
       <p>
-        Aucune donnée particulière au sens de l&apos;article&nbsp;9 du RGPD (données de santé,
-        opinions, etc.) n&apos;est demandée lors de ce premier contact. Nous vous invitons à ne pas
-        joindre de document confidentiel à ce stade.
+        Aucune donnée particulière au sens de l&rsquo;article&nbsp;9 du Règlement (UE) 2016/679
+        (RGPD) n&rsquo;est sollicitée à ce stade. Il est recommandé de ne joindre aucune pièce
+        sensible lors du premier courriel&nbsp;; les modalités de communication de pièces seront
+        convenues directement avec le cabinet lors du premier échange.
       </p>
 
-      <h2>4. Finalités et bases légales</h2>
+      <h2>4. Finalités, bases légales et secret professionnel</h2>
+      <p>
+        Les informations reçues par courrier électronique ou par téléphone sont traitées par le
+        cabinet aux seules fins suivantes&nbsp;:
+      </p>
       <ul>
         <li>
-          <strong>Examen de votre demande et réponse à votre prise de contact</strong>&nbsp;:
-          exécution de mesures précontractuelles prises à votre demande (article&nbsp;6.1.b du RGPD)
-          et intérêt légitime du cabinet à traiter les sollicitations reçues (article&nbsp;6.1.f du
-          RGPD), accompagnés de votre accord exprimé lors de l&apos;envoi du formulaire
-          (article&nbsp;6.1.a du RGPD).
+          <strong>
+            Prise de connaissance de la demande, vérifications déontologiques préalables (notamment
+            d&rsquo;absence de conflit d&rsquo;intérêts) et organisation d&rsquo;un premier
+            rendez-vous
+          </strong>
+          &nbsp;: exécution de mesures précontractuelles prises à la demande de la personne
+          concernée (article&nbsp;6, §&nbsp;1, b du RGPD) et intérêt légitime du cabinet à répondre
+          aux demandes reçues dans le respect des règles de la profession (article&nbsp;6, §&nbsp;1,
+          f du RGPD).
         </li>
       </ul>
       <p>
-        L&apos;envoi du formulaire ne crée pas, en soi, de relation avocat-client&nbsp;: celle-ci
-        suppose l&apos;acceptation expresse du dossier par le cabinet, après vérification notamment
-        de l&apos;absence de conflit d&apos;intérêts. Les échanges conduits avec un avocat relèvent
-        ensuite du secret professionnel dans les conditions prévues par l&apos;article&nbsp;66-5 de
-        la loi du 31&nbsp;décembre&nbsp;1971 et le Règlement intérieur national (RIN).
+        {SITE.confidentialityNotice} L&rsquo;envoi d&rsquo;une demande ne crée pas, en soi, de
+        relation avocat-client&nbsp;: celle-ci débute uniquement après l&rsquo;acceptation expresse
+        du dossier par le cabinet, après vérification notamment de l&rsquo;absence de conflit
+        d&rsquo;intérêts, conformément à la loi du 31&nbsp;décembre&nbsp;1971 (art.&nbsp;66-5) et au
+        Règlement intérieur national (RIN).
       </p>
 
       <h2>5. Destinataires</h2>
       <p>
-        Les informations reçues par courriel sont destinées exclusivement au cabinet, en charge de
-        l&apos;examen de votre demande. Elles sont acheminées par courriel à l&apos;adresse
-        professionnelle du cabinet et ne sont ni cédées ni vendues à des tiers.
-      </p>
-      {/* TODO [À CONFIRMER] Région d'hébergement du compte Cal.com (UE ou hors UE) et DPA signé : à préciser ici avant la mise en production. */}
-      <p>
-        Les données de réservation sont en outre traitées par Cal.com, prestataire de prise de
-        rendez-vous, agissant sur instruction du cabinet.
+        Les messages adressés à {SITE.email} sont destinés exclusivement au cabinet pour
+        l&rsquo;examen de la demande. Les données ne font l&rsquo;objet d&rsquo;aucune cession ni
+        exploitation commerciale et transitent uniquement par les services de messagerie
+        électronique nécessaires à leur acheminement.
       </p>
 
       <h2>6. Durée de conservation</h2>
       <p>
-        Les demandes reçues sont conservées pendant la durée strictement nécessaire à leur examen et
-        au suivi des échanges précontractuels, puis supprimées si aucune suite n&apos;est donnée, ou
-        archivées selon les durées légales et déontologiques applicables en cas d&apos;ouverture
-        d&apos;un dossier client.
+        Lorsqu&rsquo;une prise de contact ne donne pas lieu à l&rsquo;ouverture d&rsquo;un dossier,
+        les échanges sont conservés pendant la durée strictement nécessaire au traitement de la
+        demande et aux vérifications déontologiques utiles, puis supprimés. En cas
+        d&rsquo;acceptation d&rsquo;un dossier, les données sont conservées pendant la durée de la
+        mission puis archivées selon les délais de prescription applicables à la profession
+        d&rsquo;avocat.
       </p>
 
-      <h2>7. Vos droits</h2>
+      <h2>7. Exercice de vos droits</h2>
       <p>
-        Conformément au RGPD et à la loi «&nbsp;Informatique et Libertés&nbsp;», vous disposez
-        d&apos;un droit d&apos;accès, de rectification, d&apos;effacement, de limitation du
-        traitement, d&apos;opposition, de retrait de votre consentement et, le cas échéant, de
-        portabilité de vos données. Vous pouvez également définir des directives relatives au sort
+        Dans les conditions prévues par le RGPD et la loi «&nbsp;Informatique et Libertés&nbsp;»,
+        vous disposez d&rsquo;un droit d&rsquo;accès, de rectification, d&rsquo;effacement, de
+        limitation du traitement, d&rsquo;opposition ainsi que, le cas échéant, d&rsquo;un droit à
+        la portabilité de vos données, et de la faculté de définir des directives relatives au sort
         de vos données après votre décès.
       </p>
       <p>
-        Pour exercer ces droits, écrivez à{" "}
+        Ces droits s&rsquo;exercent par courriel à{" "}
         <a href={`mailto:${SITE.email}`} className="link-underline">
           {SITE.email}
         </a>{" "}
-        en précisant l&apos;objet de votre demande. Un justificatif d&apos;identité pourra être
-        demandé uniquement en cas de doute raisonnable sur l&apos;identité du demandeur.
+        ou par courrier postal adressé à {SITE.name}, {SITE.address.street},{" "}
+        {SITE.address.postalCode} {SITE.address.locality}. Un justificatif d&rsquo;identité peut
+        être sollicité en cas de doute raisonnable sur l&rsquo;identité du demandeur.
       </p>
       <p>
-        Vous disposez également du droit d&apos;introduire une réclamation auprès de la CNIL —
-        3&nbsp;place de Fontenoy, TSA&nbsp;80715, 75334 Paris Cedex&nbsp;07 —{" "}
+        Vous disposez également de la faculté d&rsquo;introduire une réclamation auprès de la
+        Commission nationale de l&rsquo;informatique et des libertés (CNIL) — 3&nbsp;place de
+        Fontenoy, TSA&nbsp;80715, 75334 Paris Cedex&nbsp;07 —{" "}
         <a
           href="https://www.cnil.fr"
           target="_blank"
@@ -132,20 +143,20 @@ export default function PolitiqueConfidentialitePage() {
         .
       </p>
 
-      <h2>8. Cookies et mesure d&apos;audience</h2>
+      <h2>8. Cookies et mesure d&rsquo;audience</h2>
       <p>
-        Le Site ne dépose aucun cookie publicitaire, aucun traceur tiers et aucun outil de mesure
-        d&apos;audience. Les polices de caractères et les images sont servies depuis le site lui-même
-        ; aucun service externe n&apos;est sollicité lors de votre navigation, à l&apos;exception des
-        liens que vous choisissez d&apos;ouvrir (publications externes, service de réservation
-        Cal.com), qui relèvent de la politique de confidentialité et des cookies de chaque service.
+        Le Site ne dépose aucun cookie publicitaire, aucun traceur marketing et aucun outil tiers de
+        mesure d&rsquo;audience. Les polices de caractères et les visuels sont servis directement
+        par le Site&nbsp;; la consultation des liens externes (tels que les publications parues sur
+        Village de la Justice) relève de la politique propre à chaque site tiers.
       </p>
 
-      <h2>9. Sécurité</h2>
+      <h2>9. Sécurité des échanges</h2>
       <p>
-        Le cabinet met en œuvre des mesures techniques et organisationnelles appropriées afin de
-        protéger les informations qu&apos;il reçoit contre la perte, l&apos;accès non autorisé ou la
-        divulgation accidentelle.
+        Le cabinet met en œuvre des mesures organisationnelles et techniques appropriées pour
+        protéger sa messagerie professionnelle. Pour la transmission ultérieure de pièces sensibles
+        ou volumineuses, les modalités adaptées sont convenues directement avec le cabinet à
+        l&rsquo;issue du premier contact.
       </p>
     </LegalArticle>
   );

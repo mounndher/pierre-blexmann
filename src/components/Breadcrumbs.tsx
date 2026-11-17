@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SITE } from "@/content/site";
 
 export type Crumb = { label: string; href?: string };
@@ -10,7 +11,9 @@ export default function Breadcrumbs({ items }: { items: Crumb[] }) {
       "@type": "ListItem",
       position: i + 1,
       name: item.label,
-      ...(item.href ? { item: `${SITE.url}${item.href}` } : {}),
+      ...(item.href
+        ? { item: item.href === "/" ? SITE.url : `${SITE.url}${item.href}` }
+        : {}),
     })),
   };
 
@@ -30,12 +33,12 @@ export default function Breadcrumbs({ items }: { items: Crumb[] }) {
                 </span>
               )}
               {item.href ? (
-                <a
+                <Link
                   href={item.href}
                   className="eyebrow link-underline text-mute transition-colors hover:text-navy"
                 >
                   {item.label}
-                </a>
+                </Link>
               ) : (
                 <span aria-current="page" className="eyebrow text-navy">
                   {item.label}

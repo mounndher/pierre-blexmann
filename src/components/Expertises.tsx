@@ -1,8 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { EXPERTISES, type Expertise } from "@/content/site";
 import { Reveal, Section } from "@/components/ui";
@@ -86,7 +86,7 @@ function Row({
                   {item.intervention}
                 </p>
                 <div className="mt-7 flex flex-col items-start gap-4">
-                  <a
+                  <Link
                     href={item.href}
                     className="eyebrow group inline-flex items-center gap-3 border-b border-gold pb-2 text-navy transition-colors hover:text-bronze"
                   >
@@ -97,7 +97,7 @@ function Row({
                     >
                       →
                     </span>
-                  </a>
+                  </Link>
                   <a
                     href="#contact"
                     onClick={handleCtaClick}
@@ -156,9 +156,9 @@ export default function Expertises() {
       </Reveal>
       <Reveal delay={0.08}>
         <p className="measure mt-7 text-[1.0625rem] leading-[1.75] text-ink/80">
-          Le cabinet accompagne dirigeants, entreprises et actionnaires dans leurs principaux
-          contentieux économiques, commerciaux et sociétaires. Ouvrez la situation qui correspond à
-          votre enjeu pour consulter notre lecture du dossier et les modalités d&apos;intervention.
+          Le cabinet accompagne dirigeants, associés et entreprises confrontés à des litiges
+          commerciaux, contractuels et sociétaires. Sélectionnez la situation correspondant à votre
+          enjeu pour consulter les points d&rsquo;analyse et les modalités d&rsquo;intervention.
         </p>
       </Reveal>
 
@@ -173,24 +173,6 @@ export default function Expertises() {
             />
           ))}
         </ul>
-      </Reveal>
-      <Reveal delay={0.18} className="mt-12">
-        <nav aria-label="Pages des domaines d'intervention">
-          <p className="eyebrow text-bronze">Toutes les pages d&apos;expertise</p>
-          <ul className="mt-5 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
-            {EXPERTISES.map((e) => (
-              <li key={e.id} className="flex items-start gap-3">
-                <span aria-hidden="true" className="mt-2.5 h-px w-5 shrink-0 bg-gold" />
-                <Link
-                  href={e.href}
-                  className="link-underline text-[1rem] leading-[1.7] text-navy hover:text-bronze"
-                >
-                  {e.pageLinkText}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
       </Reveal>
     </Section>
   );

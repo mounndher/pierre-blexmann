@@ -1,8 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import AuditComment from "@/components/AuditComment";
 import { CTA, FOOTER, SITE } from "@/content/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const pathname = usePathname();
+  const ctaHref =
+    pathname === "/" ? "#contact" : pathname === "/contact" ? "#contact-form" : "/contact";
+  const resolveHref = (href: string) =>
+    pathname === "/" && href.startsWith("/#") ? href.slice(1) : href;
 
   return (
     <footer className="border-t border-ivory/10 bg-navy pb-20 text-ivory md:pb-0">
@@ -15,14 +24,16 @@ export default function Footer() {
             <p className="eyebrow mt-3 text-goldsoft">
               {SITE.wordmarkSuffix} — {SITE.tagline}
             </p>
-            <address className="mt-6 max-w-[34ch] text-sm not-italic leading-relaxed text-ivory/70">
-              {SITE.legalName}
+            <address className="mt-6 max-w-[34ch] text-sm not-italic leading-relaxed text-ivory/75">
+              {SITE.name}
               <br />
               {SITE.address.street}
               <br />
               {SITE.address.postalCode} {SITE.address.locality}
             </address>
-            <p className="mt-5 text-sm text-ivory/70">
+            <p className="mt-5 text-sm text-ivory/75">
+              {/* TODO: Verify with lawyer: Phone */}
+              <AuditComment text="TODO: Verify with lawyer: Phone" />
               <a href={SITE.phoneHref} className="link-underline">
                 {SITE.phone}
               </a>
@@ -43,12 +54,12 @@ export default function Footer() {
               <ul className="mt-5 space-y-3">
                 {col.items.map((item) => (
                   <li key={item.label}>
-                    <a
-                      href={item.href}
-                      className="link-underline text-sm text-ivory/75 transition-colors hover:text-ivory"
+                    <Link
+                      href={resolveHref(item.href)}
+                      className="link-underline text-sm text-ivory/80 transition-colors hover:text-ivory"
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -56,13 +67,15 @@ export default function Footer() {
           ))}
 
           <div className="col-span-12 sm:col-span-8 lg:col-span-2">
-            <p className="eyebrow text-goldsoft">Premier échange</p>
-            <p className="mt-5 text-sm leading-relaxed text-ivory/70">
-              Sur rendez-vous au cabinet ({SITE.address.locality} 16ᵉ).
-            </p>
+            <p className="eyebrow text-goldsoft">Rendez-vous</p>
+            <ul className="mt-5 space-y-1.5 text-sm leading-relaxed text-ivory/75">
+              {SITE.appointmentOptions.map((opt) => (
+                <li key={opt}>{opt}</li>
+              ))}
+            </ul>
             <Link
-              href="/#contact"
-              className="eyebrow mt-5 inline-flex items-center gap-3 border border-ivory/40 px-4 py-3 text-ivory transition-colors hover:border-ivory hover:bg-ivory hover:text-navy"
+              href={ctaHref}
+              className="eyebrow mt-5 inline-flex items-center gap-3 border border-ivory/45 px-4 py-3 text-ivory transition-colors hover:border-ivory hover:bg-ivory hover:text-navy"
             >
               {CTA.primary}
             </Link>
@@ -70,20 +83,22 @@ export default function Footer() {
         </div>
 
         <div className="mt-16 border-t border-ivory/15 pt-7">
-          <p className="max-w-[80ch] text-xs leading-relaxed text-ivory/55">
+          <p className="max-w-[80ch] text-xs leading-relaxed text-ivory/65">
             {FOOTER.disclaimer}
           </p>
-          <div className="mt-6 flex flex-col gap-3 text-xs text-ivory/55 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-6 flex flex-col gap-3 text-xs text-ivory/65 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              © {year} {SITE.legalName} — {SITE.barreau} · {SITE.siren}
+              {/* TODO: Verify with lawyer: Phone, Toque number, SIREN, Founding year 2013, and replace 2020 labor law articles with recent commercial litigation articles */}
+              <AuditComment text="TODO: Verify with lawyer: Phone, Toque number, SIREN, Founding year 2013, and replace 2020 labor law articles with recent commercial litigation articles" />
+              © {year} {SITE.name} — {SITE.barreau} · Toque {SITE.toque} · {SITE.siren}
             </p>
             <p className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              <a href="/mentions-legales" className="link-underline hover:text-ivory">
+              <Link href="/mentions-legales" className="link-underline hover:text-ivory">
                 Mentions légales
-              </a>
-              <a href="/politique-de-confidentialite" className="link-underline hover:text-ivory">
+              </Link>
+              <Link href="/politique-de-confidentialite" className="link-underline hover:text-ivory">
                 Politique de confidentialité
-              </a>
+              </Link>
             </p>
           </div>
         </div>

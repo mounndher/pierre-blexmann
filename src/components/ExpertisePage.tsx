@@ -1,9 +1,11 @@
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { CTA, SITE } from "@/content/site";
+import FaqList, { type FaqItem } from "@/components/FaqList";
+import { CTA, SITE, type ContactSubject } from "@/content/site";
 
-export type Faq = { q: string; a: string };
+export type Faq = FaqItem;
 
 export type ExpertisePageData = {
   path: string;
@@ -14,10 +16,14 @@ export type ExpertisePageData = {
   situationsTitle: string;
   situationsText: string;
   situationsBullets: string[];
+  enjeuxTitle: string;
+  enjeuxParagraphs: string[];
+  enjeuxPoints: string[];
   conduiteTitle: string;
   conduiteParagraphs: string[];
   faqs: Faq[];
   related: { label: string; href: string }[];
+  contactSubject: ContactSubject;
 };
 
 export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
@@ -30,6 +36,8 @@ export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
       acceptedAnswer: { "@type": "Answer", text: faq.a },
     })),
   };
+
+  const contactHref = `/contact?sujet=${encodeURIComponent(data.contactSubject)}#contact-form`;
 
   return (
     <>
@@ -64,14 +72,37 @@ export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
               <p className="measure mt-4 text-[1rem] leading-[1.75] text-ink/85">
                 {data.situationsText}
               </p>
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-6 space-y-3.5">
                 {data.situationsBullets.map((b) => (
-                  <li key={b.slice(0, 32)} className="flex items-start gap-3 text-ink/85">
+                  <li key={b.slice(0, 36)} className="flex items-start gap-3 text-ink/85">
                     <span aria-hidden="true" className="mt-2.5 h-px w-5 shrink-0 bg-gold" />
-                    <span className="text-[1rem] leading-[1.7]">{b}</span>
+                    <span className="measure text-[1rem] leading-[1.7]">{b}</span>
                   </li>
                 ))}
               </ul>
+
+              <h2 className="mt-14 font-display text-[1.6rem] leading-snug text-navy">
+                {data.enjeuxTitle}
+              </h2>
+              {data.enjeuxParagraphs.map((p) => (
+                <p
+                  key={p.slice(0, 40)}
+                  className="measure mt-4 text-[1rem] leading-[1.75] text-ink/85"
+                >
+                  {p}
+                </p>
+              ))}
+              <div className="mt-6 border-l-2 border-gold bg-paper/60 px-6 py-5">
+                <p className="eyebrow text-bronze">Points d&rsquo;examen prioritaires</p>
+                <ul className="mt-4 space-y-2.5">
+                  {data.enjeuxPoints.map((pt) => (
+                    <li key={pt.slice(0, 36)} className="flex items-start gap-3 text-ink/85">
+                      <span aria-hidden="true" className="mt-2.5 h-px w-4 shrink-0 bg-gold" />
+                      <span className="text-[0.95rem] leading-[1.65]">{pt}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
               <h2 className="mt-14 font-display text-[1.6rem] leading-snug text-navy">
                 {data.conduiteTitle}
@@ -88,90 +119,91 @@ export default function ExpertisePage({ data }: { data: ExpertisePageData }) {
               <h2 className="mt-14 font-display text-[1.6rem] leading-snug text-navy">
                 Questions fréquentes
               </h2>
-              <div className="rule-double mt-6 border-b border-rule">
-                {data.faqs.map((faq) => (
-                  <details
-                    key={faq.q.slice(0, 32)}
-                    className="group border-t border-rule py-5"
-                  >
-                    <summary className="cursor-pointer list-none font-display text-[1.1rem] leading-snug text-navy transition-colors marker:hidden hover:text-bronze [&::-webkit-details-marker]:hidden">
-                      <span className="flex items-baseline justify-between gap-4">
-                        {faq.q}
-                        <span
-                          aria-hidden="true"
-                          className="shrink-0 text-bronze transition-transform duration-300 group-open:rotate-45"
-                        >
-                          +
-                        </span>
-                      </span>
-                    </summary>
-                    <p className="measure mt-3 text-[0.95rem] leading-[1.75] text-ink/80">
-                      {faq.a}
-                    </p>
-                  </details>
-                ))}
-              </div>
+              <FaqList items={data.faqs} />
             </div>
 
             <aside className="col-span-12 mt-14 lg:col-span-4 lg:mt-0">
               <div className="bg-paper/70 p-6 sm:p-8 lg:sticky lg:top-28">
-                <p className="eyebrow text-bronze">Voir aussi</p>
+                <p className="eyebrow text-bronze">Domaines liés</p>
                 <ul className="mt-5 space-y-4">
                   {data.related.map((link) => (
                     <li key={link.href}>
-                      <a
+                      <Link
                         href={link.href}
                         className="link-underline font-display text-[1.05rem] leading-snug text-navy hover:text-bronze"
                       >
                         {link.label}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
                 <div aria-hidden="true" className="my-6 h-px w-full bg-rule" />
-                <p className="text-sm leading-relaxed text-ink/75">
-                  {SITE.legalName} — {SITE.address.street}, {SITE.address.postalCode}{" "}
-                  {SITE.address.locality}.
+                <p className="eyebrow text-mute">Premier échange</p>
+                <p className="mt-3 text-sm leading-relaxed text-ink/80">
+                  {SITE.name}
+                  <br />
+                  {SITE.address.street}, {SITE.address.postalCode} {SITE.address.locality}
+                </p>
+                <p className="mt-2 text-xs leading-relaxed text-mute">
+                  Au cabinet (Paris), en visioconférence ou par téléphone.
                 </p>
                 <p className="mt-3 text-sm">
                   <a href={SITE.phoneHref} className="link-underline text-navy">
                     {SITE.phone}
                   </a>
                 </p>
+                <Link
+                  href={contactHref}
+                  className="eyebrow group mt-5 inline-flex w-full items-center justify-center gap-3 bg-navy px-5 py-3.5 text-ivory transition-colors duration-300 hover:bg-navytint"
+                >
+                  {CTA.primary}
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </Link>
               </div>
             </aside>
           </div>
 
           <div className="mt-20 bg-navy px-6 py-12 sm:px-10">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <p className="eyebrow text-goldsoft">Premier échange</p>
-                <p className="mt-4 max-w-[40ch] font-display text-2xl leading-snug text-ivory">
-                  Quelques lignes sur les faits suffisent pour engager l&apos;examen de votre
-                  dossier.
+                <p className="eyebrow text-goldsoft">Soumettre un dossier</p>
+                <p className="mt-4 max-w-[42ch] font-display text-2xl leading-snug text-ivory">
+                  Exposez les faits, les parties et vos éventuelles échéances en quelques lignes.
                 </p>
-                <p className="mt-4 max-w-[64ch] text-xs leading-relaxed text-ivory/55">
+                <p className="mt-3 max-w-[60ch] text-sm leading-relaxed text-ivory/80">
+                  {SITE.confidentialityNotice}
+                </p>
+                <p className="mt-4 max-w-[66ch] text-xs leading-relaxed text-ivory/65">
                   Les informations de cette page ont un caractère général et informatif&nbsp;; elles
                   ne constituent ni une consultation juridique ni un conseil personnalisé, et leur
                   lecture ne crée aucune relation avocat-client.
                 </p>
               </div>
-              <div className="flex shrink-0 flex-col items-start gap-3 sm:items-end">
-              <a
-                href="/contact"
-                className="eyebrow group inline-flex shrink-0 items-center justify-center gap-3 bg-ivory px-7 py-4 text-navy transition-colors duration-300 hover:bg-goldsoft"
-              >
-                {CTA.primary}
-                <span
-                  aria-hidden="true"
-                  className="transition-transform duration-300 group-hover:translate-x-1"
+              <div className="flex shrink-0 flex-col gap-3 sm:flex-row lg:flex-col">
+                <Link
+                  href={contactHref}
+                  className="eyebrow group inline-flex items-center justify-center gap-3 bg-ivory px-7 py-4 text-navy transition-colors duration-300 hover:bg-goldsoft"
                 >
-                  →
-                </span>
-              </a>
-              <a href="/rendez-vous" className="link-underline text-sm text-goldsoft hover:text-ivory">
-                Ou réserver un créneau
-              </a>
+                  {CTA.primary}
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </Link>
+                <a
+                  href={SITE.phoneHref}
+                  aria-label={`Appeler le cabinet au ${SITE.phone}`}
+                  className="eyebrow inline-flex items-center justify-center border border-ivory/40 px-7 py-4 text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
+                >
+                  {SITE.phone}
+                </a>
               </div>
             </div>
           </div>

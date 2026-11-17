@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo";
 import ExpertisePage, { type ExpertisePageData } from "@/components/ExpertisePage";
-import { SITE } from "@/content/site";
+import { buildPageMetadata } from "@/lib/seo";
 
-// NOTE: aucun document de travail joint à la demande — le contenu ci-dessous est rédigé
-// à partir des informations publiées sur le site existant, dans le respect du RIN art. 10.
-const TITLE = "Rupture brutale de relations commerciales | Avocat Paris";
+// TODO [À CONFIRMER] Contenu éditorial et réponses FAQ à relire et valider par Maître Blexmann.
+const TITLE = "Rupture brutale & concurrence Paris | Blexmann Avocats";
 const DESCRIPTION =
-  "Rupture brutale de relation commerciale ou concurrence déloyale à Paris : le Cabinet Blexmann Avocats chiffre le préjudice. Premier échange confidentiel.";
+  "Rupture brutale de relation commerciale établie ou concurrence déloyale à Paris : Blexmann Avocats défend vos intérêts. Exposez votre situation.";
 const PATH = "/rupture-brutale-concurrence-deloyale";
 
-export const metadata: Metadata = pageMetadata({ title: TITLE, description: DESCRIPTION, path: PATH });
+export const metadata: Metadata = buildPageMetadata({
+  title: TITLE,
+  description: DESCRIPTION,
+  path: PATH,
+  type: "article",
+});
 
 const DATA: ExpertisePageData = {
   path: PATH,
@@ -18,46 +21,59 @@ const DATA: ExpertisePageData = {
   eyebrow: "Rupture brutale et concurrence déloyale — Paris",
   h1: "Rupture brutale et concurrence déloyale : avocat à Paris",
   intro: [
-    "Une relation commerciale ancienne interrompue sans préavis écrit suffisant, une clientèle captée par des moyens déloyaux : ces pratiques causent un préjudice économique qui se chiffre et se répare, à condition d'agir avec méthode.",
-    "Maître Pierre Blexmann, avocat au Barreau de Paris, assiste les entreprises victimes de ruptures brutales ou d'actes déloyaux, comme celles auxquelles de tels faits sont reprochés.",
+    "Déréférencement soudain, arrêt ou chute massive de commandes sans préavis écrit suffisant, détournement de clientèle, dénigrement ou reprise parasitaire d’investissements : ces pratiques déstabilisent brutalement le chiffre d’affaires et l’organisation commerciale.",
+    "Blexmann Avocats accompagne tant les entreprises qui subissent une rupture brutale ou un acte déloyal que celles qui entendent sécuriser la fin d’une relation commerciale ou se défendre face à une assignation.",
   ],
-  situationsTitle: "Les situations traitées",
+  situationsTitle: "Situations relevant de ce contentieux",
   situationsText:
-    "L'article L. 442-1 du Code de commerce sanctionne la rupture brutale d'une relation commerciale établie sans préavis écrit suffisant. La concurrence déloyale, elle, se démontre par des faits précis : dénigrement, désorganisation, parasitisme.",
+    "La rupture brutale d’une relation commerciale établie (art. L. 442-1, II du Code de commerce) et la concurrence déloyale ou parasitaire (art. 1240 du Code civil) répondent à des fondements juridiques et probatoires distincts, qu’il convient de ne pas confondre.",
   situationsBullets: [
-    "Rupture brutale de relations commerciales établies (art. L. 442-1 C. com.) : ancienneté de la relation, préavis exigible, marge perdue.",
-    "Concurrence déloyale, dénigrement et parasitisme : actes fautifs, lien avec le préjudice, cessation du trouble.",
-    "Débauchage fautif et détournement de clientèle : départs organisés, violation d'obligations, réparation.",
+    "Rupture totale ou partielle d’une relation commerciale établie : interruption des commandes, baisse significative de volume, modification unilatérale substantielle des conditions tarifaires ou recours soudain à un appel d’offres sans préavis écrit suffisant.",
+    "Concurrence déloyale : dénigrement de produits, de services ou de la situation d’une entreprise auprès de clients ou partenaires, confusion entretenue sur l’origine commerciale, désorganisation d’une entreprise concurrente.",
+    "Débauchage fautif et captation de clientèle : départ concerté de collaborateurs accompagné d’un détournement de fichiers, de savoir-faire ou de contrats en cours.",
+    "Parasitisme économique : appropriation indue et sans bourse délier d’une valeur économique individualisée (investissements commerciaux, techniques ou créatifs) en se plaçant dans le sillage d’un opérateur.",
   ],
-  conduiteTitle: "La conduite du dossier",
+  enjeuxTitle: "Enjeux de marge, de preuve et de compétence juridictionnelle",
+  enjeuxParagraphs: [
+    "Pour l’entreprise évincée, l’absence de préavis suffisant prive du temps nécessaire pour réorienter son outil de production ou sa force commerciale ; le préjudice indemnisable se mesure principalement à la marge sur coûts variables perdue durant le préavis qui aurait dû être accordé. En matière de concurrence déloyale, la poursuite du trouble érode durablement la clientèle si la preuve n’est pas figée rapidement.",
+    "Par ailleurs, les litiges fondés sur l’article L. 442-1, II du Code de commerce relèvent de juridictions commerciales spécialement désignées par la loi (dont le tribunal des activités économiques de Paris, avec compétence exclusive de la cour d’appel de Paris en appel) : saisir une juridiction non habilitée expose à une fin de non-recevoir.",
+  ],
+  enjeuxPoints: [
+    "Caractère établi de la relation (durée, continuité, volume d’affaires, absence de précarité) et appréciation du préavis suffisant au regard des usages et d’une éventuelle dépendance économique (étant rappelé le plafond légal de dix-huit mois de préavis de l’art. L. 442-1, II C. com.).",
+    "Existence d’une notification écrite claire annonçant la rupture, ou de manquements suffisamment graves justifiant une rupture sans préavis.",
+    "Constitution de la preuve en concurrence déloyale : constats de commissaire de justice (notamment en ligne), attestations régulières, mesure d’instruction sur requête (art. 145 CPC) lorsque nécessaire.",
+    "Justification comptable rigoureuse de la marge sur coûts variables et des coûts spécifiques non amortis.",
+  ],
+  conduiteTitle: "Stratégie d’action, défense et intervention du cabinet",
   conduiteParagraphs: [
-    "Le cabinet apprécie le préavis qui aurait dû être respecté, documente les faits et le préjudice économique, puis agit en réparation — ou organise la défense de l'entreprise mise en cause.",
-    "La préservation des preuves dès les premiers signes — échanges, chiffres, constats — conditionne l'issue : elle est engagée avec méthode, en demande comme en défense.",
+    "En demande, le cabinet organise la préservation des preuves, évalue avec les éléments comptables du client le préavis exigible et le préjudice réparable, adresse une mise en demeure circonstanciée et, à défaut d’accord transactionnel, saisit la juridiction spécialisée ou le juge des référés pour faire cesser un trouble manifestement illicite.",
+    "En amont ou en défense, le cabinet aide l’entreprise à encadrer par écrit la fin d’une relation commerciale ou conteste le caractère établi de la relation, la durée de préavis revendiquée et le calcul de marge présenté par la partie adverse.",
   ],
   faqs: [
     {
-      q: "Qu'est-ce qu'une rupture brutale de relation commerciale ?",
-      a: "C'est l'interruption sans préavis écrit suffisant d'une relation commerciale établie. Le caractère établi s'apprécie à l'ancienneté et à la régularité des échanges ; le préavis exigible dépend notamment de la durée de la relation et de la dépendance économique.",
+      q: "Comment est calculée l’indemnité en cas de rupture brutale de relation commerciale ?",
+      a: "La réparation porte sur le préjudice résultant de la brutalité de la rupture, et non de la rupture elle-même. Elle correspond en principe à la marge sur coûts variables (chiffre d’affaires hors taxes diminué des charges variant directement avec le volume d’activité) que la victime aurait pu réaliser pendant la durée du préavis manquant, attestée par des éléments comptables précis.",
     },
     {
-      q: "Comment démontrer une concurrence déloyale ?",
-      a: "Par des faits précis et datés : actes de dénigrement, manœuvres de désorganisation, reprise parasitaire d'investissements. Constats, attestations et pièces comptables permettent d'établir la faute et le préjudice.",
+      q: "Le préavis inscrit dans le contrat protège-t-il automatiquement l’auteur de la rupture ?",
+      a: "Pas nécessairement : en présence d’une relation commerciale établie, le juge vérifie si le délai contractuel tenait suffisamment compte de la durée totale de la relation et des autres circonstances au moment de la notification. Toutefois, selon l’article L. 442-1, II du Code de commerce, en cas de litige sur la durée du préavis, la responsabilité de l’auteur de la rupture ne peut être engagée du chef d’une durée insuffisante dès lors qu’il a respecté un préavis d’au moins dix-huit mois.",
     },
     {
-      q: "Que faire si une rupture vous est reprochée ?",
-      a: "Faire examiner la notification adressée, la durée du préavis accordé et les motifs de la décision : une rupture motivée par des manquements graves du partenaire ou accompagnée d'un préavis suffisant peut être défendue.",
+      q: "Le recrutement d’anciens salariés par un concurrent suffit-il à prouver la concurrence déloyale ?",
+      a: "Non, en vertu de la liberté du travail et de la liberté d’entreprendre, l’embauche d’un salarié non lié par une clause de non-concurrence et le démarchage loyal d’une clientèle sont licites. La concurrence déloyale suppose des manœuvres fautives : détournement de fichiers confidentiels, dénigrement, confusion volontairement créée ou débauchage massif désorganisant réellement l’entreprise.",
     },
     {
-      q: "Que préparer avant le premier échange ?",
-      a: "L'historique de la relation (contrats, commandes, chiffres d'affaires), la notification de rupture et tout élément relatif au préjudice allégué.",
+      q: "Quel tribunal saisir pour une action en rupture brutale de relation commerciale ?",
+      a: "Seules huit juridictions commerciales spécialement désignées par le Code de commerce (art. L. 442-4, III et D. 442-2), parmi lesquelles le tribunal des activités économiques de Paris, peuvent statuer sur ce fondement, et la cour d’appel de Paris est seule compétente pour connaître des appels formés contre leurs décisions.",
     },
   ],
   related: [
     { label: "Contentieux commercial et contractuel à Paris", href: "/contentieux-commercial" },
-    { label: "Référé et procédures d'urgence à Paris", href: "/procedures-d-urgence" },
-    { label: "Contentieux commercial international à Paris", href: "/contentieux-international" },
-    { label: "Maître Pierre Blexmann, avocat au Barreau de Paris", href: "/le-cabinet" },
+    { label: "Référé et procédures d’urgence à Paris", href: "/procedures-d-urgence" },
+    { label: "Contentieux commercial international", href: "/contentieux-international" },
+    { label: "Présentation de Maître Pierre Blexmann", href: "/le-cabinet" },
   ],
+  contactSubject: "Rupture brutale ou concurrence déloyale",
 };
 
 export default function Page() {

@@ -1,54 +1,56 @@
 import type { Metadata } from "next";
 import { SITE } from "@/content/site";
 
-export const OG_IMAGE = {
+const DEFAULT_OG_IMAGE = {
   url: "/images/hero-facade.jpg",
   width: 1536,
   height: 1024,
-  alt: "Façade haussmannienne à Paris 16ᵉ — Cabinet Blexmann Avocats",
+  alt: "Façade haussmannienne à Paris 16ᵉ — Blexmann Avocats, contentieux des affaires",
 } as const;
 
-/**
- * Shared page metadata. Next.js replaces (does not merge) the parent's
- * `openGraph` object, so every page must restate its images — centralised here.
- */
-export function pageMetadata({
+type PageMetadataInput = {
+  /** Exact <title> string (rendered without extra template suffix). */
+  title: string;
+  /** Concise meta description (< 160 characters). */
+  description: string;
+  /** Route path starting with "/" (e.g. "/contentieux-commercial"). */
+  path: string;
+  type?: "website" | "article";
+};
+
+export function buildPageMetadata({
   title,
   description,
   path,
-  index = true,
-}: {
-  title: string;
-  description: string;
-  path: string;
-  index?: boolean;
-}): Metadata {
+  type = "website",
+}: PageMetadataInput): Metadata {
+  const canonicalUrl = path === "/" ? SITE.url : `${SITE.url}${path}`;
+
   return {
     title: { absolute: title },
     description,
     alternates: { canonical: path },
-    robots: index ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: {
       title,
       description,
-      url: `${SITE.url}${path}`,
-      siteName: SITE.legalName,
+      url: canonicalUrl,
+      siteName: SITE.name,
       locale: "fr_FR",
-      type: "website",
-      images: [OG_IMAGE],
+      type,
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [OG_IMAGE.url],
+      images: [DEFAULT_OG_IMAGE.url],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
     },
   };
 }
 
-export const ORG_ID = `${SITE.url}/#organization`;
-export const PERSON_ID = `${SITE.url}/#pierre-blexmann`;
-export const WEBSITE_ID = `${SITE.url}/#website`;
-
-/** E.164 form required by schema.org consumers. */
-export const PHONE_E164 = "+33189864860";
+export { DEFAULT_OG_IMAGE };
