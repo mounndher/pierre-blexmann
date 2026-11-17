@@ -1,32 +1,36 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import LegalArticle from "@/components/LegalArticle";
-import { SITE } from "@/content/site";
+import { OG_IMAGE, SITE } from "@/content/site";
+
+const TITLE = "Mentions légales";
+const DESCRIPTION =
+  "Mentions légales du Cabinet Blexmann Avocats, avocat inscrit au Barreau de Paris, 53 avenue Victor Hugo, 75116 Paris.";
 
 export const metadata: Metadata = {
-  title: "Mentions légales",
-  description:
-    "Mentions légales du Cabinet Blexmann Avocats, avocat inscrit au Barreau de Paris, 53 avenue Victor Hugo, 75116 Paris.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "/mentions-legales" },
   openGraph: {
-    title: "Mentions légales | Cabinet Blexmann Avocats",
-    description:
-      "Mentions légales du Cabinet Blexmann Avocats, avocat inscrit au Barreau de Paris, 53 avenue Victor Hugo, 75116 Paris.",
+    type: "website",
+    locale: "fr_FR",
     url: `${SITE.url}/mentions-legales`,
     siteName: SITE.legalName,
-    locale: "fr_FR",
-    type: "article",
+    title: `${TITLE} — ${SITE.legalName}`,
+    description: DESCRIPTION,
+    images: [OG_IMAGE],
   },
-  robots: { index: true, follow: true },
 };
 
 export default function MentionsLegalesPage() {
   return (
-    <LegalArticle title="Mentions légales" updated="Novembre 2026">
+    <LegalArticle title={TITLE} slug="mentions-legales">
       <h2>1. Éditeur du site</h2>
       <p>Le présent site internet (le «&nbsp;Site&nbsp;») est édité par&nbsp;:</p>
       <p>
         <strong>{SITE.legalName}</strong>
         <br />
+        {/* [À CONFIRMER] TODO: numéro de toque (E0140) et identifiant SIRET exact à valider. */}
         Avocat inscrit au {SITE.barreau} (Toque {SITE.toque})
         <br />
         Forme d&apos;exercice&nbsp;: exercice individuel
@@ -44,16 +48,15 @@ export default function MentionsLegalesPage() {
           {SITE.email}
         </a>
         <br />
-        {SITE.siren}
+        {SITE.registration}
         <br />
-        Directeur de la publication&nbsp;: Maître Pierre {SITE.wordmark}, avocat inscrit au{" "}
-        {SITE.barreau}
+        Directeur de la publication&nbsp;: Maître Pierre {SITE.wordmark}, avocat
       </p>
 
       <h2>2. Statut professionnel</h2>
       <p>
-        Maître Pierre {SITE.wordmark} exerce la profession d&apos;avocat à titre individuel,
-        conformément aux dispositions légales et réglementaires applicables, notamment&nbsp;:
+        Maître Pierre Blexmann exerce la profession d&apos;avocat à titre individuel dans le respect
+        des dispositions légales, réglementaires et déontologiques applicables, notamment&nbsp;:
       </p>
       <ul>
         <li>
@@ -65,10 +68,10 @@ export default function MentionsLegalesPage() {
           d&apos;avocat&nbsp;;
         </li>
         <li>le Règlement intérieur national de la profession d&apos;avocat (RIN)&nbsp;;</li>
-        <li>les règles déontologiques applicables à la profession d&apos;avocat.</li>
+        <li>le Règlement intérieur du {SITE.barreau}.</li>
       </ul>
       <p>
-        <strong>Autorité de tutelle</strong>
+        <strong>Autorité ordinale</strong>
         <br />
         Ordre des avocats au Barreau de Paris
         <br />
@@ -82,6 +85,7 @@ export default function MentionsLegalesPage() {
           className="link-underline"
         >
           www.avocatparis.org
+          <span className="sr-only"> (nouvel onglet)</span>
         </a>
       </p>
       <p>
@@ -89,8 +93,9 @@ export default function MentionsLegalesPage() {
       </p>
 
       <h2>3. Hébergement du site</h2>
+      {/* [À CONFIRMER] TODO: confirmer l'hébergeur effectif lors de la bascule sur le domaine de production. */}
       <p>
-        Le Site est hébergé par Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723,
+        Le Site est hébergé par Vercel Inc., 440 N Barranca Ave #4171, Covina, CA 91723,
         États-Unis —{" "}
         <a
           href="https://vercel.com"
@@ -99,20 +104,20 @@ export default function MentionsLegalesPage() {
           className="link-underline"
         >
           vercel.com
+          <span className="sr-only"> (nouvel onglet)</span>
         </a>
         .
       </p>
 
       <h2>4. Objet et contenu du site</h2>
       <p>
-        Le Site a pour objet de présenter le cabinet, ses activités et ses domaines
-        d&apos;intervention en contentieux des affaires. Les informations qui y figurent sont
-        fournies à titre purement informatif et général&nbsp;; elles ne constituent ni une
-        consultation juridique, ni un conseil personnalisé, ni l&apos;établissement d&apos;une
-        relation avocat-client.
+        Le Site a pour objet de présenter le cabinet et ses domaines d&apos;intervention en
+        contentieux des affaires. Les informations qui y figurent sont fournies à titre purement
+        informatif et général&nbsp;; elles ne constituent ni une consultation juridique, ni un
+        conseil personnalisé, ni l&apos;établissement d&apos;une relation avocat-client.
       </p>
       <p>
-        La consultation du Site ne saurait se substituer à une consultation juridique adaptée à la
+        La consultation du Site ne saurait se substituer à une analyse juridique adaptée à la
         situation particulière de l&apos;utilisateur.
       </p>
 
@@ -121,62 +126,63 @@ export default function MentionsLegalesPage() {
         L&apos;utilisation du Site ou l&apos;envoi d&apos;un message au cabinet via le formulaire de
         contact ou par courrier électronique ne crée pas, en soi, de relation avocat-client. Une
         telle relation ne peut être établie qu&apos;après acceptation expresse du dossier par le
-        cabinet.
+        cabinet, après vérification notamment de l&apos;absence de conflit d&apos;intérêts.
       </p>
 
-      <h2>6. Responsabilité</h2>
+      <h2>6. Honoraires</h2>
+      {/* [À CONFIRMER] TODO: détail des modalités d'honoraires à valider par l'avocat
+          (convention d'honoraires écrite, temps passé, forfait, honoraire de résultat éventuel). */}
       <p>
-        Le cabinet s&apos;efforce d&apos;assurer l&apos;exactitude et la mise à jour des
-        informations diffusées sur le Site, sans pouvoir en assurer l&apos;exhaustivité ni
-        l&apos;actualité en toute circonstance. L&apos;utilisateur reconnaît utiliser ces
-        informations sous sa responsabilité exclusive.
+        Les modalités d&apos;honoraires sont présentées avant toute intervention.
       </p>
 
-      <h2>7. Liens hypertextes</h2>
+      <h2>7. Responsabilité</h2>
       <p>
-        Le Site peut contenir des liens vers des sites tiers (tels que des publications externes),
-        fournis à titre informatif. Le cabinet ne dispose d&apos;aucun contrôle sur ces sites et
-        décline toute responsabilité quant à leur contenu ou à leurs politiques de protection des
-        données.
+        Le cabinet veille à l&apos;exactitude et à la mise à jour des informations diffusées sur le
+        Site, sans pouvoir assurer leur exhaustivité à tout instant. L&apos;utilisateur reconnaît
+        consulter ces informations sous sa seule responsabilité.
       </p>
 
-      <h2>8. Propriété intellectuelle</h2>
+      <h2>8. Liens hypertextes</h2>
       <p>
-        L&apos;ensemble des éléments composant le Site — textes, documents, images, graphismes,
-        logos et structure générale — est protégé par le Code de la propriété intellectuelle. Toute
-        reproduction, représentation, modification ou exploitation, sans autorisation préalable et
-        écrite du cabinet, est interdite.
+        Le Site peut comporter des liens vers des sites tiers, notamment vers des publications
+        juridiques externes, fournis à titre informatif. Le cabinet n&apos;exerce aucun contrôle sur
+        ces sites et décline toute responsabilité quant à leur contenu ou à leur politique de
+        confidentialité.
       </p>
 
-      <h2>9. Protection des données personnelles</h2>
+      <h2>9. Propriété intellectuelle</h2>
       <p>
-        Les traitements de données réalisés via le Site sont effectués dans le respect du Règlement
-        (UE) 2016/679 du 27&nbsp;avril&nbsp;2016 (RGPD) et de la loi «&nbsp;Informatique et
-        Libertés&nbsp;». Les modalités détaillées figurent dans la{" "}
-        <a href="/politique-de-confidentialite" className="link-underline">
+        L&apos;ensemble des éléments composant le Site — textes, documents, photographies,
+        graphismes, signes distinctifs et structure générale — est protégé par le Code de la
+        propriété intellectuelle. Toute reproduction, représentation, adaptation ou exploitation,
+        totale ou partielle, sans autorisation écrite préalable du cabinet, est interdite.
+      </p>
+
+      <h2>10. Protection des données personnelles</h2>
+      <p>
+        Les traitements de données personnelles liés aux prises de contact s&apos;effectuent dans le
+        respect du Règlement (UE) 2016/679 du 27&nbsp;avril&nbsp;2016 (RGPD) et de la loi
+        «&nbsp;Informatique et Libertés&nbsp;» modifiée. Les modalités détaillées figurent dans la{" "}
+        <Link href="/politique-de-confidentialite" className="link-underline">
           politique de confidentialité
-        </a>
+        </Link>
         .
       </p>
-
-      {/* TODO [À CONFIRMER] Mention « Honoraires » : périmètre et formulation exacte à valider
-          par le cabinet avant publication définitive. */}
-      <h2>10. Honoraires</h2>
-      <p>Les modalités d&apos;honoraires sont présentées avant toute intervention.</p>
 
       <h2>11. Cookies</h2>
       <p>
         Le Site ne dépose aucun cookie publicitaire ni traceur de mesure d&apos;audience sans
-        consentement préalable. Seuls les éléments techniques strictement nécessaires au
-        fonctionnement du Site peuvent être utilisés.
+        consentement préalable. Seuls les éléments techniques strictement nécessaires à son
+        fonctionnement peuvent être utilisés.
       </p>
 
       <h2>12. Médiation de la consommation</h2>
       <p>
         Conformément aux articles L.&nbsp;612-1 et suivants du Code de la consommation, tout client
-        consommateur peut recourir gratuitement au médiateur de la consommation de la profession
-        d&apos;avocat&nbsp;: Conseil national des barreaux (CNB), 180&nbsp;boulevard Haussmann,
-        75008 Paris —{" "}
+        ayant la qualité de consommateur a la possibilité, en cas de litige, de recourir
+        gratuitement au médiateur de la consommation de la profession d&apos;avocat&nbsp;: Conseil
+        national des barreaux (CNB), 180&nbsp;boulevard Haussmann, 75008 Paris —{" "}
         <a
           href="https://mediateur-consommation-avocat.fr"
           target="_blank"
@@ -184,13 +190,14 @@ export default function MentionsLegalesPage() {
           className="link-underline"
         >
           mediateur-consommation-avocat.fr
+          <span className="sr-only"> (nouvel onglet)</span>
         </a>
         .
       </p>
 
       <h2>13. Droit applicable</h2>
       <p>
-        Le Site est régi par le droit français. Tout litige relatif à son usage relève de la
+        Le Site est soumis au droit français. Tout différend relatif à son utilisation relève de la
         compétence des juridictions françaises.
       </p>
     </LegalArticle>

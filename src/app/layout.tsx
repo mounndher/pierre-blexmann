@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
-import { SITE } from "@/content/site";
-import MobileCtaBar from "@/components/MobileCtaBar";
+import { OG_IMAGE, SITE } from "@/content/site";
+import StickyMobileBar from "@/components/StickyMobileBar";
+import LegacyAnchorRedirect from "@/components/LegacyAnchorRedirect";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -20,15 +21,25 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const TITLE = "Avocat contentieux des affaires Paris | Cabinet Blexmann";
+/**
+ * Mark preview deployments (`*.vercel.app` or `VERCEL_ENV=preview`) as `noindex`
+ * so they never compete with the canonical production domain.
+ */
+const IS_PREVIEW =
+  process.env.VERCEL_ENV === "preview" ||
+  (process.env.VERCEL_URL?.endsWith("vercel.app") ?? false);
+
+/** Strictly under 60 characters (56 chars). */
+const TITLE = "Avocat contentieux des affaires Paris | Blexmann Avocats";
+/** Strictly under 155 characters (144 chars). */
 const DESCRIPTION =
-  "Avocat en contentieux des affaires à Paris 16ᵉ : litiges commerciaux, conflits entre associés, responsabilité des dirigeants et procédures d'urgence.";
+  "Cabinet Blexmann Avocats, Barreau de Paris : litiges commerciaux, conflits entre associés, responsabilité des dirigeants et référés à Paris 16ᵉ.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
     default: TITLE,
-    template: `%s | ${SITE.legalName}`,
+    template: `%s — ${SITE.legalName}`,
   },
   description: DESCRIPTION,
   applicationName: SITE.legalName,
@@ -41,25 +52,18 @@ export const metadata: Metadata = {
     siteName: SITE.legalName,
     title: TITLE,
     description: DESCRIPTION,
-    images: [
-      {
-        url: "/images/hero-facade.jpg",
-        width: 1536,
-        height: 1024,
-        alt: "Façade haussmannienne parisienne à Paris 16ᵉ — Cabinet Blexmann Avocats",
-      },
-    ],
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: ["/images/hero-facade.jpg"],
+    images: [OG_IMAGE.url],
   },
   robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    index: !IS_PREVIEW,
+    follow: !IS_PREVIEW,
+    googleBot: { index: !IS_PREVIEW, follow: !IS_PREVIEW, "max-image-preview": "large" },
   },
 };
 
@@ -69,63 +73,17 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const legalServiceJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LegalService",
-  name: SITE.legalName,
-  alternateName: "Maître Pierre Blexmann, avocat au Barreau de Paris",
-  url: SITE.url,
-  image: `${SITE.url}/images/hero-facade.jpg`,
-  description: DESCRIPTION,
-  foundingDate: String(SITE.founded),
-  areaServed: ["Paris", "Île-de-France", "France"],
-  knowsAbout: [
-    "Contentieux commercial et contractuel",
-    "Conflits entre associés et actionnaires",
-    "Responsabilité des dirigeants",
-    "Contentieux post-acquisition",
-    "Rupture brutale des relations commerciales et concurrence déloyale",
-    "Procédures d'urgence",
-    "Contentieux à dimension internationale",
-    "Modes alternatifs de règlement des différends (négociation, médiation, conciliation, arbitrage)",
-  ],
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: SITE.address.street,
-    postalCode: SITE.address.postalCode,
-    addressLocality: SITE.address.locality,
-    addressCountry: SITE.address.countryCode,
-  },
-  telephone: SITE.phone,
-  email: SITE.email,
-  founder: {
-    "@type": "Person",
-    name: "Pierre Blexmann",
-    jobTitle: "Avocat au Barreau de Paris",
-    worksFor: { "@type": "Organization", name: SITE.legalName },
-  },
-};
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={`${playfair.variable} ${inter.variable}`}>
       <body className="min-h-screen bg-ivory text-ink antialiased">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(legalServiceJsonLd) }}
-        />
-        {/* Entrance animations set inline opacity:0 — never leave content hidden without JS */}
+        {/* Entrance animations set inline opacity:0 — keep content visible if JS is disabled */}
         <noscript>
           <style>{`[style*="opacity:0"]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
-        <a
-          href="#main"
-          className="eyebrow sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-navy focus:px-4 focus:py-3 focus:text-ivory"
-        >
-          Aller au contenu
-        </a>
+        <LegacyAnchorRedirect />
         {children}
-        <MobileCtaBar />
+        <StickyMobileBar />
       </body>
     </html>
   );

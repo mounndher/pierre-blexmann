@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
-import { EXPERTISES, type Expertise } from "@/content/site";
+import { useState } from "react";
+import { CTA, EXPERTISES, type Expertise } from "@/content/site";
 import { Reveal, Section } from "@/components/ui";
 
 function Row({
@@ -20,14 +20,14 @@ function Row({
   const panelId = `expertise-panel-${item.id}`;
   const buttonId = `expertise-button-${item.id}`;
 
-  const handleCtaClick = () => {
+  const preselectSubject = () => {
     window.dispatchEvent(
       new CustomEvent("blexmann:select-subject", { detail: item.contactSubject }),
     );
   };
 
   return (
-    <li id={item.id} className="scroll-mt-24 border-t border-rule first:border-t-0">
+    <li className="border-t border-rule first:border-t-0">
       <h3>
         <button
           id={buttonId}
@@ -37,7 +37,10 @@ function Row({
           aria-controls={panelId}
           className="group grid w-full grid-cols-12 items-start gap-x-4 gap-y-2 py-6 text-left transition-colors duration-300 hover:bg-paper/70 sm:py-7"
         >
-          <span className="order-1 col-span-2 font-display text-lg italic text-bronze sm:order-1 sm:col-span-1 sm:text-xl">
+          <span
+            aria-hidden="true"
+            className="order-1 col-span-2 font-display text-lg italic text-bronze sm:order-1 sm:col-span-1 sm:text-xl"
+          >
             {item.index}
           </span>
           <span className="order-2 col-span-7 sm:order-2 sm:col-span-4">
@@ -56,7 +59,9 @@ function Row({
             <span
               aria-hidden="true"
               className={`flex h-9 w-9 items-center justify-center border transition-colors duration-300 ${
-                open ? "border-gold text-bronze" : "border-ink/25 text-ink/70 group-hover:border-ink"
+                open
+                  ? "border-gold text-bronze"
+                  : "border-ink/25 text-ink/70 group-hover:border-ink"
               }`}
             >
               {open ? <Minus size={15} strokeWidth={1.5} /> : <Plus size={15} strokeWidth={1.5} />}
@@ -75,22 +80,25 @@ function Row({
             initial={reduce ? { opacity: 1 } : { height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
             <div className="grid grid-cols-12 gap-x-4 gap-y-6 pb-9 sm:pl-[8.333%]">
               <div className="col-span-12 sm:col-span-7 lg:col-span-6">
-                <p className="measure text-[1.0625rem] leading-[1.75] text-ink/85">{item.problem}</p>
-                <p className="eyebrow mt-6 text-bronze">L&apos;intervention du cabinet</p>
+                <p className="measure text-[1.0625rem] leading-[1.75] text-ink/85">
+                  {item.problem}
+                </p>
+                <p className="eyebrow mt-6 text-bronze">Traitement du dossier</p>
                 <p className="measure mt-3 text-[1.0625rem] leading-[1.75] text-ink/85">
                   {item.intervention}
                 </p>
-                <div className="mt-7 flex flex-col items-start gap-4">
+
+                <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3">
                   <Link
                     href={item.href}
                     className="eyebrow group inline-flex items-center gap-3 border-b border-gold pb-2 text-navy transition-colors hover:text-bronze"
                   >
-                    {item.pageLinkText}
+                    {`Consulter « ${item.domain} »`}
                     <span
                       aria-hidden="true"
                       className="transition-transform duration-300 group-hover:translate-x-1"
@@ -100,21 +108,16 @@ function Row({
                   </Link>
                   <a
                     href="#contact"
-                    onClick={handleCtaClick}
-                    className="eyebrow group inline-flex items-center gap-3 text-mute transition-colors hover:text-navy"
+                    onClick={preselectSubject}
+                    className="eyebrow link-underline pb-2 text-mute transition-colors hover:text-navy"
                   >
-                    {item.cta}
-                    <span
-                      aria-hidden="true"
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    >
-                      →
-                    </span>
+                    {CTA.primary}
                   </a>
                 </div>
               </div>
+
               <div className="col-span-12 sm:col-span-5 lg:col-span-4 lg:col-start-8">
-                <p className="eyebrow text-mute">Exemples de situations traitées</p>
+                <p className="eyebrow text-mute">Situations fréquemment traitées</p>
                 <ul className="mt-4 space-y-3">
                   {item.points.map((point) => (
                     <li key={point} className="flex items-start gap-3 text-sm text-mute">
@@ -135,20 +138,8 @@ function Row({
 export default function Expertises() {
   const [openId, setOpenId] = useState<string | null>(EXPERTISES[0]?.id ?? null);
 
-  useEffect(() => {
-    const syncFromHash = () => {
-      const hash = window.location.hash.replace(/^#/, "");
-      if (EXPERTISES.some((e) => e.id === hash)) {
-        setOpenId(hash);
-      }
-    };
-    syncFromHash();
-    window.addEventListener("hashchange", syncFromHash);
-    return () => window.removeEventListener("hashchange", syncFromHash);
-  }, []);
-
   return (
-    <Section id="expertises" index="01" label="Expertises">
+    <Section id="expertises" index="01" label="Domaines d'intervention">
       <Reveal>
         <h2 id="expertises-title" className="display-lg max-w-[20ch] font-display text-navy">
           Derrière chaque litige, un enjeu économique concret.
@@ -157,8 +148,9 @@ export default function Expertises() {
       <Reveal delay={0.08}>
         <p className="measure mt-7 text-[1.0625rem] leading-[1.75] text-ink/80">
           Le cabinet accompagne dirigeants, entreprises et actionnaires dans leurs principaux
-          contentieux économiques, commerciaux et sociétaires. Ouvrez la situation qui correspond à
-          votre enjeu pour consulter notre lecture du dossier et les modalités d&apos;intervention.
+          contentieux économiques, commerciaux et sociétaires. Sélectionnez la situation qui
+          correspond à votre enjeu pour consulter notre lecture du dossier ou accéder à la page
+          dédiée.
         </p>
       </Reveal>
 
