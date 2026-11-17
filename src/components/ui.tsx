@@ -111,3 +111,33 @@ export function Section({
     </section>
   );
 }
+
+type CTAProps = {
+  href: string;
+  children: ReactNode;
+  variant?: "solid" | "outline" | "light";
+  className?: string;
+  onClick?: () => void;
+};
+
+export function Cta({ href, children, variant = "solid", className = "", onClick }: CTAProps) {
+  const base =
+    "group inline-flex items-center justify-center gap-3 px-7 py-4 eyebrow transition-colors duration-300";
+  const styles = {
+    solid: "bg-navy text-ivory hover:bg-navytint",
+    outline: "border border-ink/30 text-ink hover:border-ink hover:bg-ink hover:text-ivory",
+    light: "bg-ivory text-navy hover:bg-goldsoft",
+  }[variant];
+
+  return (
+    <a href={href} onClick={onClick} className={`${base} ${styles} ${className}`}>
+      {children}
+      <span
+        aria-hidden="true"
+        className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+      >
+        →
+      </span>
+    </a>
+  );
+}

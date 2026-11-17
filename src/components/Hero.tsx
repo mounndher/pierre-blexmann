@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import AuditComment from "@/components/AuditComment";
 import { CTA, SITE } from "@/content/site";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -21,7 +20,7 @@ export default function Hero() {
         {/* Left — the ivory sheet carrying the headline */}
         <div className="col-span-12 order-2 px-5 pb-16 pt-12 sm:px-8 lg:order-1 lg:col-span-7 lg:px-12 lg:pb-24 lg:pt-20 xl:col-span-7">
           <motion.p {...rise(0)} className="eyebrow text-bronze">
-            {SITE.name} — {SITE.address.arrondissement}
+            Avocat en contentieux des affaires — {SITE.address.locality} 16ᵉ · {SITE.barreau}
           </motion.p>
 
           <motion.h1
@@ -29,10 +28,14 @@ export default function Hero() {
             id="hero-title"
             className="display-xl mt-7 font-display text-navy"
           >
-            Avocat en contentieux des affaires à Paris.
-            <br />
-            Défendre vos intérêts, <span className="italic">maîtriser</span> vos enjeux.
+            Avocat en contentieux des affaires à Paris
           </motion.h1>
+          <motion.p
+            {...rise(0.14)}
+            className="mt-5 font-display text-[1.5rem] italic leading-snug text-bronze sm:text-[1.75rem]"
+          >
+            Défendre vos intérêts, maîtriser vos enjeux.
+          </motion.p>
 
           <motion.div
             aria-hidden="true"
@@ -46,13 +49,11 @@ export default function Hero() {
             {...rise(0.22)}
             className="measure mt-8 text-[1.0625rem] leading-[1.75] text-ink/85 sm:text-lg"
           >
-            Un impayé qui s&rsquo;installe, un associé qui bloque une décision, une garantie de
-            passif invoquée après une cession&nbsp;: le litige pèse sur la trésorerie, la
-            gouvernance et la valeur de l&rsquo;entreprise bien avant d&rsquo;atteindre le prétoire.{" "}
-            {/* TODO: Verify with lawyer: Founding year 2013 */}
-            <AuditComment text="TODO: Verify with lawyer: Founding year 2013" />
-            Depuis {SITE.founded}, {SITE.name} accompagne dirigeants, associés et entreprises
-            confrontés à des litiges commerciaux.
+            Un impayé qui s&apos;installe, un associé qui bloque une décision, une garantie de passif
+            invoquée après une cession&nbsp;: un litige pèse sur la trésorerie, la gouvernance et la
+            valeur de l&apos;entreprise bien avant l&apos;audience. Depuis {SITE.founded}, le Cabinet{" "}
+            {SITE.wordmark}, à Paris 16ᵉ, conseille et défend entreprises, dirigeants, actionnaires
+            et investisseurs, devant les juridictions comme par la négociation.
           </motion.p>
 
           <motion.div
@@ -71,14 +72,12 @@ export default function Hero() {
                 →
               </span>
             </a>
-            {/* TODO: Verify with lawyer: Phone */}
-            <AuditComment text="TODO: Verify with lawyer: Phone" />
             <a
               href={SITE.phoneHref}
-              aria-label={`Appeler ${SITE.name} au ${SITE.phone}`}
+              aria-label={`Appeler le cabinet au ${SITE.phone}`}
               className="eyebrow group inline-flex items-center justify-center gap-3 border border-ink/30 px-7 py-4 text-ink transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-ivory"
             >
-              Appeler le cabinet · {SITE.phone}
+              Appeler · {SITE.phone}
             </a>
           </motion.div>
 
@@ -87,7 +86,7 @@ export default function Hero() {
               href="#expertises"
               className="eyebrow group inline-flex w-fit items-center gap-3 border-b border-gold pb-1 text-navy transition-colors hover:text-bronze"
             >
-              {CTA.secondary}
+              Voir les domaines d&apos;intervention
               <span
                 aria-hidden="true"
                 className="transition-transform duration-300 group-hover:translate-x-1"
@@ -95,13 +94,17 @@ export default function Hero() {
                 →
               </span>
             </a>
-            <p className="measure mt-1 text-sm leading-relaxed text-mute">
-              {SITE.confidentialityNotice}
+            <a
+              href="/rendez-vous"
+              className="link-underline w-fit text-sm text-navy hover:text-bronze"
+            >
+              Ou réserver un créneau : cabinet, visioconférence ou téléphone
+            </a>
+            <p className="text-sm leading-relaxed text-mute">
+              Premier échange confidentiel. Quelques lignes sur les faits suffisent.
             </p>
           </motion.div>
 
-          {/* Credibility bar — single homepage placement of Barreau & Toque alongside footer */}
-          <AuditComment text="TODO: Verify with lawyer: Toque number, Oath date, and Founding year 2013" />
           <motion.dl
             {...rise(0.44)}
             className="rule-double mt-14 grid grid-cols-2 gap-y-6 pt-6 sm:grid-cols-3"
@@ -111,7 +114,7 @@ export default function Hero() {
               { t: `Fondé en ${SITE.founded}`, d: `${SITE.address.street}, Paris 16ᵉ` },
               {
                 t: "Procédure & voies amiables",
-                d: "Juridictions françaises, médiation, arbitrage",
+                d: "Juridictions étatiques, médiation, arbitrage",
               },
             ].map((item) => (
               <div key={item.t} className="pr-4">
@@ -123,10 +126,10 @@ export default function Hero() {
         </div>
 
         {/* Right — the navy buckram cover, with the vertical spine */}
-        <div className="relative col-span-12 order-1 min-h-[38vh] overflow-hidden bg-navy sm:min-h-[44vh] lg:order-2 lg:col-span-5 lg:min-h-[calc(100vh-5.5rem)] xl:col-span-5">
+        <div className="relative col-span-12 order-1 min-h-[46vh] overflow-hidden bg-navy lg:order-2 lg:col-span-5 lg:min-h-[calc(100vh-5.5rem)] xl:col-span-5">
           <Image
             src="/images/hero-facade.jpg"
-            alt="Façade haussmannienne parisienne à Paris 16ᵉ — Blexmann Avocats, avocat en contentieux des affaires"
+            alt="Façade haussmannienne parisienne à Paris 16ᵉ — Cabinet Blexmann Avocats, avocat en contentieux des affaires"
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 42vw"
@@ -143,7 +146,7 @@ export default function Hero() {
 
           <div className="absolute inset-y-0 right-0 flex w-12 items-center justify-center border-l border-ivory/15 bg-navy/40 backdrop-blur-[2px] sm:w-14">
             <span className="vertical-rl eyebrow text-[0.6rem] tracking-[0.4em] text-goldsoft">
-              {SITE.address.arrondissement}
+              {SITE.address.locality} — {SITE.barreau.toUpperCase()}
             </span>
           </div>
 
@@ -151,10 +154,10 @@ export default function Hero() {
             initial={reduce ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.6 }}
-            className="absolute bottom-6 left-5 max-w-[26ch] sm:bottom-8 sm:left-8 lg:left-10"
+            className="absolute bottom-6 left-5 max-w-[22ch] sm:bottom-8 sm:left-8 lg:left-10"
           >
             <figcaption className="font-display text-lg italic leading-snug text-ivory/90">
-              {SITE.heroQuote}
+              {SITE.address.street}, {SITE.address.postalCode} {SITE.address.locality}
             </figcaption>
           </motion.figure>
         </div>

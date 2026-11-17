@@ -12,8 +12,7 @@
   /* Champagne darkened for TEXT on ivory — #B49A70 only reaches 2.4:1 on paper */
   --color-bronze: #7a6136;
   --color-ink: #292d32;
-  /* Warm stone grey tuned for comfortable WCAG AA contrast on both ivory and paper */
-  --color-mute: #5d5c56;
+  --color-mute: #6b6a63;
 
   --font-display: var(--font-playfair), "Iowan Old Style", Georgia, serif;
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
@@ -38,7 +37,6 @@
     font-family: var(--font-sans);
     font-size: 1.0625rem;
     line-height: 1.7;
-    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern" 1;
@@ -46,8 +44,7 @@
 
   h1,
   h2,
-  h3,
-  h4 {
+  h3 {
     font-family: var(--font-display);
     font-weight: 400;
     letter-spacing: -0.02em;

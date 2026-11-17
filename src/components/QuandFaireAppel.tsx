@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Reveal, Section } from "@/components/ui";
 import { CTA } from "@/content/site";
 
@@ -50,8 +51,8 @@ export default function QuandFaireAppel() {
             Plus le dossier est examiné tôt, plus les options restent ouvertes, qu&apos;il
             s&apos;agisse d&apos;agir, de négocier ou de préserver des preuves.
           </p>
-          <a
-            href="#contact"
+          <Link
+            href="/#contact"
             className="eyebrow group inline-flex shrink-0 items-center gap-3 border-b border-gold pb-2 text-navy transition-colors hover:text-bronze"
           >
             {CTA.primary}
@@ -61,7 +62,7 @@ export default function QuandFaireAppel() {
             >
               →
             </span>
-          </a>
+          </Link>
         </div>
       </Reveal>
     </Section>

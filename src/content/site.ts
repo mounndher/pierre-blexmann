@@ -1,68 +1,71 @@
 /**
- * Single source of truth for all editorial content and client data — Blexmann Avocats.
+ * Single source of truth for all editorial content and verified factual data.
  *
- * Unified editorial voice:
- * - Strict institutional third-person singular ("Le cabinet" / "Blexmann Avocats").
- * - No mixing of "nous", "je", and "il".
+ * Factual sources:
+ * - blexmann-avocats.fr (accueil, mentions légales)
+ * - Public registries (INSEE / Barreau de Paris / Village de la Justice)
  *
- * TODO: Verify with lawyer: Phone, Toque number, SIREN, Founding year 2013, and replace 2020 labor law articles with recent commercial litigation articles.
+ * Points explicitly flagged for manual confirmation by the firm:
+ * 1. Registration identifier: the existing site mentions "RCS Paris n° 489 346 007 00052".
+ *    An individual lawyer (exercice individuel) is not registered at the RCS; 489 346 007 is
+ *    the verified SIREN, while 00052 was the former SIRET (227 bd Pereire) and public INSEE
+ *    records show active SIRET 489 346 007 00060 for 53 avenue Victor Hugo. Only the verified
+ *    SIREN is displayed here pending firm confirmation of the exact SIRET to publish.
+ *    TODO [À CONFIRMER] SIRET exact à faire valider par le cabinet.
+ * 2. Oath date (4 janvier 2006) & Toque (E0140): sourced from public bar directories.
+ *    TODO [À CONFIRMER] Date de serment et toque à faire valider par le cabinet.
+ * 3. Direct involvement "de la première consultation à l'audience": softened in published copy.
+ *    TODO [À CONFIRMER] Formulation d'origine à valider : « L'avocat qui analyse votre dossier
+ *    en assure le suivi et la défense, de la première consultation à l'audience ».
+ * 4. Correspondents network in France and abroad: softened in published copy.
+ *    TODO [À CONFIRMER] Réseau de correspondants : existence et modalités à confirmer par le
+ *    cabinet avant toute mention publique.
+ * 5. Contact subject "Autre litige d'entreprise": scope to confirm with the lawyer.
+ *    TODO [À CONFIRMER] Périmètre du sujet « Autre litige d'entreprise » à confirmer.
  */
 
 export const SITE = {
-  name: "Blexmann Avocats",
+  name: "Cabinet Blexmann Avocats",
   wordmark: "Blexmann",
-  wordmarkSuffix: "Avocats",
-  legalName: "Blexmann Avocats",
+  wordmarkSuffix: "Avocat",
+  legalName: "Cabinet Blexmann Avocats",
   domain: "blexmann-avocats.fr",
   url: "https://blexmann-avocats.fr",
   tagline: "Contentieux des affaires",
-  // TODO: Verify with lawyer: Phone (+33 (0)1 89 86 48 60)
   phone: "+33 (0)1 89 86 48 60",
-  phoneE164: "+33189864860",
   phoneHref: "tel:+33189864860",
   email: "pblexmann@blexmann-avocats.com",
   address: {
     street: "53 avenue Victor Hugo",
     postalCode: "75116",
     locality: "Paris",
-    arrondissement: "Paris 16ᵉ",
     country: "France",
     countryCode: "FR",
   },
   barreau: "Barreau de Paris",
-  // TODO: Verify with lawyer: SIREN (489 346 007) and exact active SIRET
+  /** SIREN vérifié (exercice individuel — voir note d'audit en en-tête sur RCS/SIRET). */
   siren: "SIREN 489 346 007",
-  // TODO: Verify with lawyer: Oath date (4 janvier 2006) and Toque number (E0140)
+  /** Serment et toque issus des annuaires professionnels publics — à confirmer par le cabinet. */
   oathDate: "4 janvier 2006",
   toque: "E0140",
-  // TODO: Verify with lawyer: Founding year 2013
   founded: 2013,
-  heroQuote:
-    "Anticiper le risque judiciaire et défendre vos intérêts commerciaux avec méthode et réactivité.",
-  confidentialityNotice:
-    "Votre demande est traitée avec discrétion et dans le respect du secret professionnel.",
-  appointmentOptions: ["Au cabinet (Paris)", "En visioconférence", "Par téléphone"] as const,
   linkedin: null as string | null,
 } as const;
 
 export const CTA = {
-  primary: "Exposer ma situation",
-  secondary: "Voir les domaines d’intervention",
-  submitMailto: "Préparer ma demande",
+  primary: "Demander un premier échange",
+  secondary: "Découvrir les domaines d'intervention",
 } as const;
 
-/**
- * Primary navigation — zero conflict between in-page section anchors and standalone routes.
- * Contact is served by a single unambiguous destination per page context (#contact on homepage,
- * /contact on inner pages).
- */
+/** Anchors are prefixed with "/" so navigation works from any route. */
 export const NAV = [
   { label: "Accueil", href: "/" },
   { label: "Expertises", href: "/#expertises" },
   { label: "Approche", href: "/#approche" },
+  { label: "Pourquoi le cabinet", href: "/#pourquoi" },
   { label: "Le Cabinet", href: "/le-cabinet" },
-  { label: "Publications", href: "/publications" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "Actualités", href: "/publications" },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
 export const CONTACT_SUBJECTS = [
@@ -73,6 +76,7 @@ export const CONTACT_SUBJECTS = [
   "Rupture brutale ou concurrence déloyale",
   "Procédure d'urgence",
   "Contentieux international",
+  // TODO [À CONFIRMER] Périmètre du sujet « Autre litige d'entreprise » à confirmer avec l'avocat.
   "Autre litige d'entreprise",
 ] as const;
 
@@ -95,7 +99,7 @@ export type Expertise = {
 };
 
 /**
- * Seven core practice areas — consistent institutional third-person voice ("Le cabinet").
+ * Practice areas — grounded in blexmann-avocats.fr.
  */
 export const EXPERTISES: Expertise[] = [
   {
@@ -104,37 +108,37 @@ export const EXPERTISES: Expertise[] = [
     domain: "Contentieux commercial et contractuel",
     title: "Un contrat inexécuté coûte bien plus que son montant.",
     problem:
-      "Impayé durable, livraison non conforme, prestation interrompue ou résiliation contestée : le manquement d’un partenaire pèse immédiatement sur la trésorerie et l’exploitation. Sans réaction structurée, le préjudice s’aggrave et la position contractuelle se fragilise.",
+      "Impayé durable, livraison non conforme, prestation interrompue ou résiliation contestée : le manquement d'un partenaire pèse immédiatement sur la trésorerie et l'exploitation. Sans réponse structurée, le préjudice s'installe et le rapport de force se dégrade.",
     intervention:
-      "Le cabinet qualifie les droits en présence, consolide les pièces probantes et engage la voie la plus adaptée — mise en demeure motivée, injonction de payer, référé-provision, assignation au fond ou négociation encadrée — en demande comme en défense devant les juridictions commerciales et civiles.",
+      "Nous qualifions vos droits, consolidons les preuves et engageons la voie la plus adaptée — mise en demeure motivée, injonction de payer, assignation ou négociation encadrée — en demande comme en défense devant les juridictions commerciales et civiles.",
     points: [
       "Recouvrement de créances et de factures impayées",
-      "Inexécution, résolution et résiliation de contrats commerciaux",
-      "Litiges fournisseurs, sous-traitance et prestations non conformes",
+      "Inexécution, résolution et résiliation de contrats",
+      "Litiges fournisseurs, sous-traitance et livraisons défectueuses",
     ],
-    cta: "Exposer un litige commercial",
+    cta: "Exposer un litige contractuel",
     contactSubject: "Contentieux commercial et contractuel",
     href: "/contentieux-commercial",
-    pageLinkText: "Consulter la page sur les litiges commerciaux à Paris",
+    pageLinkText: "Avocat en contentieux commercial à Paris",
   },
   {
     id: "associes-actionnaires",
     index: "02",
     domain: "Conflits entre associés et actionnaires",
-    title: "Quand le capital se divise, c’est l’entreprise qui se bloque.",
+    title: "Quand le capital se divise, c'est l'entreprise qui se bloque.",
     problem:
-      "Désaccord persistant sur la gestion, décision sociale contestée, éviction ou sortie bloquée : un conflit entre associés paralyse la gouvernance et entame rapidement la valeur de la société ainsi que la confiance de ses partenaires.",
+      "Désaccord profond sur la gestion, décision contestée, éviction brutale ou sortie bloquée : un conflit entre associés paralyse la gouvernance et fragilise la valeur construite par l'entreprise, parfois en quelques mois.",
     intervention:
-      "Le cabinet examine les statuts et pactes applicables, encadre la négociation lorsqu’un accord demeure envisageable, ou saisit la juridiction compétente lorsque la situation l’exige, en veillant à préserver le fonctionnement de la société jusqu’au dénouement.",
+      "Nous cadrons la négociation lorsqu'un accord demeure envisageable, portons le différend devant les tribunaux lorsque la situation l'exige, et sécurisons la continuité de la société jusqu'au dénouement — rééquilibrage ou sortie organisée.",
     points: [
-      "Abus de majorité ou de minorité, révocation de mandataires sociaux",
-      "Exclusion statutaire, retrait et cession de droits sociaux",
-      "Contestation d’assemblées générales et désignation d’un mandataire",
+      "Abus de majorité ou de minorité, révocation de mandataires",
+      "Exclusion, retrait et cession de droits sociaux",
+      "Contestation d'assemblées et de décisions de gestion",
     ],
-    cta: "Exposer un conflit entre associés",
+    cta: "Exposer un conflit d'associés",
     contactSubject: "Conflits entre associés ou actionnaires",
     href: "/conflits-entre-associes",
-    pageLinkText: "Consulter la page sur les conflits entre associés",
+    pageLinkText: "Avocat en conflit entre associés à Paris",
   },
   {
     id: "responsabilite-dirigeants",
@@ -143,233 +147,211 @@ export const EXPERTISES: Expertise[] = [
     title:
       "Votre responsabilité personnelle peut être engagée. Votre défense doit être à la hauteur des enjeux.",
     problem:
-      "Faute de gestion alléguée, violation statutaire reprochée ou action liée à une procédure collective : la responsabilité d’un dirigeant peut être recherchée sur son patrimoine personnel, souvent dans un calendrier procédural contraint.",
+      "Faute de gestion alléguée, décision sociale contestée ou procédure collective : la responsabilité civile — parfois pénale — d'un dirigeant peut être recherchée sur son patrimoine personnel, souvent dans des délais procéduraux serrés.",
     intervention:
-      "Le cabinet analyse le fondement exact de chaque grief, réunit les éléments justifiant les décisions de gestion et structure la défense dès la première mise en demeure ou assignation, dans le respect du secret professionnel et des règles relatives aux conflits d’intérêts.",
+      "Nous analysons le fondement juridique des griefs, préparons la réponse dès la première notification ou assignation et assurons votre défense jusqu'à l'audience puis l'exécution, dans le strict respect du secret professionnel.",
     points: [
-      "Actions en responsabilité civile pour faute de gestion",
-      "Défense du dirigeant dans le cadre d’une procédure collective",
-      "Mise en cause personnelle, révocation et enjeux patrimoniaux",
+      "Actions en responsabilité pour faute de gestion",
+      "Défense du dirigeant dans le cadre d'une procédure collective",
+      "Mise en cause personnelle et enjeux patrimoniaux",
     ],
-    cta: "Exposer une mise en cause de dirigeant",
+    cta: "Évoquer une mise en cause de dirigeant",
     contactSubject: "Responsabilité des dirigeants",
     href: "/responsabilite-des-dirigeants",
-    pageLinkText: "Consulter la page sur la responsabilité des dirigeants",
+    pageLinkText: "Avocat en responsabilité des dirigeants à Paris",
   },
   {
     id: "post-acquisition",
     index: "04",
     domain: "Contentieux post-acquisition",
-    title: "Après la signature, un passif révélé peut remettre l’équilibre en cause.",
+    title: "Après la signature, un passif caché peut tout remettre en jeu.",
     problem:
-      "Garantie d’actif et de passif appelée, comptes de cession discutés, complément de prix (earn-out) contesté ou clause de non-concurrence méconnue : les suites d’une opération de cession font naître des différends techniques où le formalisme contractuel est déterminant.",
+      "Garantie d'actif et de passif mise en œuvre, comptes discutés, complément de prix contesté ou clause de non-concurrence méconnue : les suites d'une cession donnent lieu à des différends techniques où la rédaction des actes commande l'analyse.",
     intervention:
-      "Le cabinet audite les actes de cession, les délais de notification et les pièces comptables, évalue le préjudice invoqué ou subi, et conduit la négociation ou la procédure prévue au contrat — juridiction étatique, référé ou arbitrage.",
+      "Nous instruisons le dossier à partir des actes de cession et des pièces comptables, évaluons le préjudice allégué ou subi, et conduisons la négociation ou la procédure prévue au contrat — juridiction étatique, référé ou arbitrage.",
     points: [
-      "Mise en œuvre et contestation de garanties d’actif et de passif",
-      "Litiges d’ajustement de prix, de comptes de référence et d’earn-out",
-      "Inexécution des engagements post-cession et clauses de non-concurrence",
+      "Mise en œuvre et contestation de garanties d'actif et de passif",
+      "Litiges de prix, d'ajustement comptable et d'earn-out",
+      "Exécution des engagements post-cession et non-concurrence",
     ],
-    cta: "Exposer un différend post-acquisition",
+    cta: "Faire examiner un dossier post-acquisition",
     contactSubject: "Contentieux post-acquisition",
     href: "/contentieux-post-acquisition",
-    pageLinkText: "Consulter la page sur le contentieux post-acquisition",
+    pageLinkText: "Garantie de passif et contentieux post-acquisition",
   },
   {
     id: "rupture-concurrente",
     index: "05",
     domain: "Rupture brutale et concurrence déloyale",
     title:
-      "Un partenaire écarté sans préavis, une clientèle détournée : cela se démontre et se chiffre.",
+      "Un partenaire écarté sans préavis, une clientèle détournée : cela se chiffre et se répare.",
     problem:
-      "Relation commerciale établie interrompue sans préavis écrit suffisant, dénigrement, désorganisation ou détournement de clientèle : ces pratiques pèsent directement sur la marge et la part de marché de l’entreprise qui les subit — ou exposent celle qui est mise en cause.",
+      "Une relation commerciale ancienne interrompue sans préavis écrit suffisant, un concurrent qui capte votre clientèle ou désorganise votre activité : ces agissements engagent la responsabilité de leur auteur dès lors que les preuves sont réunies à temps.",
     intervention:
-      "Le cabinet évalue la durée de préavis exigible, rassemble les preuves factuelles et comptables du préjudice, et engage l’action en réparation devant les juridictions compétentes — ou assure la défense de l’entreprise assignée.",
+      "Nous apprécions la durée de préavis exigible, documentons les faits et le préjudice économique, et agissons en réparation — ou organisons la défense de l'entreprise à laquelle une rupture ou un acte déloyal est reproché.",
     points: [
-      "Rupture brutale de relations commerciales établies (art. L. 442-1, II C. com.)",
-      "Concurrence déloyale, dénigrement et parasitisme (art. 1240 C. civ.)",
-      "Débauchage désorganisateur et captation fautive de clientèle",
+      "Rupture brutale de relations commerciales établies (art. L. 442-1 C. com.)",
+      "Concurrence déloyale, dénigrement et parasitisme",
+      "Débauchage fautif et détournement de clientèle",
     ],
-    cta: "Exposer un litige de rupture ou concurrence",
+    cta: "Évaluer un préjudice commercial",
     contactSubject: "Rupture brutale ou concurrence déloyale",
     href: "/rupture-brutale-concurrence-deloyale",
-    pageLinkText: "Consulter la page sur la rupture brutale et la concurrence déloyale",
+    pageLinkText: "Rupture brutale et concurrence déloyale",
   },
   {
     id: "urgence",
     index: "06",
     domain: "Procédures d'urgence",
-    title: "Lorsque la preuve ou la trésorerie est menacée, le choix procédural est décisif.",
+    title: "Certaines situations ne souffrent aucun délai.",
     problem:
-      "Trouble manifestement illicite, éléments de preuve risquant de disparaître, actifs en voie de dissipation ou créance incontestable impayée : attendre l’issue d’une instance au fond peut priver une décision future de son utilité pratique.",
+      "Trouble manifestement illicite, preuve menacée de disparition, actifs en voie de dissipation ou créance en péril : lorsque la situation évolue vite, attendre une procédure au fond expose à un préjudice difficilement réversible.",
     intervention:
-      "Le cabinet vérifie les conditions de recevabilité et engage les référés ou requêtes appropriés — provision, cessation de trouble, mesure d’instruction in futurum (art. 145 CPC), saisie conservatoire — tout en préparant la suite éventuelle au fond.",
+      "Nous engageons les référés et requêtes appropriés — mesure conservatoire, séquestre, mesure d'instruction, cessation d'un trouble — tout en structurant la défense au fond afin de maîtriser la suite de la procédure.",
     points: [
-      "Référé-provision, dommage imminent et trouble manifestement illicite",
-      "Mesures d’instruction in futurum et préservation des preuves",
-      "Saisies et sûretés conservatoires sur autorisation judiciaire",
+      "Référés, mesures provisoires et d'instruction in futurum",
+      "Saisies et mesures conservatoires",
+      "Exécution provisoire et préservation des preuves",
     ],
-    cta: "Exposer une situation procédurale urgente",
+    cta: "Signaler une urgence procédurale",
     contactSubject: "Procédure d'urgence",
     href: "/procedures-d-urgence",
-    pageLinkText: "Consulter la page sur le référé et les procédures d’urgence",
+    pageLinkText: "Référé et procédures d'urgence à Paris",
   },
   {
     id: "international",
     index: "07",
     domain: "Contentieux à dimension internationale",
-    title: "Un litige transfrontalier exige de sécuriser d’abord le juge et la loi applicables.",
+    title: "Un litige qui traverse les frontières ne s'improvise pas.",
     problem:
-      "Contrat international, cocontractant établi hors de France ou décision à faire exécuter dans un autre État : l’élément d’extranéité ajoute au litige commercial des questions préalables de compétence, de droit applicable et d’exécution effective.",
+      "Contrat régi par un droit étranger, contrepartie établie hors de France ou décision à faire exécuter à l'étranger : la dimension transfrontalière soulève des enjeux de compétence, de loi applicable et d'exécution qui pèsent directement sur l'issue.",
+    // TODO [À CONFIRMER] Toute mention d'un réseau de correspondants en France et à l'étranger
+    // reste suspendue à la confirmation du cabinet ; le texte publié ci-dessous est volontairement neutre.
     intervention:
-      "Le cabinet représente ses clients devant les juridictions françaises et analyse dès l’origine les enjeux transfrontaliers — clauses attributives de juridiction ou d’arbitrage, loi applicable et perspectives d’exécution — pour orienter le dossier vers la voie la plus pertinente.",
+      "Nous analysons les questions de compétence, de loi applicable et d'exécution propres à votre dossier, et définissons avec vous la voie adaptée — juridiction étatique, médiation ou arbitrage — au regard de vos objectifs.",
     points: [
-      "Litiges contractuels et commerciaux comportant un élément d’extranéité",
-      "Détermination de la juridiction compétente et de la loi applicable",
-      "Reconnaissance, exequatur et exécution des décisions ou sentences",
+      "Litiges commerciaux et contractuels internationaux",
+      "Compétence juridictionnelle et loi applicable",
+      "Exécution des décisions et sentences à l'étranger",
     ],
-    cta: "Exposer un litige international",
+    cta: "Exposer un dossier transfrontalier",
     contactSubject: "Contentieux international",
     href: "/contentieux-international",
-    pageLinkText: "Consulter la page sur le contentieux commercial international",
+    pageLinkText: "Contentieux commercial international",
   },
 ];
 
 export const APPROACH_INTRO = {
   title: "Un litige se traite. Une stratégie se choisit.",
-  body: "Chaque dossier commence par une question concrète : quelle issue sert réellement l’entreprise ? Les objectifs poursuivis, les coûts prévisibles, les risques procéduraux, l’état des preuves et la continuité de l’exploitation déterminent la voie retenue — judiciaire ou amiable — et non l’inverse.",
+  body: "Chaque dossier commence par une question concrète : quelle issue sert réellement votre entreprise ? Vos objectifs, les coûts, les risques procéduraux, l'état des preuves et la continuité de votre activité déterminent la voie retenue — judiciaire ou amiable — et non l'inverse.",
   principle:
-    "Vous décidez en connaissance de cause, sur la base d’une analyse claire et motivée.",
+    "Vous décidez en connaissance de cause, sur la base d'une analyse claire et motivée.",
 } as const;
 
 export const APPROACH = [
   {
     index: "I",
     title: "Comprendre les enjeux économiques et opérationnels",
-    body: "Un contentieux d’affaires ne se lit jamais hors contexte. Avant toute initiative, le cabinet examine l’activité de l’entreprise, ses contraintes, ses échéances et ce que le différend expose concrètement : trésorerie, gouvernance, partenaires clés ou continuité d’exploitation.",
+    body: "Un contentieux n'est jamais purement abstrait. Avant d'engager une action, nous analysons votre activité, vos contraintes, vos délais et ce que le différend expose concrètement : trésorerie, gouvernance, partenaires clés ou continuité d'exploitation.",
   },
   {
     index: "II",
     title: "Définir la stratégie juridique adaptée",
-    body: "Mise en demeure, référé, action au fond, négociation, médiation ou arbitrage : le cabinet compare chaque option au regard de la solidité des preuves, des aléas procéduraux, des délais prévisibles et du coût global pour l’entreprise.",
+    body: "Action au fond, référé, négociation, médiation ou arbitrage : chaque option est comparée au regard des éléments de preuve disponibles, des risques procéduraux, des coûts prévisibles et de vos objectifs opérationnels.",
   },
   {
     index: "III",
     title: "Défendre vos intérêts à chaque étape",
-    body: "De la première notification jusqu’à la signature d’un protocole transactionnel ou à l’exécution de la décision, le cabinet anticipe les échéances et explique chaque acte en amont afin de protéger la marche de l’entreprise pendant le litige.",
+    body: "De la mise en demeure jusqu'à l'exécution de la décision ou la signature d'un protocole transactionnel, chaque échéance est anticipée et chaque acte vous est expliqué, afin de préserver la conduite de votre entreprise pendant toute la durée du litige.",
   },
 ] as const;
 
 export const MARD = {
   kicker: "Juridictions étatiques & modes alternatifs",
   title: "Choisir la voie, pas seulement la procédure.",
-  body: "Le cabinet intervient devant les juridictions étatiques françaises comme dans le cadre des modes alternatifs de règlement des différends — négociation, médiation, conciliation et arbitrage. Cette double pratique permet d’orienter le dossier selon l’objectif prioritaire : obtenir un titre exécutoire, préserver une relation d’affaires ou encadrer une issue amiable par un protocole confidentiel.",
+  body: "Le cabinet pratique aussi bien le contentieux devant les juridictions étatiques que les modes alternatifs de règlement des différends — négociation, médiation, conciliation et arbitrage. Cette double pratique permet d'orienter le dossier selon votre priorité : obtenir une décision exécutoire, préserver une relation commerciale ou conclure un accord confidentiel maîtrisé.",
 } as const;
 
+/**
+ * « Pourquoi le cabinet » — four differentiating commitments grounded in
+ * the firm's published positioning. No comparative or unverifiable claims.
+ */
 export const WHY = {
-  eyebrow: "Engagements du cabinet",
-  title: "Pourquoi confier votre contentieux à Blexmann Avocats ?",
-  body: "Parce qu’un litige d’affaires ne se joue pas uniquement à l’audience : sa préparation et sa conduite sont déterminantes. Quatre engagements structurent le traitement de chaque dossier, du premier diagnostic jusqu’à son dénouement.",
+  eyebrow: "Pourquoi le cabinet",
+  title: "Pourquoi confier votre litige à Maître Pierre Blexmann ?",
+  body: "Parce qu'un litige d'affaires ne se gagne pas seulement au tribunal : il se conduit. Quatre engagements structurent le traitement de chaque dossier, de la première analyse jusqu'à son issue.",
   commitments: [
     {
       index: "01",
       title: "Implication directe",
-      body: "Le cabinet assure un suivi personnel et continu de chaque dossier. Vous échangez avec un interlocuteur unique, qui maîtrise les pièces, le calendrier et les arbitrages successifs de la procédure.",
+      // TODO [À CONFIRMER] Formulation d'origine à valider par le cabinet : « L'avocat qui
+      // analyse votre dossier en assure le suivi et la défense, de la première consultation
+      // à l'audience ». Texte publié volontairement adouci ci-dessous.
+      body: "L'avocat qui analyse votre dossier en assure le suivi. Vous disposez d'un interlocuteur constant, informé des pièces, du calendrier et des choix successifs du dossier.",
     },
     {
       index: "02",
       title: "Pragmatisme économique",
-      body: "Une procédure mobilise du temps, de la trésorerie et l’attention des dirigeants. Avant d’assigner, le cabinet met en balance les voies judiciaires et amiables selon leur coût, leurs risques et leur intérêt réel pour l’activité.",
+      body: "Un contentieux mobilise du temps, des ressources financières et l'attention des dirigeants. Avant toute procédure, les voies judiciaires et amiables sont comparées selon leur coût, leurs aléas et leur utilité concrète pour votre activité.",
     },
     {
       index: "03",
       title: "Transparence",
-      body: "À chaque étape — mise en demeure, assignation, pourparlers, audience ou exécution — le cabinet délivre une information lisible sur l’état du dossier, les risques identifiés et les modalités d’honoraires convenues.",
+      body: "À chaque étape — mise en demeure, assignation, négociation, audience ou exécution — vous recevez une information claire sur l'avancement, les risques identifiés et les conditions d'intervention du cabinet.",
     },
     {
       index: "04",
-      title: "Un périmètre clair, un regard international",
-      body: "Établi à Paris 16ᵉ, le cabinet représente ses clients devant les juridictions françaises tout en traitant les enjeux transfrontaliers. Lorsqu’un litige comporte un élément d’extranéité (partie étrangère, contrat international, exécution à l’étranger), la juridiction compétente, la loi applicable et les conditions d’exécution sont analysées dès le départ.",
+      title: "Coordination nationale et internationale",
+      // TODO [À CONFIRMER] Réseau de correspondants en France et à l'étranger : existence et
+      // modalités à confirmer par le cabinet avant toute mention publique.
+      body: "Établi à Paris 16ᵉ, le cabinet agit devant les juridictions françaises. Lorsque le différend dépasse les frontières, les correspondances utiles sont examinées au cas par cas.",
     },
   ],
-  closing: "Une conduite de dossier lisible, fondée sur les pièces et l’intérêt économique du client.",
+  closing: "Une conduite de dossier lisible, fondée sur les faits et les intérêts de l'entreprise.",
   cta: CTA.primary,
 } as const;
 
 export const ABOUT = {
-  eyebrow: "Fondateur — Blexmann Avocats",
+  eyebrow: "Le Cabinet",
   name: "Maître Pierre Blexmann",
   role: "Avocat au Barreau de Paris",
-  lead: "Dirigeants, associés et entreprises confrontés à des litiges commerciaux : le cabinet consacre sa pratique aux différends qui engagent la trésorerie, la gouvernance et la continuité de l’activité.",
+  lead: "Avocat au Barreau de Paris, Maître Pierre Blexmann consacre sa pratique aux litiges qui engagent la valeur, la gouvernance et la continuité de l'entreprise.",
   paragraphs: [
-    "Fondé en 2013 par Maître Pierre Blexmann au 53 avenue Victor Hugo (Paris 16ᵉ), Blexmann Avocats applique une ligne constante : chaque dossier est conduit avec méthode — diagnostic précis, choix assumés, calendrier maîtrisé.",
-    "Le cabinet accompagne dirigeants, associés et entreprises confrontés à des litiges commerciaux, contractuels, sociétaires ou comportant une dimension internationale, devant les juridictions françaises ainsi que dans le cadre de négociations, médiations, conciliations et arbitrages.",
-    "La relation nouée par le cabinet repose sur l’écoute, l’examen rigoureux des faits et la clarté des échanges, dans le respect des règles déontologiques et du secret professionnel. Des contributions juridiques signées par Maître Pierre Blexmann ont par ailleurs été publiées sur la revue Village de la Justice.",
+    "Inscrit au Barreau de Paris depuis sa prestation de serment le 4 janvier 2006, il fonde en 2013 le cabinet établi au 53 avenue Victor Hugo (Paris 16ᵉ). Sa conviction : un litige d'affaires se conduit comme un projet, avec un diagnostic précis, des choix assumés et un calendrier tenu.",
+    // TODO [À CONFIRMER] Réseau de correspondants : ne pas publier de mention d'un réseau
+    // avant confirmation du cabinet (voir note d'audit en en-tête).
+    "Il assiste entreprises, dirigeants, actionnaires et investisseurs dans leurs contentieux commerciaux, sociétaires et transfrontaliers, devant les juridictions étatiques comme dans le cadre de négociations, de médiations, de conciliations ou d'arbitrages.",
+    "Chaque dossier repose sur l'écoute, la précision factuelle et le dialogue, dans le respect des règles déontologiques et du secret professionnel applicables à la profession d'avocat. Maître Pierre Blexmann a également publié une série d'articles sur Village de la Justice consacrée à la preuve de la discrimination dans les relations de travail.",
   ],
-  /** Concise facts for the homepage Cabinet section (avoids repeating Barreau/Toque next to Hero & Footer). */
-  homeFacts: [
-    { label: "Fondation", value: "2013 — exercice individuel" },
-    { label: "Adresse", value: "53 avenue Victor Hugo, 75116 Paris" },
-    { label: "Pratique", value: "Contentieux des affaires et modes amiables" },
-    { label: "Consultations", value: "Au cabinet (Paris), visioconférence, téléphone" },
-  ],
-  /** Full profile facts for the dedicated /le-cabinet page. */
   facts: [
-    { label: "Fondation du cabinet", value: "2013 — exercice individuel" },
-    { label: "Prestation de serment", value: "4 janvier 2006" },
-    { label: "Adresse", value: "53 avenue Victor Hugo, 75116 Paris" },
-    { label: "Pratique", value: "Contentieux des affaires et modes amiables" },
-    { label: "Consultations", value: "Au cabinet (Paris), en visioconférence ou par téléphone" },
+    { label: "Barreau", value: "Barreau de Paris — serment du 4 janvier 2006" },
+    { label: "Toque", value: "E0140" },
+    { label: "Fondation", value: "Cabinet fondé en 2013" },
+    { label: "Adresse", value: "53 avenue Victor Hugo, Paris 16ᵉ" },
+    { label: "Pratique", value: "Conseil et contentieux des affaires" },
+    { label: "Rendez-vous", value: "Au cabinet, Paris 16ᵉ" },
   ],
 } as const;
 
 export const NEWS = {
-  eyebrow: "Publications",
-  title: "Publications externes.",
-  body: "Cette rubrique réunit des contributions publiées à titre externe par Maître Pierre Blexmann sur la revue juridique Village de la Justice. Rédigées en 2020 sur le régime de la preuve en droit du travail, ces publications antérieures sont présentées à titre documentaire, l’activité principale de Blexmann Avocats étant dédiée au contentieux des affaires.",
+  eyebrow: "Actualités",
+  title: "Publications.",
+  body: "Maître Pierre Blexmann a publié sur Village de la Justice une série d'articles de droit du travail. Ces contenus ont une portée strictement informative et ne constituent pas une consultation juridique.",
 } as const;
-
-/**
- * Five SEO-optimized homepage FAQ entries covering commercial litigation in Paris.
- */
-export const HOME_FAQS = [
-  {
-    q: "Quels sont les délais et le coût d’une procédure d’injonction de payer ?",
-    a: "La requête en injonction de payer est déposée sans frais de greffe élevés pour les créances commerciales certaines, liquides et exigibles ; s’y ajoutent les honoraires de rédaction convenus avec le cabinet et les frais de commissaire de justice pour signifier l’ordonnance. Les délais varient selon la juridiction saisie et la complétude des pièces justificatives ; à compter de la signification, le débiteur dispose d’un délai légal d’un mois pour former opposition, ce qui ouvre alors un débat contradictoire devant le tribunal.",
-  },
-  {
-    q: "Comment agir face à un associé qui bloque les décisions de l’entreprise ?",
-    a: "Le cabinet examine en priorité les statuts, le pacte d’associés et les procès-verbaux afin d’identifier les règles de majorité ainsi que les éventuelles clauses de sortie ou d’exclusion. Selon la gravité de la paralysie et son impact sur l’exploitation, le cabinet engage des pourparlers encadrés ou une médiation, sollicite en justice la désignation d’un mandataire ad hoc, agit sur le fondement de l’abus de minorité ou d’égalité, ou structure une séparation amiable sécurisée.",
-  },
-  {
-    q: "Combien coûte l’intervention d’un avocat en contentieux des affaires ?",
-    a: "Les honoraires du cabinet sont libres et déterminés en toute transparence avant toute diligence, dans le cadre d’une convention d’honoraires écrite. Selon la nature du dossier, la technicité du litige et la voie retenue (mise en demeure, négociation, référé ou procédure au fond), la facturation peut être fixée au temps passé selon un taux horaire convenu ou sous forme de forfait par étape procédurale, complété le cas échéant par un honoraire de résultat.",
-  },
-  {
-    q: "Faut-il privilégier une mise en demeure ou une assignation directe ?",
-    a: "Dans la majorité des litiges commerciaux, une mise en demeure rédigée par le cabinet constitue un préalable utile — et souvent juridiquement nécessaire — pour constater formellement le manquement, faire courir les intérêts moratoires et ouvrir une fenêtre de règlement amiable rapide. Une saisine judiciaire immédiate (assignation en référé, mesure probatoire ou saisie conservatoire) est en revanche privilégiée lorsqu’une preuve risque de disparaître, qu’un trouble manifestement illicite doit cesser ou que le recouvrement d’une créance est menacé.",
-  },
-  {
-    q: "Comment se déroule le premier rendez-vous ?",
-    a: "Après réception d’un bref exposé des faits et vérification de l’absence de conflit d’intérêts, le premier rendez-vous peut se tenir au cabinet (Paris 16ᵉ), en visioconférence ou par téléphone. Cet échange permet au cabinet d’analyser les pièces essentielles, d’évaluer les options amiables et judiciaires, de préciser le calendrier prévisible et de présenter les modalités d’honoraires avant toute intervention. Votre demande est traitée avec discrétion et dans le respect du secret professionnel.",
-  },
-] as const;
 
 export const CONTACT = {
   eyebrow: "Contact",
   title: "Commençons par les faits.",
-  body: "Quelques lignes suffisent pour solliciter un premier rendez-vous — au cabinet (Paris), en visioconférence ou par téléphone : indiquez le contexte du différend, les parties concernées et toute échéance en cours. Votre demande est traitée avec discrétion et dans le respect du secret professionnel.",
-  formHelper:
-    "En cliquant sur « Préparer ma demande », votre messagerie électronique s’ouvre automatiquement avec votre message pré-rempli afin de vous permettre de le relire et de l’envoyer en toute maîtrise depuis votre propre boîte de réception. Merci de ne joindre aucune pièce sensible lors de ce premier envoi.",
+  body: "Quelques lignes suffisent : le contexte du différend, les parties concernées et vos éventuelles échéances (mise en demeure, assignation, audience). Le cabinet prend connaissance de votre demande et vous indique les suites envisageables. Pour une échéance imminente, appelez directement le cabinet.",
   formNote:
-    "Votre demande est traitée avec discrétion et dans le respect du secret professionnel. L’envoi de ce courriel ne crée pas, en soi, de relation avocat-client : celle-ci suppose l’acceptation expresse du dossier par le cabinet, après vérification notamment de l’absence de conflit d’intérêts.",
+    "Ce formulaire prépare un courriel pré-rempli dans votre messagerie ; aucune donnée n'est enregistrée sur ce site. L'envoi ne crée pas, en soi, de relation avocat-client : celle-ci suppose l'acceptation expresse du dossier par le cabinet, après vérification notamment de l'absence de conflit d'intérêts.",
   subjects: CONTACT_SUBJECTS,
 } as const;
 
 export const CONVERSION = {
   eyebrow: "Premier échange",
-  title: "Un enjeu juridique mérite une réponse adaptée.",
-  body: "Litige commercial, blocage entre associés, garantie de passif ou échéance procédurale : exposez l’essentiel des faits en quelques lignes. Votre demande est traitée avec discrétion et dans le respect du secret professionnel.",
+  title: "Un litige engage votre entreprise. Parlons-en tôt.",
+  body: "Litige commercial, blocage entre associés, mise en cause d'un dirigeant ou échéance procédurale : décrivez les faits et les parties concernées en quelques lignes. Le cabinet examine votre demande de manière confidentielle et vous indique les suites envisageables.",
   cta: CTA.primary,
 } as const;
 
@@ -384,15 +366,15 @@ export const FOOTER = {
         { label: "Responsabilité des dirigeants", href: "/responsabilite-des-dirigeants" },
         { label: "Contentieux post-acquisition", href: "/contentieux-post-acquisition" },
         { label: "Rupture brutale & concurrence", href: "/rupture-brutale-concurrence-deloyale" },
-        { label: "Procédures d’urgence", href: "/procedures-d-urgence" },
+        { label: "Procédures d'urgence", href: "/procedures-d-urgence" },
         { label: "Contentieux international", href: "/contentieux-international" },
       ],
     },
     {
       title: "Informations",
       items: [
-        { label: "Publications externes", href: "/publications" },
-        { label: "Questions fréquentes", href: "/#faq" },
+        { label: "Prendre rendez-vous", href: "/rendez-vous" },
+        { label: "Actualités & publications", href: "/publications" },
         { label: "Mentions légales", href: "/mentions-legales" },
         { label: "Politique de confidentialité", href: "/politique-de-confidentialite" },
       ],
@@ -400,4 +382,40 @@ export const FOOTER = {
   ],
   disclaimer:
     "Les informations diffusées sur ce site ont un caractère strictement général et informatif : elles ne constituent ni une consultation juridique ni un conseil personnalisé, et leur lecture ne crée aucune relation avocat-client.",
+} as const;
+
+/**
+ * Prise de rendez-vous via Cal.com (compte de démonstration validé par le cabinet).
+ * Surcharge possible par variables d'environnement, sans modifier le code :
+ *   NEXT_PUBLIC_BOOKING_URL, NEXT_PUBLIC_BOOKING_URL_CABINET,
+ *   NEXT_PUBLIC_BOOKING_URL_VIDEO, NEXT_PUBLIC_BOOKING_URL_PHONE
+ */
+const BOOKING_PROFILE =
+  process.env.NEXT_PUBLIC_BOOKING_URL ?? "https://cal.com/mondir-riache-pvbqqs";
+
+export const BOOKING = {
+  profileUrl: BOOKING_PROFILE,
+  modes: [
+    {
+      id: "telephone",
+      label: "Consultation téléphonique",
+      duration: "10 min",
+      text: "Un premier contact bref pour présenter votre situation et vérifier que le cabinet peut vous répondre.",
+      href: process.env.NEXT_PUBLIC_BOOKING_URL_PHONE ?? BOOKING_PROFILE,
+    },
+    {
+      id: "visio",
+      label: "Consultation en visioconférence",
+      duration: "60 min",
+      text: "Un échange approfondi à distance sur les faits, les pièces et les voies envisageables.",
+      href: process.env.NEXT_PUBLIC_BOOKING_URL_VIDEO ?? BOOKING_PROFILE,
+    },
+    {
+      id: "cabinet",
+      label: "Rendez-vous au cabinet",
+      duration: "30 min",
+      text: "Un rendez-vous au 53 avenue Victor Hugo, Paris 16ᵉ.",
+      href: process.env.NEXT_PUBLIC_BOOKING_URL_CABINET ?? BOOKING_PROFILE,
+    },
+  ],
 } as const;

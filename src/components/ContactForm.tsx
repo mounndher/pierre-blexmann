@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { AlertCircle, Check, CheckCircle2, ChevronDown, Copy, Mail } from "lucide-react";
+import { AlertCircle, CheckCircle2, ChevronDown, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
-import { CONTACT, CTA, SITE } from "@/content/site";
+import { CONTACT, SITE } from "@/content/site";
 
 type Fields = {
   nom: string;
@@ -12,7 +11,6 @@ type Fields = {
   societe: string;
   sujet: string;
   message: string;
-  appointmentMode: string;
   consent: boolean;
 };
 
@@ -25,22 +23,18 @@ const EMPTY: Fields = {
   societe: "",
   sujet: "",
   message: "",
-  appointmentMode: SITE.appointmentOptions[0],
   consent: false,
 };
 
-const MAILTO_LONG_MESSAGE_CHARS = 1500;
-
 const SUCCESS_MESSAGE =
-  "Votre courriel pré-rempli vient de s’ouvrir dans votre messagerie électronique : vous pouvez le relire puis l’adresser directement au cabinet. Votre demande est traitée avec discrétion et dans le respect du secret professionnel.";
+  "Votre message a bien été préparé dans votre logiciel de messagerie. Le cabinet en prend connaissance et vous répondra à l'adresse indiquée. En cas d'échéance imminente, vous pouvez aussi appeler le +33 (0)1 89 86 48 60.";
 const ERROR_MESSAGE =
-  "Votre messagerie n’a pas pu s’ouvrir automatiquement. Vous pouvez écrire directement à pblexmann@blexmann-avocats.com ou appeler le +33 (0)1 89 86 48 60.";
+  "Votre message n'a pas pu être préparé. Vous pouvez réessayer ou écrire directement à pblexmann@blexmann-avocats.com.";
 
 function validate(values: Fields): Errors {
   const errors: Errors = {};
   if (values.nom.trim().length < 2) errors.nom = "Veuillez indiquer votre nom et votre prénom.";
-  if (values.nom.trim().length > 100)
-    errors.nom = "Ce champ est trop long (100 caractères maximum).";
+  if (values.nom.trim().length > 100) errors.nom = "Ce champ est trop long (100 caractères maximum).";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email.trim()))
     errors.email = "Veuillez indiquer une adresse électronique valide.";
   if (values.telephone.trim() && !/^[+()\d\s.-]{6,30}$/.test(values.telephone.trim()))
@@ -50,11 +44,11 @@ function validate(values: Fields): Errors {
   if (!values.sujet) errors.sujet = "Veuillez sélectionner la nature de votre dossier.";
   if (values.message.trim().length < 20)
     errors.message = "Veuillez décrire brièvement votre situation (20 caractères minimum).";
-  if (values.message.trim().length > 4000)
-    errors.message = "Votre message est trop long (4 000 caractères maximum).";
+  if (values.message.trim().length > 5000)
+    errors.message = "Votre message est trop long (5 000 caractères maximum).";
   if (!values.consent)
     errors.consent =
-      "Veuillez confirmer avoir pris connaissance de la politique de confidentialité avant de préparer votre demande.";
+      "Votre accord au traitement de ces informations est requis pour transmettre la demande.";
   return errors;
 }
 
@@ -63,46 +57,27 @@ const fieldClass = (invalid: boolean) =>
     invalid ? "border-red-700/70" : "border-ink/25 hover:border-ink/50"
   }`;
 
-function formatPlainBody(values: Fields): string {
-  return [
-    `Nom et prénom : ${values.nom.trim()}`,
-    `Adresse électronique : ${values.email.trim()}`,
-    values.telephone.trim() ? `Téléphone : ${values.telephone.trim()}` : "",
-    values.societe.trim() ? `Société : ${values.societe.trim()}` : "",
-    `Nature du dossier : ${values.sujet}`,
-    `Modalité d’échange souhaitée : ${values.appointmentMode}`,
-    "",
-    "Exposé de la situation :",
-    values.message.trim(),
-    "",
-    `— Demande préparée pour ${SITE.name} (${SITE.domain})`,
-  ]
-    .filter(Boolean)
-    .join("\n");
-}
-
+/**
+ * Site 100 % statique : aucun serveur, aucune base de données.
+ * Le formulaire compose un courriel dans la messagerie du visiteur.
+ */
 function buildMailtoUrl(values: Fields): string {
-  const subject = `Demande de rendez-vous — ${values.sujet}`;
-  const fullBody = formatPlainBody(values);
-  const safeBody =
-    values.message.trim().length > MAILTO_LONG_MESSAGE_CHARS
-      ? [
-          `Nom et prénom : ${values.nom.trim()}`,
-          `Adresse électronique : ${values.email.trim()}`,
-          values.telephone.trim() ? `Téléphone : ${values.telephone.trim()}` : "",
-          values.societe.trim() ? `Société : ${values.societe.trim()}` : "",
-          `Nature du dossier : ${values.sujet}`,
-          `Modalité d’échange souhaitée : ${values.appointmentMode}`,
-          "",
-          "Exposé de la situation (extrait — collez le récapitulatif intégral si nécessaire) :",
-          `${values.message.trim().slice(0, MAILTO_LONG_MESSAGE_CHARS)}…`,
-        ]
-          .filter(Boolean)
-          .join("\n")
-      : fullBody;
+  const subject = `Demande de contact — ${values.sujet}`;
+  const lines = [
+    `Nom et prénom : ${values.nom}`,
+    `Adresse électronique : ${values.email}`,
+    values.telephone.trim() ? `Téléphone : ${values.telephone}` : "",
+    values.societe.trim() ? `Société : ${values.societe}` : "",
+    `Nature du dossier : ${values.sujet}`,
+    "",
+    "Situation :",
+    values.message,
+    "",
+    `— Message préparé depuis le site ${SITE.domain}`,
+  ].filter(Boolean);
 
   return `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-    safeBody,
+    lines.join("\n"),
   )}`;
 }
 
@@ -112,9 +87,6 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [composedHref, setComposedHref] = useState<string>("");
-  const [composedText, setComposedText] = useState<string>("");
-  const [wasLongMessage, setWasLongMessage] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const applySubject = (subject: unknown) => {
@@ -126,6 +98,7 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
         setErrors((prev) => ({ ...prev, sujet: undefined }));
       }
     };
+    // Preselect from inner-page links: /contact?sujet=…
     try {
       const param = new URLSearchParams(window.location.search).get("sujet");
       if (param) applySubject(param);
@@ -164,7 +137,6 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
       telephone: true,
       societe: true,
       sujet: true,
-      appointmentMode: true,
       message: true,
       consent: true,
     });
@@ -176,30 +148,11 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
       return;
     }
 
-    try {
-      const href = buildMailtoUrl(values);
-      setComposedHref(href);
-      setComposedText(
-        `Destinataire : ${SITE.email}\nObjet : Demande de rendez-vous — ${values.sujet}\n\n${formatPlainBody(values)}`,
-      );
-      setWasLongMessage(values.message.trim().length > MAILTO_LONG_MESSAGE_CHARS);
-      setCopied(false);
-      setStatus("success");
-      window.location.href = href;
-    } catch {
-      setStatus("error");
-    }
-  }
-
-  async function onCopy() {
-    if (!composedText) return;
-    try {
-      await navigator.clipboard.writeText(composedText);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 3000);
-    } catch {
-      setCopied(false);
-    }
+    const href = buildMailtoUrl(values);
+    setComposedHref(href);
+    setStatus("success");
+    // Opens the visitor's mail client — nothing is transmitted to this site.
+    window.location.href = href;
   }
 
   const err = (key: keyof Fields) => (touched[key] ? errors[key] : undefined);
@@ -208,14 +161,16 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
 
   return (
     <form
-      id="contact-form"
       onSubmit={onSubmit}
       noValidate
       aria-describedby={`${formId}-form-note`}
-      className="scroll-mt-24 bg-paper/60 p-6 sm:p-9"
+      className="bg-paper/60 p-6 sm:p-9"
     >
-      <p className="eyebrow text-bronze">{CTA.primary}</p>
-      <p className="mt-3 text-sm leading-relaxed text-mute">{CONTACT.formHelper}</p>
+      <p className="eyebrow text-bronze">Votre demande</p>
+      <p className="mt-3 text-sm leading-relaxed text-mute">
+        Décrivez l&apos;essentiel en quelques lignes&nbsp;; il n&apos;est pas nécessaire de
+        transmettre de documents sensibles à ce stade.
+      </p>
 
       <div aria-live="polite" className="mt-5">
         {status === "success" && (
@@ -223,45 +178,20 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
             role="status"
             className="flex items-start gap-3 border border-navy/20 bg-ivory px-4 py-4 text-sm leading-relaxed text-navy"
           >
-            <CheckCircle2
-              size={17}
-              strokeWidth={1.5}
-              aria-hidden="true"
-              className="mt-0.5 shrink-0"
-            />
+            <CheckCircle2 size={17} strokeWidth={1.5} aria-hidden="true" className="mt-0.5 shrink-0" />
             <div>
               <p>{SUCCESS_MESSAGE}</p>
-              {wasLongMessage && (
-                <p className="mt-2 text-xs text-mute">
-                  Votre description étant détaillée, utilisez le bouton «&nbsp;Copier le
-                  récapitulatif intégral&nbsp;» ci-dessous si votre messagerie a abrégé le texte.
-                </p>
-              )}
-              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-mute">
+              <p className="mt-2 text-mute">
+                Rien ne s&apos;est ouvert&nbsp;?{" "}
                 <a href={composedHref} className="link-underline text-navy">
-                  Rouvrir dans ma messagerie
-                </a>
-                <button
-                  type="button"
-                  onClick={onCopy}
-                  className="inline-flex items-center gap-1.5 text-navy transition-colors hover:text-bronze"
-                >
-                  {copied ? (
-                    <>
-                      <Check size={14} strokeWidth={1.75} aria-hidden="true" />
-                      Récapitulatif copié
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={14} strokeWidth={1.5} aria-hidden="true" />
-                      Copier le récapitulatif intégral
-                    </>
-                  )}
-                </button>
-                <a href={`mailto:${SITE.email}`} className="link-underline break-all text-navy">
+                  Ouvrir le message dans ma messagerie
+                </a>{" "}
+                ou écrivez à{" "}
+                <a href={`mailto:${SITE.email}`} className="link-underline text-navy">
                   {SITE.email}
                 </a>
-              </div>
+                .
+              </p>
             </div>
           </div>
         )}
@@ -270,12 +200,7 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
             role="alert"
             className="flex items-start gap-3 border border-red-800/30 bg-red-50 px-4 py-4 text-sm leading-relaxed text-red-900"
           >
-            <AlertCircle
-              size={17}
-              strokeWidth={1.5}
-              aria-hidden="true"
-              className="mt-0.5 shrink-0"
-            />
+            <AlertCircle size={17} strokeWidth={1.5} aria-hidden="true" className="mt-0.5 shrink-0" />
             <span>{ERROR_MESSAGE}</span>
           </p>
         )}
@@ -376,7 +301,7 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
             value={values.societe}
             onChange={(e) => set("societe", e.target.value)}
             onBlur={() => blur("societe")}
-            placeholder="Dénomination sociale ou fonction"
+            placeholder="Raison sociale ou fonction"
             className={fieldClass(!!err("societe"))}
           />
           {err("societe") && (
@@ -386,7 +311,7 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
           )}
         </div>
 
-        <div>
+        <div className="sm:col-span-2">
           <label htmlFor={`${formId}-sujet`} className="eyebrow block text-mute">
             Nature du dossier *
           </label>
@@ -424,33 +349,6 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
           )}
         </div>
 
-        <div>
-          <label htmlFor={`${formId}-appointmentMode`} className="eyebrow block text-mute">
-            Modalité de rendez-vous souhaitée
-          </label>
-          <div className="relative">
-            <select
-              id={`${formId}-appointmentMode`}
-              name="appointmentMode"
-              value={values.appointmentMode}
-              onChange={(e) => set("appointmentMode", e.target.value)}
-              className={`${fieldClass(false)} appearance-none rounded-none pr-8`}
-            >
-              {SITE.appointmentOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={16}
-              strokeWidth={1.5}
-              aria-hidden="true"
-              className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-mute"
-            />
-          </div>
-        </div>
-
         <div className="sm:col-span-2">
           <label htmlFor={`${formId}-message`} className="eyebrow block text-mute">
             Décrivez brièvement la situation *
@@ -461,18 +359,17 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
             rows={5}
             required
             aria-required="true"
-            maxLength={4000}
+            maxLength={5000}
             aria-invalid={!!err("message")}
             aria-describedby={describedBy("message", `${formId}-h-message`)}
             value={values.message}
             onChange={(e) => set("message", e.target.value)}
             onBlur={() => blur("message")}
-            placeholder="Qui sont les parties ? Que s’est-il passé ? Une échéance est-elle en cours (mise en demeure, assignation, audience) ?"
+            placeholder="Qui sont les parties ? Que s'est-il passé ? Une échéance est-elle en cours (mise en demeure, assignation, audience) ?"
             className={`${fieldClass(!!err("message"))} resize-y`}
           />
           <p id={`${formId}-h-message`} className="mt-2 text-xs text-mute">
-            {values.message.trim().length} caractères (20 minimum) — sans pièce sensible jointe à
-            ce stade.
+            {values.message.trim().length} caractères — 20 minimum.
           </p>
           {err("message") && (
             <p id={`${formId}-e-message`} className="mt-2 text-xs text-red-800">
@@ -496,16 +393,16 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
               onBlur={() => blur("consent")}
               className="mt-1 h-4 w-4 shrink-0 accent-[#101D2B]"
             />
-            <label htmlFor={`${formId}-consent`} className="text-sm leading-relaxed text-ink/85">
-              J&rsquo;ai pris connaissance de la{" "}
-              <Link
+            <label htmlFor={`${formId}-consent`} className="text-sm leading-relaxed text-ink/80">
+              J&apos;accepte que les informations transmises soient traitées par le cabinet pour
+              examiner ma demande, conformément à la{" "}
+              <a
                 href="/politique-de-confidentialite"
                 className="link-underline text-navy underline-offset-2"
               >
                 politique de confidentialité
-              </Link>{" "}
-              et j&rsquo;accepte que les informations adressées par courriel soient traitées par le
-              cabinet pour l&rsquo;examen de ma demande.
+              </a>
+              .
             </label>
           </div>
           {err("consent") && (
@@ -525,7 +422,7 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
           className="eyebrow group inline-flex shrink-0 items-center justify-center gap-3 bg-navy px-7 py-4 text-ivory transition-colors duration-300 hover:bg-navytint"
         >
           <Mail size={15} strokeWidth={1.75} aria-hidden="true" />
-          {CTA.submitMailto}
+          Envoyer ma demande par courriel
           <span
             aria-hidden="true"
             className="transition-transform duration-300 group-hover:translate-x-1"
@@ -534,18 +431,6 @@ export default function ContactForm({ formId = "f" }: { formId?: string }) {
           </span>
         </button>
       </div>
-
-      <p className="mt-5 text-xs leading-relaxed text-mute">
-        Vous pouvez également écrire directement à{" "}
-        <a href={`mailto:${SITE.email}`} className="link-underline break-all text-navy">
-          {SITE.email}
-        </a>{" "}
-        ou joindre le cabinet au{" "}
-        <a href={SITE.phoneHref} className="link-underline text-navy">
-          {SITE.phone}
-        </a>
-        .
-      </p>
     </form>
   );
 }

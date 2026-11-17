@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/content/site";
 
-const LAST_MODIFIED = new Date("2026-04-01T00:00:00.000Z");
+const LAST_EDITORIAL_UPDATE = "2026-11-16";
 
 const PATHS: { path: string; changeFrequency: "monthly" | "yearly"; priority: number }[] = [
   { path: "", changeFrequency: "monthly", priority: 1 },
@@ -13,16 +13,19 @@ const PATHS: { path: string; changeFrequency: "monthly" | "yearly"; priority: nu
   { path: "/procedures-d-urgence", changeFrequency: "monthly", priority: 0.8 },
   { path: "/contentieux-international", changeFrequency: "monthly", priority: 0.8 },
   { path: "/le-cabinet", changeFrequency: "yearly", priority: 0.7 },
-  { path: "/publications", changeFrequency: "yearly", priority: 0.5 },
+  { path: "/publications", changeFrequency: "monthly", priority: 0.6 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.7 },
+  { path: "/rendez-vous", changeFrequency: "yearly", priority: 0.6 },
   { path: "/mentions-legales", changeFrequency: "yearly", priority: 0.3 },
   { path: "/politique-de-confidentialite", changeFrequency: "yearly", priority: 0.3 },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  // Date fixe (dernière révision éditoriale) : new Date() annoncerait une modification à chaque build.
+  const lastModified = new Date(LAST_EDITORIAL_UPDATE);
   return PATHS.map(({ path, changeFrequency, priority }) => ({
     url: path ? `${SITE.url}${path}` : SITE.url,
-    lastModified: LAST_MODIFIED,
+    lastModified,
     changeFrequency,
     priority,
   }));

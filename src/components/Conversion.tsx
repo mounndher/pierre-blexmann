@@ -14,7 +14,7 @@ export default function Conversion() {
     >
       <Image
         src="/images/paris-passage.jpg"
-        alt="Architecture parisienne au crépuscule — Blexmann Avocats, contentieux des affaires à Paris"
+        alt="Architecture parisienne au crépuscule — Cabinet d'avocats en contentieux des affaires à Paris"
         fill
         sizes="100vw"
         className="object-cover opacity-40 mix-blend-luminosity"
@@ -81,6 +81,12 @@ export default function Conversion() {
                 className="eyebrow group inline-flex items-center justify-center gap-3 border border-ivory/40 px-7 py-4 text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
               >
                 Appeler · {SITE.phone}
+              </a>
+              <a
+                href="/rendez-vous"
+                className="eyebrow inline-flex items-center justify-center gap-3 px-2 py-4 text-goldsoft transition-colors hover:text-ivory"
+              >
+                Réserver un créneau
               </a>
             </div>
           </div>

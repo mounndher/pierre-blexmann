@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import { APPROACH, APPROACH_INTRO, MARD, WHY } from "@/content/site";
 import { DrawRule, Reveal, Section } from "@/components/ui";
@@ -84,8 +85,8 @@ export default function Approche() {
             <p className="max-w-[44ch] font-display text-lg italic leading-snug text-ivory/85">
               {WHY.closing}
             </p>
-            <a
-              href="#contact"
+            <Link
+              href="/#contact"
               className="eyebrow group inline-flex shrink-0 items-center justify-center gap-3 bg-ivory px-7 py-4 text-navy transition-colors duration-300 hover:bg-goldsoft"
             >
               {WHY.cta}
@@ -95,7 +96,7 @@ export default function Approche() {
               >
                 →
               </span>
-            </a>
+            </Link>
           </div>
         </Reveal>
       </div>

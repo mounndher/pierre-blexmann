@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
 import { SITE } from "@/content/site";
-import { DEFAULT_OG_IMAGE } from "@/lib/seo";
+import { ORG_ID, PERSON_ID, PHONE_E164, WEBSITE_ID } from "@/lib/seo";
 import MobileCtaBar from "@/components/MobileCtaBar";
 import "./globals.css";
 
@@ -21,34 +21,41 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const TITLE = "Avocat contentieux des affaires Paris | Blexmann Avocats";
+const TITLE = "Avocat contentieux des affaires Paris 16e | Cabinet Blexmann";
 const DESCRIPTION =
-  "Blexmann Avocats, avocat en contentieux des affaires à Paris 16ᵉ : litiges commerciaux, conflits entre associés, responsabilité des dirigeants et référés.";
+  "Avocat en contentieux des affaires à Paris 16ᵉ : litiges commerciaux, conflits entre associés, responsabilité des dirigeants, garantie de passif. Premier échange confidentiel.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
     default: TITLE,
-    template: `%s | ${SITE.name}`,
+    template: `%s | ${SITE.legalName}`,
   },
   description: DESCRIPTION,
-  applicationName: SITE.name,
-  authors: [{ name: SITE.name }],
+  applicationName: SITE.legalName,
+  authors: [{ name: SITE.legalName }],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "fr_FR",
     url: SITE.url,
-    siteName: SITE.name,
+    siteName: SITE.legalName,
     title: TITLE,
     description: DESCRIPTION,
-    images: [DEFAULT_OG_IMAGE],
+    images: [
+      {
+        url: "/images/hero-facade.jpg",
+        width: 1536,
+        height: 1024,
+        alt: "Façade haussmannienne parisienne à Paris 16ᵉ — Cabinet Blexmann Avocats",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: [DEFAULT_OG_IMAGE.url],
+    images: ["/images/hero-facade.jpg"],
   },
   robots: {
     index: true,
@@ -63,23 +70,33 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-/**
- * Site-wide Schema.org @graph using strictly verified factual information.
- * TODO: Verify with lawyer: Phone, Toque number, SIREN, Founding year 2013.
- */
-const siteGraphJsonLd = {
+const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": ["LegalService", "Attorney"],
-      "@id": `${SITE.url}/#organization`,
-      name: SITE.name,
+      "@id": ORG_ID,
+      name: SITE.legalName,
+      alternateName: "Maître Pierre Blexmann, avocat au Barreau de Paris",
       url: SITE.url,
-      image: `${SITE.url}${DEFAULT_OG_IMAGE.url}`,
+      image: `${SITE.url}/images/hero-facade.jpg`,
       description: DESCRIPTION,
       foundingDate: String(SITE.founded),
-      telephone: SITE.phoneE164,
-      email: SITE.email,
+      areaServed: [
+        { "@type": "City", name: "Paris" },
+        { "@type": "AdministrativeArea", name: "Île-de-France" },
+        { "@type": "Country", name: "France" },
+      ],
+      knowsAbout: [
+        "Contentieux commercial et contractuel",
+        "Conflits entre associés et actionnaires",
+        "Responsabilité des dirigeants",
+        "Contentieux post-acquisition et garantie de passif",
+        "Rupture brutale des relations commerciales et concurrence déloyale",
+        "Procédures d'urgence",
+        "Contentieux à dimension internationale",
+        "Modes alternatifs de règlement des différends (négociation, médiation, conciliation, arbitrage)",
+      ],
       address: {
         "@type": "PostalAddress",
         streetAddress: SITE.address.street,
@@ -87,38 +104,27 @@ const siteGraphJsonLd = {
         addressLocality: SITE.address.locality,
         addressCountry: SITE.address.countryCode,
       },
-      areaServed: [
-        { "@type": "City", name: "Paris" },
-        { "@type": "AdministrativeArea", name: "Île-de-France" },
-        { "@type": "Country", name: "France" },
-      ],
-      knowsAbout: [
-        "Contentieux des affaires",
-        "Contentieux commercial et contractuel",
-        "Conflits entre associés et actionnaires",
-        "Responsabilité des dirigeants",
-        "Contentieux post-acquisition",
-        "Rupture brutale des relations commerciales et concurrence déloyale",
-        "Référé et procédures d’urgence",
-        "Contentieux commercial international",
-        "Modes alternatifs de règlement des différends",
-      ],
-      founder: { "@id": `${SITE.url}/#founder` },
+      telephone: PHONE_E164,
+      email: SITE.email,
+      founder: { "@id": PERSON_ID },
+      employee: { "@id": PERSON_ID },
     },
     {
       "@type": "Person",
-      "@id": `${SITE.url}/#founder`,
+      "@id": PERSON_ID,
       name: "Pierre Blexmann",
+      honorificPrefix: "Maître",
       jobTitle: "Avocat au Barreau de Paris",
-      worksFor: { "@id": `${SITE.url}/#organization` },
+      url: `${SITE.url}/le-cabinet`,
+      worksFor: { "@id": ORG_ID },
     },
     {
       "@type": "WebSite",
-      "@id": `${SITE.url}/#website`,
+      "@id": WEBSITE_ID,
       url: SITE.url,
-      name: SITE.name,
+      name: SITE.legalName,
       inLanguage: "fr-FR",
-      publisher: { "@id": `${SITE.url}/#organization` },
+      publisher: { "@id": ORG_ID },
     },
   ],
 };
@@ -126,22 +132,15 @@ const siteGraphJsonLd = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={`${playfair.variable} ${inter.variable}`}>
-      <head>
+      <body className="min-h-screen bg-ivory text-ink antialiased">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteGraphJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-      </head>
-      <body className="min-h-screen bg-ivory text-ink antialiased">
+        {/* Entrance animations set inline opacity:0 — never leave content hidden without JS */}
         <noscript>
           <style>{`[style*="opacity:0"]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
-        <a
-          href="#main"
-          className="eyebrow sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-navy focus:px-4 focus:py-3 focus:text-ivory"
-        >
-          Aller au contenu
-        </a>
         {children}
         <MobileCtaBar />
       </body>

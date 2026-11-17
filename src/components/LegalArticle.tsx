@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -38,12 +37,12 @@ export default function LegalArticle({
             </div>
           </div>
 
-          <Link
+          <a
             href={backHref}
             className="eyebrow mt-16 inline-flex items-center gap-3 border-b border-gold pb-2 text-navy transition-colors hover:text-bronze"
           >
             {backLabel}
-          </Link>
+          </a>
         </article>
       </main>
       <Footer />

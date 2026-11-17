@@ -1,13 +1,14 @@
-import AuditComment from "@/components/AuditComment";
+"use client";
+
 import ContactForm from "@/components/ContactForm";
 import { CONTACT, SITE } from "@/content/site";
 import { Reveal, Section } from "@/components/ui";
 
 export default function Contact() {
   return (
-    <Section id="contact" index="07" label="Contact">
+    <Section id="contact" index="06" label="Contact">
       <div className="grid grid-cols-12 gap-x-6 gap-y-14">
-        {/* Left — verified coordinates & consultation options */}
+        {/* Left — verified coordinates */}
         <div className="col-span-12 lg:col-span-4">
           <Reveal>
             <h2 id="contact-title" className="display-lg font-display text-navy">
@@ -19,10 +20,8 @@ export default function Contact() {
           <Reveal delay={0.1}>
             <dl className="rule-double mt-10 space-y-6 pt-7">
               <div>
-                <dt className="eyebrow text-mute">Adresse</dt>
+                <dt className="eyebrow text-mute">Cabinet à Paris 16ᵉ</dt>
                 <dd className="mt-2 font-display text-lg leading-snug text-navy">
-                  {SITE.name}
-                  <br />
                   {SITE.address.street}
                   <br />
                   {SITE.address.postalCode} {SITE.address.locality}
@@ -31,8 +30,6 @@ export default function Contact() {
               <div>
                 <dt className="eyebrow text-mute">Téléphone</dt>
                 <dd className="mt-2">
-                  {/* TODO: Verify with lawyer: Phone */}
-                  <AuditComment text="TODO: Verify with lawyer: Phone" />
                   <a
                     href={SITE.phoneHref}
                     className="link-underline font-display text-lg text-navy hover:text-bronze"
@@ -53,16 +50,9 @@ export default function Contact() {
                 </dd>
               </div>
               <div>
-                <dt className="eyebrow text-mute">Modalités de rendez-vous</dt>
-                <dd className="mt-2">
-                  <ul className="space-y-1.5 font-display text-lg leading-snug text-navy">
-                    {SITE.appointmentOptions.map((option) => (
-                      <li key={option} className="flex items-center gap-3">
-                        <span aria-hidden="true" className="h-px w-4 shrink-0 bg-gold" />
-                        <span>{option}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <dt className="eyebrow text-mute">Rattachement</dt>
+                <dd className="mt-2 font-display text-lg text-navy">
+                  {SITE.barreau} · Toque {SITE.toque}
                 </dd>
               </div>
             </dl>
