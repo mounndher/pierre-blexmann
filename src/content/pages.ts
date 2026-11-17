@@ -21,7 +21,7 @@ export type PageSection = {
   points?: string[];
 };
 
-export type Faq = { question: string; answer: string };
+export type Faq = { question: string; answer: string; link?: { label: string; href: string } };
 
 export type InnerPage = {
   slug: string;
@@ -77,7 +77,7 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Voies d'action",
         heading: "Les voies d'action envisageables",
         paragraphs: [
-          "Selon le montant en jeu, la certitude de la créance et le calendrier de l'entreprise, plusieurs leviers existent : requête en injonction de payer pour une créance contractuelle déterminée, référé-provision en l'absence de contestation sérieuse, assignation au fond devant le tribunal des activités économiques ou protocole transactionnel.",
+          "Selon le montant en jeu, la certitude de la créance et le calendrier de l'entreprise, plusieurs leviers existent : requête en injonction de payer pour une créance répondant aux conditions légales, référé-provision si l’obligation n’est pas sérieusement contestable, assignation devant la juridiction compétente ou négociation d’un protocole transactionnel.",
           "Chaque option est présentée avec ses implications pratiques : délais procéduraux, coûts prévisibles, risques identifiés, solvabilité du débiteur et incidence sur la poursuite éventuelle de la relation d'affaires.",
         ],
       },
@@ -86,7 +86,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Faut-il impérativement un contrat signé pour agir ?",
         answer:
-          "Non. En matière commerciale, la preuve est libre : l'existence et le contenu de l'accord peuvent résulter de bons de commande, de factures acceptées, de correspondances ou d'une exécution suivie. Un contrat écrit facilite néanmoins la démonstration précise des obligations convenues.",
+          "Pas nécessairement. Entre commerçants, les actes de commerce peuvent en principe se prouver par tout moyen, sous réserve des exceptions légales. Bons de commande, factures, échanges et éléments d’exécution doivent être examinés ensemble. Un écrit facilite la démonstration des obligations convenues.",
       },
       {
         question: "Dans quel délai agir face à une facture impayée ?",
@@ -96,7 +96,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Un procès est-il toujours indispensable ?",
         answer:
-          "Non. Une négociation encadrée entre conseils, formalisée par un protocole transactionnel, permet souvent de solder le différend dans un cadre confidentiel et maîtrisé, notamment lorsqu'un échéancier sécurisé ou une sortie ordonnée du contrat est préférable.",
+          "Non. Une négociation peut permettre de convenir d’un échéancier ou d’une sortie du contrat, puis de formaliser l’accord dans un protocole. Sa confidentialité et ses conditions d’exécution doivent être prévues ; aucun accord n’est acquis avant son acceptation par les parties.",
       },
       {
         question: "Quels éléments réunir pour un premier échange ?",
@@ -145,8 +145,8 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Voies de résolution",
         heading: "Arbitrer entre négociation, médiation et action judiciaire",
         paragraphs: [
-          "La discussion structurée entre conseils demeure la première voie à envisager lorsque les intérêts peuvent encore être conciliés : elle débouche sur un protocole réaménageant la gouvernance ou organisant une cession de titres, à l'abri de la publicité des débats. La médiation offre également un cadre confidentiel adapté aux sociétés fermées ou familiales.",
-          "La saisine du juge s'impose lorsqu'un abus doit être sanctionné, une délibération annulée ou le fonctionnement social préservé : demande de communication de pièces en référé, désignation d'un mandataire ad hoc ou d'un administrateur provisoire, ou encore mesure d'instruction portant sur une ou plusieurs opérations de gestion.",
+          "La discussion structurée entre conseils demeure la première voie à envisager lorsque les intérêts peuvent encore être conciliés : elle peut aboutir à un accord réaménageant la gouvernance ou organisant une cession de titres. La médiation offre un cadre de discussion dont les règles de confidentialité doivent être examinées avec les parties.",
+          "Une saisine du juge peut être envisagée lorsqu’un abus est invoqué, qu’une délibération est contestée ou que le fonctionnement social doit être préservé, dans les conditions applicables : demande de communication de pièces en référé, désignation d'un mandataire ad hoc ou d'un administrateur provisoire, ou encore mesure d'instruction portant sur une ou plusieurs opérations de gestion.",
         ],
       },
       {
@@ -162,7 +162,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Peut-on contester une assemblée générale irrégulièrement convoquée ?",
         answer:
-          "Oui, selon la forme sociale et la nature de l'irrégularité constatée (défaut de convocation, violation du droit d'information, non-respect des règles de quorum ou de majorité), la nullité des délibérations peut être poursuivie dans les délais légaux.",
+          "Une irrégularité n’entraîne pas automatiquement l’annulation d’une décision. La forme sociale, la règle méconnue, ses conséquences et les délais de contestation doivent être examinés. Le cabinet apprécie ces éléments avant d’envisager une demande en justice.",
       },
       {
         question: "Un associé peut-il être contraint de céder ses titres ?",
@@ -177,7 +177,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Comment préserver la confidentialité du différend ?",
         answer:
-          "Les pourparlers entre avocats sont couverts par la confidentialité des correspondances, et la médiation comme le protocole transactionnel préservent la discrétion des échanges, à la différence d'une audience publique.",
+          "La confidentialité des correspondances entre avocats relève des règles déontologiques, avec des exceptions notamment pour les correspondances officielles. En médiation ou lors d’une transaction, il convient également d’examiner le cadre applicable et les clauses convenues. La discrétion ne découle pas automatiquement du seul choix d’une négociation.",
       },
     ],
     relatedHeading: "Autres domaines d'intervention",
@@ -208,7 +208,7 @@ export const INNER_PAGES: InnerPage[] = [
           "La première étape consiste à qualifier précisément le fondement invoqué, à vérifier la qualité à agir du demandeur ainsi que la prescription, et à mesurer l'exposition réelle du mandataire — y compris au regard d'une éventuelle assurance responsabilité des dirigeants (RCMS).",
         ],
         points: [
-          "Actions sociales (ut universi ou ut singuli) et actions individuelles en responsabilité",
+          "Actions en responsabilité exercées au nom de la société ou à titre personnel",
           "Défense du dirigeant dans le cadre d'une procédure collective (insuffisance d'actif, sanctions personnelles)",
           "Litiges liés à la révocation brutale, vexatoire ou sans juste motif du mandataire social",
           "Mise en cause personnelle, engagements de caution et protection patrimoniale",
@@ -227,7 +227,7 @@ export const INNER_PAGES: InnerPage[] = [
         heading: "Maîtriser l'incidence du litige sur l'entreprise",
         paragraphs: [
           "La mise en cause d'un dirigeant rejaillit sur la gouvernance et sur la confiance des partenaires financiers ou commerciaux. Lorsqu'une issue transactionnelle est pertinente et juridiquement recevable, elle permet d'encadrer les conséquences du différend dans la discrétion.",
-          "L'ensemble des échanges avec l'avocat est protégé par le secret professionnel.",
+          "Le dossier est traité dans le respect des obligations déontologiques et du secret professionnel de l’avocat. Cette protection professionnelle ne transforme pas un courriel ordinaire en messagerie chiffrée de bout en bout.",
         ],
       },
     ],
@@ -245,7 +245,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Le patrimoine personnel du dirigeant peut-il être atteint ?",
         answer:
-          "Oui, lorsqu'une condamnation personnelle est prononcée ou qu'un engagement de caution est appelé. L'analyse porte à la fois sur la contestation des griefs, le lien de causalité, le quantum réclamé et la mobilisation éventuelle d'une police d'assurance RCMS.",
+          "Oui, lorsqu'une condamnation personnelle est prononcée ou qu'un engagement de caution est appelé. L'analyse porte à la fois sur la contestation des griefs, le lien de causalité, le montant réclamé et la mobilisation éventuelle d'une police d'assurance RCMS.",
       },
       {
         question: "Quel réflexe adopter à réception d'une mise en demeure ou d'une assignation ?",
@@ -290,7 +290,7 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Lecture des actes",
         heading: "L'instruction contractuelle et comptable du dossier",
         paragraphs: [
-          "L'étude part du protocole de cession, de la convention de garantie et des annexes de data room : étendue des déclarations, exclusions, seuils de déclenchement, franchises, plafonds, garanties de la garantie (séquestre, caution bancaire) et délais contractuels de réclamation.",
+          "L'étude part du protocole de cession, de la convention de garantie et des documents d’audit remis avant la cession : étendue des déclarations, exclusions, seuils de déclenchement, franchises, plafonds, garanties de la garantie (séquestre, caution bancaire) et délais contractuels de réclamation.",
           "Une attention particulière est portée au formalisme de notification et au droit d'information ou de participation du cédant en cas de réclamation d'un tiers : leur inobservation constitue un moyen de défense fréquent.",
         ],
       },
@@ -298,7 +298,7 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Résolution du différend",
         heading: "Négociation, évaluation contradictoire ou contentieux",
         paragraphs: [
-          "Selon l'architecture contractuelle et les montants discutés, le différend peut se traiter par voie transactionnelle, par le recours à un tiers évaluateur prévu pour l'arrêté du prix, en référé (notamment sur le sort d'un séquestre) ou au fond. Lorsqu'une clause de conciliation préalable ou une clause compromissoire est stipulée, son respect conditionne la recevabilité de l'action.",
+          "Selon l'architecture contractuelle et les montants discutés, le différend peut se traiter par voie transactionnelle, par le recours à un tiers évaluateur prévu pour l'arrêté du prix, en référé (notamment sur le sort d'un séquestre) ou au fond. Une clause de conciliation préalable peut affecter la recevabilité de la demande ; une clause d’arbitrage soulève une question de compétence. Leur portée doit être distinguée avant de saisir une juridiction.",
         ],
       },
     ],
@@ -321,7 +321,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Que vérifier avant de saisir le tribunal ?",
         answer:
-          "La présence éventuelle d'une clause de règlement amiable préalable, d'une clause de désignation d'un tiers calculateur du prix, d'une clause attributive de juridiction ou d'une clause d'arbitrage, dont la méconnaissance expose la demande à une fin de non-recevoir.",
+          "Les actes peuvent prévoir un règlement amiable préalable, un tiers chargé du calcul du prix ou une clause de juridiction ou d’arbitrage. Selon la stipulation, le débat portera sur le prix, la recevabilité de la demande ou la compétence du juge : ces mécanismes ne produisent pas tous le même effet.",
       },
     ],
     relatedHeading: "Autres domaines d'intervention",
@@ -362,7 +362,7 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Préavis & indemnisation",
         heading: "Apprécier le préavis suffisant et chiffrer la marge perdue",
         paragraphs: [
-          "Le préavis raisonnable s'apprécie à la date de notification de la rupture au regard de l'ancienneté des relations, du volume d'affaires, des investissements dédiés non amortis, d'une éventuelle dépendance économique et des usages professionnels — tout en tenant compte du plafond légal de dix-huit mois prévu par l'article L. 442-1, II du Code de commerce. Il doit faire l'objet d'un écrit clair et non équivoque.",
+          "Le préavis s’apprécie notamment au regard de la durée de la relation, des usages professionnels et des circonstances de la rupture. L’article L. 442-1, II du Code de commerce prévoit qu’un préavis de dix-huit mois met son auteur à l’abri d’une responsabilité fondée sur sa durée insuffisante : il ne s’agit pas d’un délai obligatoire pour toute relation ni d’un plafond contractuel général. La notification doit être écrite et non équivoque.",
           "Le préjudice indemnisable correspond non pas à la perte de chiffre d'affaires, mais au gain manqué durant la période de préavis qui a fait défaut — en règle générale la marge sur coûts variables — justifié par des éléments comptables attestés.",
         ],
       },
@@ -371,7 +371,7 @@ export const INNER_PAGES: InnerPage[] = [
         heading: "Établir ou contester des actes de concurrence déloyale",
         paragraphs: [
           "Sur le fondement de la responsabilité civile délictuelle (article 1240 du Code civil), l'action en concurrence déloyale ou en parasitisme suppose la preuve de faits fautifs caractérisés, d'un préjudice et d'un lien de causalité. Constats de commissaire de justice, pièces commerciales, attestations, données comptables et, lorsque nécessaire, mesures d'instruction in futurum permettent d'étayer la demande.",
-          "En défense, le cabinet accompagne également les entreprises assignées à tort afin de rappeler le principe de la liberté du commerce et de la concurrence ou de justifier une rupture sans préavis en présence d'inexécutions graves du partenaire.",
+          "En défense, le cabinet examine également les demandes dirigées contre l’entreprise : réalité des faits reprochés, liberté du commerce et de la concurrence, justification de la rupture et préjudice invoqué par l’autre partie.",
         ],
       },
     ],
@@ -435,7 +435,7 @@ export const INNER_PAGES: InnerPage[] = [
         heading: "Ce qui conditionne l'efficacité de la demande",
         paragraphs: [
           "Juge de l'évidence, le juge des référés statue au vu de pièces immédiatement lisibles et probantes : la démonstration de l'urgence, du trouble manifestement illicite ou du motif légitime doit ressortir clairement du dossier constitué dès la saisine.",
-          "Le périmètre des demandes doit être calibré avec précision : le juge des référés ne peut trancher une demande qui se heurte à une contestation sérieuse au fond, et une mesure obtenue sur requête non contradictoire doit pouvoir résister à un éventuel référé-rétractation.",
+          "Les conditions dépendent de la mesure demandée. Une provision suppose une obligation qui n’est pas sérieusement contestable. En revanche, le juge peut prescrire certaines mesures conservatoires ou de remise en état, même en présence d’une contestation sérieuse, pour prévenir un dommage imminent ou faire cesser un trouble manifestement illicite (article 873 du Code de procédure civile en matière commerciale). Une ordonnance sur requête peut faire l’objet d’une demande de rétractation.",
         ],
       },
       {
@@ -450,7 +450,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Quelle est la différence entre un référé et une procédure au fond ?",
         answer:
-          "Le référé est une procédure contradictoire accélérée aboutissant à une ordonnance provisoire, exécutoire de plein droit à titre provisoire. Elle n'a pas, au principal, l'autorité de la chose jugée et ne tranche pas les questions relevant d'une contestation sérieuse.",
+          "Le référé permet de solliciter une mesure provisoire dans les cas prévus par les textes, sans jugement définitif sur le fond du litige. Les conditions varient : une provision exige une obligation non sérieusement contestable, tandis que certaines mesures conservatoires restent possibles malgré une contestation. L’ordonnance peut faire l’objet des recours applicables.",
       },
       {
         question: "Comment préserver une preuve avant d'engager un procès ?",
@@ -495,7 +495,7 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Enjeux préalables",
         heading: "Les questions propres aux litiges d'affaires transfrontaliers",
         paragraphs: [
-          "Contrat de distribution, de fourniture ou de cession conclu avec une société étrangère, clause attributive de juridiction ou clause d'arbitrage, pluralité de procédures ou actifs situés hors de France : le cadrage de droit international privé précède toute mise en demeure ou assignation, car il détermine le forum pertinent, les règles de preuve et le budget procédural.",
+          "Contrat de distribution, de fourniture ou de cession conclu avec une société étrangère, clause attributive de juridiction ou clause d'arbitrage, pluralité de procédures ou actifs situés hors de France : le cadrage de droit international privé précède toute mise en demeure ou assignation, car il détermine la juridiction ou le tribunal arbitral à saisir, les règles de preuve et le budget procédural.",
         ],
         points: [
           "Contentieux des contrats commerciaux internationaux (vente, distribution, prestation, cession)",
@@ -508,7 +508,7 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Juges ou arbitres",
         heading: "Juridictions étatiques, arbitrage et médiation internationale",
         paragraphs: [
-          "L'arbitrage permet d'obtenir une sentence définitive dans un cadre confidentiel et neutre, souvent recherché dans les opérations internationales. Les juridictions étatiques — notamment les chambres commerciales internationales à Paris — demeurent quant à elles incontournables en l'absence de convention d'arbitrage ou lorsqu'une mesure provisoire ou conservatoire s'impose.",
+          "L’arbitrage confie le litige à un tribunal arbitral sur le fondement d’une convention. La sentence et les recours ouverts dépendent du régime applicable ; la confidentialité ne doit pas être présumée dans tout arbitrage international et doit être examinée au regard des textes, du règlement choisi et des accords conclus. Les juridictions étatiques conservent leurs attributions, notamment pour certaines mesures provisoires ou d’exécution.",
           "Avant d'introduire une instance, l'existence, la validité et la portée de toute clause compromissoire, de médiation ou d'élection de for sont systématiquement vérifiées afin d'éviter une irrecevabilité ou un déclinatoire de compétence.",
         ],
       },
@@ -578,7 +578,7 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Pratique",
         heading: "Un exercice dédié aux litiges d'entreprises et de dirigeants",
         paragraphs: [
-          "Le cabinet accompagne PME, ETI, groupes, dirigeants, actionnaires et investisseurs dans leurs principaux différends économiques, commerciaux et sociétaires : inexécution contractuelle et impayés, conflits entre associés, responsabilité des dirigeants, contentieux post-acquisition, rupture brutale de relations commerciales et concurrence déloyale, procédures d'urgence et litiges transfrontaliers.",
+          "Le cabinet accompagne entreprises, dirigeants, actionnaires et investisseurs dans leurs principaux différends économiques, commerciaux et sociétaires : inexécution contractuelle et impayés, conflits entre associés, responsabilité des dirigeants, contentieux post-acquisition, rupture brutale de relations commerciales et concurrence déloyale, procédures d'urgence et litiges transfrontaliers.",
           "La représentation devant les juridictions étatiques s'articule avec la pratique des modes alternatifs de règlement des différends — négociation encadrée, médiation, conciliation et arbitrage — afin de retenir la voie la plus cohérente avec les objectifs économiques du client.",
         ],
       },
@@ -586,9 +586,9 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Méthode",
         heading: "Méthode de travail et déontologie",
         paragraphs: [
-          "Un litige d’affaires se conduit avec méthode : diagnostic précis, choix assumés, calendrier tenu. Chaque dossier débute par l’examen des faits et des pièces, avant la définition de la voie procédurale ou amiable retenue.",
+          "Chaque dossier est conduit avec méthode : diagnostic précis, choix assumés, calendrier maîtrisé. L’examen des faits et des pièces précède la définition de la voie procédurale ou amiable retenue.",
           /* [À CONFIRMER] TODO: modalités détaillées d'honoraires à compléter après validation de l'avocat. */
-          "L'ensemble des échanges avec le cabinet est couvert par le secret professionnel de l'avocat. Les modalités d'honoraires sont présentées avant toute intervention.",
+          "Les demandes sont examinées avec discrétion, dans le respect des obligations déontologiques de l’avocat. Les modalités d’honoraires sont présentées avant toute intervention ; l’acceptation du dossier et les éventuels conflits d’intérêts sont vérifiés au préalable.",
         ],
       },
     ],
@@ -596,7 +596,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Quels profils de clients le cabinet accompagne-t-il ?",
         answer:
-          "Des entreprises françaises et étrangères (PME, ETI et groupes), ainsi que des dirigeants, mandataires sociaux, associés, actionnaires et investisseurs confrontés à un précontentieux ou à un contentieux d'affaires.",
+          "Des entreprises, dirigeants, mandataires sociaux, associés, actionnaires et investisseurs confrontés à un différend commercial, sociétaire ou transfrontalier. Les situations sont examinées au regard du périmètre de pratique du cabinet.",
       },
       {
         question: "Où est situé le Cabinet Blexmann Avocats ?",
@@ -638,7 +638,7 @@ export const INNER_PAGES: InnerPage[] = [
         rail: "Droit du travail",
         heading: "Publications externes — droit du travail",
         paragraphs: [
-          "Série en trois volets rédigée par Maître Pierre Blexmann et parue sur la revue juridique en ligne Village de la Justice (avril à juin 2020), consacrée à l'administration de la preuve en matière de discrimination au travail : aménagement légal de la charge de la preuve, recevabilité des modes de preuve et rôle des différents acteurs.",
+          "Ces trois contributions antérieures ont été publiées par Maître Pierre Blexmann sur Village de la Justice en 2020. Consacrées à la preuve de la discrimination au travail, elles témoignent de travaux publiés à cette date et ne présentent pas le droit du travail comme l’activité principale actuelle du cabinet. Leur contenu se lit dans son contexte de publication et ne dispense pas de vérifier le droit applicable aujourd’hui.",
         ],
       },
     ],
@@ -651,7 +651,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Où consulter le texte intégral des articles ?",
         answer:
-          "Chaque article est accessible gratuitement en texte intégral sur le site de Village de la Justice via les liens figurant dans la rubrique ci-dessus.",
+          "Les liens de cette page conduisent aux articles sur le site de Village de la Justice. Leurs conditions d’accès et leur éventuelle actualisation relèvent de cet éditeur externe.",
       },
       {
         question: "D'autres analyses figurent-elles sur le site ?",
@@ -661,7 +661,7 @@ export const INNER_PAGES: InnerPage[] = [
       {
         question: "Peut-on reproduire tout ou partie de ces articles ?",
         answer:
-          "Ces textes sont protégés par le Code de la propriété intellectuelle ; toute reproduction ou représentation suppose l'autorisation préalable de leur auteur et de l'éditeur concerné.",
+          "Ces textes sont protégés par le droit d’auteur. Leur reproduction est soumise aux droits et conditions de l’auteur et de l’éditeur, sous réserve des exceptions légales, notamment la courte citation avec indication de la source.",
       },
     ],
     relatedHeading: "Découvrir également",

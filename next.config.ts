@@ -1,24 +1,23 @@
 import type { NextConfig } from "next";
 
 /**
- * STATIC SITE — no database, no API route, no server code.
+ * Every route is prerendered. `STATIC_EXPORT=1 npm run build` writes the pure
+ * HTML/CSS/JS site to out/. The normal build serves the same static pages in the
+ * managed preview, whose runtime cannot use next start with output: export.
  *
- * Every page is prerendered at build time. To produce the deployable static
- * folder (plain HTML/CSS/JS in `out/`, host it anywhere):
- *
- *     STATIC_EXPORT=1 npm run build
- *
- * A normal `npm run build` prerenders the very same pages and is only used by the
- * preview runtime (`next start` cannot serve an `output: "export"` build).
- *
- * - `images.unoptimized`: the Next.js image optimizer needs a server, so images are
- *   served as-is (they are already compressed JPEGs in /public/images).
- * - Redirects are not available on a static export: the legacy in-page anchors are
- *   handled client-side by `LegacyAnchorRedirect`.
+ * Images use local, pre-generated WebP variants: no image server, database,
+ * third-party form service or dynamic application API is required.
+ * Retired fragment links are handled by LegacyAnchorRedirect because fragments
+ * are never sent to a web server.
  */
 const nextConfig: NextConfig = {
   ...(process.env.STATIC_EXPORT === "1" ? { output: "export" as const } : {}),
-  images: { unoptimized: true },
+  images: {
+    loader: "custom",
+    loaderFile: "./src/lib/static-image-loader.ts",
+    deviceSizes: [480, 768, 960, 1248],
+    imageSizes: [],
+  },
 };
 
 export default nextConfig;

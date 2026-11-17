@@ -1,34 +1,20 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Contact from "@/components/Contact";
-import { OG_IMAGE, SITE } from "@/content/site";
+import { SITE } from "@/content/site";
 
 const CONTACT_TITLE = "Contact | Cabinet Blexmann Avocats à Paris 16ᵉ";
 const CONTACT_DESCRIPTION =
   "Contacter le Cabinet Blexmann Avocats (53 avenue Victor Hugo, 75116 Paris) : formulaire, téléphone et adresse pour exposer votre litige d'affaires.";
 
-export const metadata: Metadata = {
-  title: { absolute: CONTACT_TITLE },
+export const metadata: Metadata = pageMetadata({
+  title: CONTACT_TITLE,
   description: CONTACT_DESCRIPTION,
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: `${SITE.url}/contact`,
-    siteName: SITE.legalName,
-    title: CONTACT_TITLE,
-    description: CONTACT_DESCRIPTION,
-    images: [OG_IMAGE],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: CONTACT_TITLE,
-    description: CONTACT_DESCRIPTION,
-    images: [OG_IMAGE.url],
-  },
-};
+  path: "/contact",
+});
 
 export default function ContactPage() {
   const breadcrumbJsonLd = {

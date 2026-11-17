@@ -1,104 +1,33 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { AlertCircle, Check, ChevronDown, Copy, Mail } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { CONTACT, CTA, SITE } from "@/content/site";
 import { Reveal, Section } from "@/components/ui";
-
-type Fields = {
-  nom: string;
-  email: string;
-  telephone: string;
-  societe: string;
-  sujet: string;
-  message: string;
-  consent: boolean;
-};
-
-type Errors = Partial<Record<keyof Fields, string>>;
-
-const EMPTY: Fields = {
-  nom: "",
-  email: "",
-  telephone: "",
-  societe: "",
-  sujet: "",
-  message: "",
-  consent: false,
-};
-
-/** Capped so the encoded `mailto:` URI remains reliable across desktop and mobile mail clients. */
-const MAX_MESSAGE = 1800;
-
-function isValidPhone(raw: string): boolean {
-  const digits = raw.match(/\d/g)?.length ?? 0;
-  return /^[+()\d\s.-]{6,25}$/.test(raw) && digits >= 6 && digits <= 15;
-}
-
-function validate(values: Fields): Errors {
-  const errors: Errors = {};
-  const nom = values.nom.trim();
-  const email = values.email.trim();
-  const tel = values.telephone.trim();
-  const societe = values.societe.trim();
-  const message = values.message.trim();
-
-  if (nom.length < 2 || nom.length > 120) {
-    errors.nom = "Veuillez indiquer votre nom et votre prénom.";
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 180) {
-    errors.email = "Veuillez indiquer une adresse électronique valide.";
-  }
-  if (tel && !isValidPhone(tel)) {
-    errors.telephone = "Veuillez indiquer un numéro de téléphone valide (au moins 6 chiffres).";
-  }
-  if (societe.length > 160) {
-    errors.societe = "La dénomination saisie est trop longue (160 caractères maximum).";
-  }
-  if (!values.sujet || !CONTACT.subjects.includes(values.sujet as never)) {
-    errors.sujet = "Veuillez sélectionner la nature du dossier.";
-  }
-  if (message.length < 20) {
-    errors.message = "Veuillez décrire brièvement la situation (20 caractères minimum).";
-  } else if (message.length > MAX_MESSAGE) {
-    errors.message = `Votre message dépasse la limite de ${MAX_MESSAGE} caractères pour un envoi par messagerie.`;
-  }
-  if (!values.consent) {
-    errors.consent =
-      "Votre accord au traitement de ces informations est requis pour préparer votre demande.";
-  }
-  return errors;
-}
+import {
+  EMPTY_CONTACT as EMPTY, MAX_MESSAGE, buildContactDraft, isContactSubject,
+  validateContact as validate,
+  type ContactFields as Fields, type ContactErrors as Errors,
+} from "@/lib/contact";
 
 const fieldClass = (invalid: boolean) =>
-  `w-full border-0 border-b bg-transparent px-0 py-3 text-[1rem] text-ink outline-none transition-colors placeholder:text-mute/80 focus:border-gold ${
+  `w-full border-0 border-b bg-transparent px-0 py-3 text-[1rem] text-ink outline-none transition-colors placeholder:text-mute/80 focus:border-bronze ${
     invalid ? "border-red-700/70" : "border-ink/25 hover:border-ink/50"
   }`;
 
-/** Builds the formatted plain-text email body (CRLF line breaks per RFC 6068). */
-function buildMessageBody(values: Fields): string {
-  return [
-    `Nom et prénom : ${values.nom.trim()}`,
-    `Adresse électronique : ${values.email.trim()}`,
-    `Téléphone : ${values.telephone.trim() || "Non renseigné"}`,
-    `Société : ${values.societe.trim() || "Non renseignée"}`,
-    `Nature du dossier : ${values.sujet}`,
-    "",
-    "Situation :",
-    values.message.trim(),
-    "",
-    "—",
-    `Demande préparée depuis ${SITE.domain}. Cet envoi ne crée pas, en soi, de relation avocat-client.`,
-  ].join("\r\n");
+/** Isolated Suspense boundary keeps every page statically exportable while
+ * supporting query changes on client-side navigation as well as initial loading. */
+function SubjectFromUrl({ apply }: { apply: (candidate: unknown) => void }) {
+  const params = useSearchParams();
+  useEffect(() => { apply(params.get("objet")); }, [params, apply]);
+  return null;
 }
 
-/** Pure static `mailto:` link — no backend, no database, no third-party service. */
-function buildMailto(values: Fields): string {
-  const subject = `[${SITE.domain}] ${values.sujet} — ${values.nom.trim()}`;
-  const body = buildMessageBody(values);
-  return `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
+const subscribeToHydration = () => () => {};
+const clientSnapshot = () => true;
+const serverSnapshot = () => false;
 
 export default function Contact({ mode = "section" }: { mode?: "section" | "page" }) {
   const [values, setValues] = useState<Fields>(EMPTY);
@@ -108,25 +37,22 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
   const [feedback, setFeedback] = useState("");
   const [mailtoHref, setMailtoHref] = useState("");
   const [preparedBody, setPreparedBody] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "manual">("idle");
+  const [copyRequired, setCopyRequired] = useState(false);
+  const [preparedSubject, setPreparedSubject] = useState("");
+  const clientValidation = useSyncExternalStore(subscribeToHydration, clientSnapshot, serverSnapshot);
 
-  // Pre-selection from `/contact?objet=...` or in-page `blexmann:select-subject` events.
+  const applySubject = useCallback((candidate: unknown) => {
+    if (!isContactSubject(candidate)) return;
+    setValues((prev) => ({ ...prev, sujet: candidate }));
+    setErrors((prev) => ({ ...prev, sujet: undefined }));
+  }, []);
+
   useEffect(() => {
-    const applySubject = (candidate: string | null | undefined) => {
-      if (candidate && CONTACT.subjects.includes(candidate as never)) {
-        setValues((prev) => ({ ...prev, sujet: candidate }));
-        setErrors((prev) => ({ ...prev, sujet: undefined }));
-      }
-    };
-
-    applySubject(new URLSearchParams(window.location.search).get("objet"));
-
-    const onSelect = (event: Event) => {
-      applySubject((event as CustomEvent<string>).detail);
-    };
+    const onSelect = (event: Event) => applySubject((event as CustomEvent<unknown>).detail);
     window.addEventListener("blexmann:select-subject", onSelect);
     return () => window.removeEventListener("blexmann:select-subject", onSelect);
-  }, []);
+  }, [applySubject]);
 
   const set = <K extends keyof Fields>(key: K, value: Fields[K]) => {
     const next = { ...values, [key]: value };
@@ -138,7 +64,7 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
     if (status !== "idle") {
       setStatus("idle");
       setFeedback("");
-      setCopied(false);
+      setCopyStatus("idle");
     }
   };
 
@@ -167,7 +93,7 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
       setStatus("error");
       setFeedback(
         invalidKeys.length === 1
-          ? "Un champ obligatoire doit être complété ou corrigé avant de préparer votre demande."
+          ? "Un champ doit être complété ou corrigé avant de préparer votre demande."
           : `${invalidKeys.length} champs doivent être complétés ou corrigés avant de préparer votre demande.`,
       );
       document.getElementById(`f-${invalidKeys[0]}`)?.focus();
@@ -180,24 +106,29 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
       return;
     }
 
-    const link = buildMailto(values);
-    setMailtoHref(link);
-    setPreparedBody(buildMessageBody(values));
-    setCopied(false);
+    const draft = buildContactDraft(values);
+    setMailtoHref(draft.url);
+    setPreparedBody(draft.body);
+    setPreparedSubject(draft.subject);
+    setCopyRequired(draft.copyRequired);
+    setCopyStatus("idle");
     setStatus("mailto");
-    setFeedback(
-      "Votre demande est préparée dans votre messagerie électronique : vérifiez le courriel pré-rempli puis validez son envoi pour l’adresser au cabinet.",
-    );
-    window.location.href = link;
+    setFeedback(draft.copyRequired
+      ? "Votre demande est prête. Pour éviter de tronquer un texte long, le lien ouvre seulement le destinataire et l’objet : copiez le texte complet ci-dessous dans votre messagerie avant de l’envoyer."
+      : "Votre demande est prête. Si votre messagerie s’est ouverte, vérifiez le courriel pré-rempli puis envoyez-le. Aucun courriel n’a été envoyé depuis ce site.");
+    try { window.location.href = draft.url; } catch { /* The complete text and a manual link remain available. */ }
   }
 
   async function copyPreparedMessage() {
-    if (!preparedBody) return;
     try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
       await navigator.clipboard.writeText(preparedBody);
-      setCopied(true);
+      setCopyStatus("copied");
     } catch {
-      setCopied(false);
+      const text = document.getElementById("prepared-message") as HTMLTextAreaElement | null;
+      text?.focus();
+      text?.select();
+      setCopyStatus("manual");
     }
   }
 
@@ -212,6 +143,7 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
       index={isPage ? "01" : CONTACT.index}
       label={CONTACT.eyebrow}
     >
+      <Suspense fallback={null}><SubjectFromUrl apply={applySubject} /></Suspense>
       <div className="grid grid-cols-12 gap-x-6 gap-y-14">
         {/* Left — heading + verified coordinates */}
         <div className="col-span-12 lg:col-span-4">
@@ -262,7 +194,7 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
                 </dd>
               </div>
               <div>
-                <dt className="eyebrow text-mute">Rattachement</dt>
+                <dt className="eyebrow text-mute">Inscription professionnelle</dt>
                 {/* [À CONFIRMER] TODO: numéro de toque (E0140) à valider avec l'avocat. */}
                 <dd className="mt-2 font-display text-lg text-navy">
                   {SITE.barreau} · Toque {SITE.toque}
@@ -286,9 +218,13 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
         <div className="col-span-12 lg:col-span-7 lg:col-start-6">
           <Reveal delay={0.08}>
             <form
+              id="formulaire-contact"
+              action={`mailto:${SITE.email}`}
+              method="post"
+              encType="text/plain"
               onSubmit={onSubmit}
-              noValidate
-              aria-describedby="form-note"
+              noValidate={clientValidation}
+              aria-describedby="form-intro form-note"
               className="bg-paper/60 p-6 sm:p-9"
             >
               {isPage ? (
@@ -296,10 +232,12 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
               ) : (
                 <p className="eyebrow text-bronze">{CTA.primary}</p>
               )}
-              <p className="mt-3 text-sm leading-relaxed text-mute">
-                Les champs suivis d&apos;un astérisque (*) sont obligatoires. Aucun document
-                sensible n&apos;est requis lors de ce premier contact.
+              <p id="form-intro" className="mt-3 text-sm leading-relaxed text-mute">
+                Le bouton prépare un courriel dans votre messagerie personnelle : vous devrez en
+                valider l’envoi. Champs obligatoires marqués d’un astérisque (*). N’adressez aucun
+                document sensible lors de ce premier contact.
               </p>
+              <noscript><p className="mt-4 text-sm text-navy">Sans JavaScript, vous pouvez écrire directement à <a href={`mailto:${SITE.email}`} className="underline">{SITE.email}</a> ou appeler le <a href={SITE.phoneHref} className="underline">{SITE.phone}</a>.</p></noscript>
 
               <div aria-live="polite" className="mt-5">
                 {status === "mailto" && (
@@ -318,13 +256,13 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
                       <p className="text-xs text-mute">
                         Si aucune fenêtre ne s&apos;est ouverte,{" "}
                         <a href={mailtoHref} className="link-underline text-navy">
-                          cliquez ici pour ouvrir votre messagerie
+                          ouvrez votre messagerie avec le destinataire et l’objet
                         </a>
                         , écrivez directement à{" "}
                         <a href={`mailto:${SITE.email}`} className="link-underline text-navy">
                           {SITE.email}
                         </a>{" "}
-                        ou, en cas d&apos;échéance imminente, appelez le{" "}
+                        ou appelez le{" "}
                         <a href={SITE.phoneHref} className="link-underline text-navy">
                           {SITE.phone}
                         </a>
@@ -335,7 +273,7 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
                         onClick={copyPreparedMessage}
                         className="eyebrow inline-flex cursor-pointer items-center gap-2 border border-ink/25 px-3 py-1.5 text-[0.625rem] text-navy transition-colors hover:border-navy hover:bg-navy hover:text-ivory"
                       >
-                        {copied ? (
+                        {copyStatus === "copied" ? (
                           <>
                             <Check size={12} strokeWidth={1.75} aria-hidden="true" />
                             Texte copié
@@ -347,6 +285,13 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
                           </>
                         )}
                       </button>
+                      <p className="text-xs text-mute" role="status">
+                        {copyStatus === "copied" ? "Texte copié. Collez-le dans votre messagerie." : copyStatus === "manual" ? "La copie automatique n’est pas disponible. Le texte est sélectionné ci-dessous : copiez-le manuellement." : copyRequired ? "Le texte complet est conservé dans l’aperçu ci-dessous, sans enregistrement sur le site." : "Vous pouvez aussi copier le texte dans votre service de courrier habituel."}
+                      </p>
+                      <p className="break-words text-xs"><strong>Destinataire :</strong> {SITE.email}<br /><strong>Objet :</strong> {preparedSubject}</p>
+                      <label htmlFor="prepared-message" className="block text-xs font-medium">Texte de la demande à copier</label>
+                      <textarea id="prepared-message" readOnly rows={7} value={preparedBody}
+                        className="w-full resize-y border border-rule bg-paper/50 p-3 text-sm leading-relaxed text-ink" />
                     </div>
                   </div>
                 )}
@@ -531,7 +476,7 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
                     className={`${fieldClass(!!err("message"))} resize-y`}
                   />
                   <p id="h-message" className="mt-2 text-xs text-mute">
-                    {values.message.trim().length} caractères — 20 minimum.
+                    {values.message.length} / {MAX_MESSAGE} caractères — 20 minimum.
                   </p>
                   {err("message") && (
                     <p id="e-message" className="mt-2 text-xs text-red-800">
@@ -571,15 +516,14 @@ export default function Contact({ mode = "section" }: { mode?: "section" | "page
                       htmlFor="f-consent"
                       className="cursor-pointer text-sm leading-relaxed text-ink/85"
                     >
-                      J&apos;accepte que les informations renseignées soient utilisées par le
-                      cabinet pour examiner ma demande, conformément à la{" "}
+                      J’ai pris connaissance de la{" "}
                       <Link
                         href="/politique-de-confidentialite"
                         className="link-underline text-navy underline-offset-2"
                       >
                         politique de confidentialité
                       </Link>
-                      . *
+                      {" "}et souhaite préparer ma demande de contact. *
                     </label>
                   </div>
                   {err("consent") && (

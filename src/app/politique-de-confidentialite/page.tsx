@@ -1,146 +1,134 @@
 import type { Metadata } from "next";
 import LegalArticle from "@/components/LegalArticle";
-import { OG_IMAGE, SITE } from "@/content/site";
+import { SITE } from "@/content/site";
+import { pageMetadata } from "@/lib/seo";
 
 const TITLE = "Politique de confidentialité";
-const DESCRIPTION =
-  "Politique de confidentialité du Cabinet Blexmann Avocats : traitement des demandes de contact, bases légales RGPD, secret professionnel et vos droits.";
-
-export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: { canonical: "/politique-de-confidentialite" },
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: `${SITE.url}/politique-de-confidentialite`,
-    siteName: SITE.legalName,
-    title: `${TITLE} — ${SITE.legalName}`,
-    description: DESCRIPTION,
-    images: [OG_IMAGE],
-  },
-};
+export const metadata: Metadata = pageMetadata({
+  title: `${TITLE} — ${SITE.name}`,
+  description:
+    "Données de contact, préparation du courriel, secret professionnel et droits RGPD : la politique de confidentialité du Cabinet Blexmann Avocats.",
+  path: "/politique-de-confidentialite",
+});
 
 export default function PolitiqueConfidentialitePage() {
   return (
     <LegalArticle title={TITLE} slug="politique-de-confidentialite">
       <h2>1. Responsable du traitement</h2>
       <p>
-        Le responsable du traitement des données personnelles communiquées au cabinet est&nbsp;:
-        <br />
-        <strong>{SITE.legalName}</strong>, {SITE.address.street}, {SITE.address.postalCode}{" "}
-        {SITE.address.locality} — {SITE.registration}
-        <br />
-        Contact&nbsp;:{" "}
-        <a href={`mailto:${SITE.email}`} className="link-underline">
-          {SITE.email}
-        </a>{" "}
-        —{" "}
-        <a href={SITE.phoneHref} className="link-underline">
-          {SITE.phone}
-        </a>
+        Maître Pierre Blexmann, exerçant à titre individuel sous la dénomination
+        <strong> {SITE.name}</strong>, est responsable des traitements liés aux demandes qui lui
+        sont adressées : {SITE.address.street}, {SITE.address.postalCode} {SITE.address.locality}
+        &nbsp;— {SITE.registration}.
+      </p>
+      <p>
+        Pour toute question : <a href={`mailto:${SITE.email}`} className="link-underline">{SITE.email}</a>
+        {" "}ou <a href={SITE.phoneHref} className="link-underline">{SITE.phone}</a>.
       </p>
 
-      <h2>2. Données communiquées</h2>
+      <h2>2. Ce que fait le formulaire</h2>
       <p>
-        Lors d&apos;une prise de contact via le formulaire du Site, seules les informations que vous
-        renseignez sont utilisées&nbsp;: nom et prénom, adresse électronique, numéro de téléphone
-        (facultatif), société (facultative), nature du dossier et exposé synthétique de la
-        situation.
+        Les champs servent uniquement à préparer, dans votre navigateur, un courriel destiné au
+        cabinet : nom et prénom, adresse électronique, téléphone et société facultatifs, nature du
+        dossier et résumé de la situation. Le contenu n’est ni transmis à un serveur de formulaire,
+        ni conservé dans une base de données du Site, ni enregistré dans son stockage local.
       </p>
       <p>
-        Aucune donnée particulière au sens de l&apos;article&nbsp;9 du RGPD ni pièce confidentielle
-        n&apos;est sollicitée à ce stade. Nous vous invitons à ne pas en faire figurer dans votre
-        premier message.
+        Le bouton « Préparer ma demande » sollicite l’ouverture de votre logiciel de messagerie.
+        Vous devez vérifier et envoyer vous-même le courriel. En l’absence de messagerie configurée,
+        vous pouvez copier le texte préparé dans votre service habituel. Le traitement et la
+        conservation de ce brouillon par votre fournisseur de messagerie relèvent de ses propres
+        conditions.
+      </p>
+      <p>
+        Ne joignez aucun document sensible lors du premier contact et limitez le résumé aux faits
+        nécessaires. Les données particulières visées à l’article 9 du RGPD, notamment les données
+        de santé, ne sont pas demandées à ce stade.
       </p>
 
       <h2>3. Finalités et bases légales</h2>
+      {/* [À CONFIRMER] TODO: valider le registre des traitements et les bases par finalité avec
+          l’avocat. La case du formulaire confirme la lecture de cette notice : elle n’est pas
+          présentée comme une base de consentement cumulée avec le contrat et l’intérêt légitime. */}
       <ul>
         <li>
-          <strong>Examen de votre demande, vérification de l&apos;absence de conflit d&apos;intérêts et réponse à votre sollicitation</strong>
-          &nbsp;: exécution de mesures précontractuelles prises à votre demande
-          (article&nbsp;6.1.b du RGPD), intérêt légitime du cabinet à répondre aux demandes reçues
-          (article&nbsp;6.1.f du RGPD) et consentement exprimé lors de l&apos;envoi du formulaire
-          (article&nbsp;6.1.a du RGPD).
+          <strong>Étudier une mission demandée pour votre propre compte</strong> : mesures
+          précontractuelles prises à votre demande (article 6, paragraphe 1, b du RGPD).
+        </li>
+        <li>
+          <strong>Répondre à une sollicitation professionnelle, notamment pour une société</strong> :
+          intérêt légitime du cabinet à examiner et à suivre les demandes reçues (article 6,
+          paragraphe 1, f du RGPD).
         </li>
       </ul>
       <p>
-        L&apos;envoi d&apos;une demande ne crée pas, en soi, de relation avocat-client&nbsp;;
-        celle-ci suppose l&apos;acceptation expresse du dossier par le cabinet. Les échanges avec un
-        avocat sont couverts par le secret professionnel dans les conditions prévues par
-        l&apos;article&nbsp;66-5 de la loi du 31&nbsp;décembre&nbsp;1971 et le Règlement intérieur
-        national (RIN).
+        La case à cocher du formulaire atteste que vous avez pris connaissance de ces informations ;
+        elle ne crée pas de relation avocat-client. Celle-ci suppose l’acceptation expresse du
+        dossier après les vérifications nécessaires, notamment l’absence de conflit d’intérêts.
       </p>
 
-      <h2>4. Site statique et destinataires</h2>
+      <h2>4. Destinataires et hébergement</h2>
       <p>
-        Le Site est conçu en architecture statique&nbsp;: il ne comporte ni base de données, ni
-        compte utilisateur, ni service tiers de collecte de formulaire. Votre demande est préparée
-        localement dans votre messagerie électronique, puis adressée à votre initiative au
-        cabinet&nbsp;; aucune donnée issue du formulaire n&apos;est conservée sur ce Site.
+        Les courriels effectivement reçus sont destinés à Maître Pierre Blexmann et aux seules
+        personnes habilitées à en connaître. Ils sont examinés dans le respect des obligations
+        déontologiques de l’avocat, notamment du secret professionnel dans les conditions prévues
+        par l’article 66-5 de la loi du 31 décembre 1971 et le Règlement intérieur national.
       </p>
+      {/* [À CONFIRMER] TODO: confirmer les prestataires de messagerie, leurs contrats, lieux de
+          traitement et éventuels transferts hors UE ; ne pas affirmer une localisation européenne. */}
       <p>
-        Les courriels adressés au cabinet sont destinés exclusivement à Maître Pierre Blexmann et,
-        le cas échéant, aux personnes habilitées au sein du cabinet. Les données ne font
-        l&apos;objet d&apos;aucune cession ni exploitation commerciale. L&apos;hébergement statique
-        du Site est assuré par Vercel Inc.
+        Le Site statique est hébergé par Vercel Inc. L’hébergeur peut traiter des données techniques
+        de connexion nécessaires à la fourniture et à la sécurité du service. Les champs du
+        formulaire ne lui sont pas envoyés. Aucun service tiers de collecte de formulaire ni outil
+        publicitaire n’est intégré à cette version.
       </p>
 
-      <h2>5. Durée de conservation</h2>
+      <h2>5. Conservation</h2>
+      {/* [À CONFIRMER] TODO: fixer les durées chiffrées et le calendrier d’effacement/archivage
+          des courriels et journaux techniques ; aucune purge automatique n’est mise en œuvre par le Site. */}
       <p>
-        Les données relatives à une demande de contact sont conservées pendant la durée strictement
-        nécessaire à son examen et aux échanges précontractuels, puis supprimées lorsqu&apos;aucune
-        suite n&apos;est donnée. En cas d&apos;ouverture d&apos;un dossier, elles sont conservées
-        conformément aux durées légales de prescription et aux règles déontologiques de la
-        profession d&apos;avocat.
+        Le Site ne conserve pas le texte préparé. Après envoi par votre messagerie, la conservation
+        du courriel par le cabinet doit rester limitée au temps nécessaire à l’examen de la demande
+        et au suivi des échanges. En cas d’ouverture d’un dossier, les obligations professionnelles,
+        les délais de prescription et les nécessités d’archivage doivent être pris en compte. Vous
+        pouvez contacter le cabinet pour connaître les modalités applicables à votre demande.
       </p>
 
       <h2>6. Vos droits</h2>
       <p>
-        Conformément au RGPD et à la loi «&nbsp;Informatique et Libertés&nbsp;», vous disposez
-        d&apos;un droit d&apos;accès, de rectification, d&apos;effacement, de limitation du
-        traitement, d&apos;opposition et, lorsque applicable, de portabilité de vos données, ainsi
-        que du droit de retirer votre consentement à tout moment sans porter atteinte à la licéité
-        du traitement antérieur. Vous pouvez également définir des directives relatives au sort de
-        vos données après votre décès.
+        Dans les conditions prévues par le RGPD, vous disposez de droits d’accès, de rectification,
+        d’effacement et de limitation du traitement. Le droit d’opposition s’applique notamment aux
+        traitements fondés sur l’intérêt légitime ; le droit à la portabilité dépend de la base
+        légale et des modalités du traitement. Le cas échéant, un consentement donné pour une autre
+        finalité peut être retiré. Vous pouvez également définir des directives relatives au sort
+        de vos données après votre décès.
       </p>
       <p>
-        Pour exercer ces droits, adressez votre demande à{" "}
-        <a href={`mailto:${SITE.email}`} className="link-underline">
-          {SITE.email}
-        </a>{" "}
-        ou par courrier postal au {SITE.address.street}, {SITE.address.postalCode}{" "}
-        {SITE.address.locality}. Un justificatif d&apos;identité pourra être demandé uniquement en
-        cas de doute raisonnable sur l&apos;identité du demandeur.
+        Pour exercer vos droits, écrivez à <a href={`mailto:${SITE.email}`} className="link-underline">{SITE.email}</a>
+        {" "}ou au {SITE.address.street}, {SITE.address.postalCode} {SITE.address.locality}. Un
+        justificatif d’identité n’est susceptible d’être demandé qu’en cas de doute raisonnable
+        sur l’identité du demandeur.
       </p>
       <p>
-        Vous disposez enfin du droit d&apos;introduire une réclamation auprès de la Commission
-        nationale de l&apos;informatique et des libertés (CNIL) — 3&nbsp;place de Fontenoy,
-        TSA&nbsp;80715, 75334 Paris Cedex&nbsp;07 —{" "}
-        <a
-          href="https://www.cnil.fr"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="link-underline"
-        >
-          www.cnil.fr
-          <span className="sr-only"> (nouvel onglet)</span>
-        </a>
-        .
+        Vous pouvez adresser une réclamation à la Commission nationale de l’informatique et des
+        libertés : <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer" className="link-underline">
+          www.cnil.fr<span className="sr-only"> (nouvel onglet)</span>
+        </a>.
       </p>
 
-      <h2>7. Cookies</h2>
+      <h2>7. Cookies et stockage</h2>
       <p>
-        Le Site n&apos;installe aucun cookie publicitaire ni traceur de mesure d&apos;audience.
-        Seuls les éléments techniques strictement nécessaires à l&apos;affichage des pages peuvent
-        être utilisés.
+        Aucun cookie publicitaire, outil de mesure d’audience ou stockage persistant des champs du
+        formulaire n’est intégré au Site. Des mécanismes techniques de l’hébergeur peuvent être
+        nécessaires au fonctionnement et à la sécurité de la navigation.
       </p>
 
-      <h2>8. Sécurité</h2>
+      <h2>8. Navigation et courrier électronique</h2>
       <p>
-        Le cabinet met en œuvre des mesures techniques et organisationnelles appropriées (dont le
-        chiffrement HTTPS des communications) afin de protéger les informations échangées contre la
-        perte, l&apos;altération ou l&apos;accès non autorisé.
+        HTTPS protège les échanges de navigation avec le Site. Il ne constitue pas une garantie de
+        chiffrement de bout en bout des courriels envoyés depuis votre messagerie. Ce formulaire
+        n’est ni une messagerie sécurisée ni un espace de transfert de documents. Si des pièces
+        sensibles sont nécessaires, le cabinet conviendra avec vous d’un mode de communication adapté.
       </p>
     </LegalArticle>
   );

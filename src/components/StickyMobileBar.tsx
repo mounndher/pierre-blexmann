@@ -10,12 +10,13 @@ import { CTA, SITE } from "@/content/site";
  */
 export default function StickyMobileBar() {
   const pathname = usePathname();
-  if (pathname === "/contact") return null;
+  if (pathname === "/contact" || pathname === "/contact/") return null;
 
-  const contactHref = pathname === "/" ? "#contact" : "/contact";
+  const contactHref = pathname === "/" ? "#contact" : "/contact#formulaire-contact";
 
   return (
     <div
+      data-contact-bar
       role="region"
       aria-label="Contact rapide"
       className="fixed inset-x-0 bottom-0 z-40 border-t border-rule bg-ivory/95 backdrop-blur-md md:hidden"

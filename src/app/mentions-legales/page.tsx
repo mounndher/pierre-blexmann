@@ -1,26 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 import LegalArticle from "@/components/LegalArticle";
-import { OG_IMAGE, SITE } from "@/content/site";
+import { SITE } from "@/content/site";
 
 const TITLE = "Mentions légales";
 const DESCRIPTION =
   "Mentions légales du Cabinet Blexmann Avocats, avocat inscrit au Barreau de Paris, 53 avenue Victor Hugo, 75116 Paris.";
 
-export const metadata: Metadata = {
-  title: TITLE,
+export const metadata: Metadata = pageMetadata({
+  title: `${TITLE} — ${SITE.name}`,
   description: DESCRIPTION,
-  alternates: { canonical: "/mentions-legales" },
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: `${SITE.url}/mentions-legales`,
-    siteName: SITE.legalName,
-    title: `${TITLE} — ${SITE.legalName}`,
-    description: DESCRIPTION,
-    images: [OG_IMAGE],
-  },
-};
+  path: "/mentions-legales",
+});
 
 export default function MentionsLegalesPage() {
   return (
@@ -123,13 +115,12 @@ export default function MentionsLegalesPage() {
 
       <h2>5. Absence de relation avocat-client</h2>
       <p>
-        L&apos;utilisation du Site ou l&apos;envoi d&apos;un message au cabinet via le formulaire de
-        contact ou par courrier électronique ne crée pas, en soi, de relation avocat-client. Une
+        L&apos;utilisation du Site ou l&apos;envoi d&apos;un message au cabinet depuis la messagerie de l’utilisateur ou par courrier électronique ne crée pas, en soi, de relation avocat-client. Une
         telle relation ne peut être établie qu&apos;après acceptation expresse du dossier par le
         cabinet, après vérification notamment de l&apos;absence de conflit d&apos;intérêts.
       </p>
 
-      <h2>6. Honoraires</h2>
+      <h2 id="honoraires">6. Honoraires</h2>
       {/* [À CONFIRMER] TODO: détail des modalités d'honoraires à valider par l'avocat
           (convention d'honoraires écrite, temps passé, forfait, honoraire de résultat éventuel). */}
       <p>
@@ -173,8 +164,7 @@ export default function MentionsLegalesPage() {
       <h2>11. Cookies</h2>
       <p>
         Le Site ne dépose aucun cookie publicitaire ni traceur de mesure d&apos;audience sans
-        consentement préalable. Seuls les éléments techniques strictement nécessaires à son
-        fonctionnement peuvent être utilisés.
+        votre consentement préalable. Aucun traceur de mesure d’audience ni cookie publicitaire n’est intégré dans cette version statique.
       </p>
 
       <h2>12. Médiation de la consommation</h2>

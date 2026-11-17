@@ -12,6 +12,8 @@ export type ExternalPublication = {
   venue: string;
   publishedDate: string;
   isoDate: string;
+  modifiedDate?: string;
+  modifiedIsoDate?: string;
   title: string;
   author: string;
   excerpt: string;
@@ -36,8 +38,10 @@ export const EXTERNAL_PUBLICATIONS: ExternalPublication[] = [
     id: "village-justice-discrimination-2",
     status: "Publication externe",
     venue: "Village de la Justice",
-    publishedDate: "26 mai 2020",
-    isoDate: "2020-05-26",
+    publishedDate: "8 mai 2020",
+    isoDate: "2020-05-08",
+    modifiedDate: "26 mai 2020",
+    modifiedIsoDate: "2020-05-26",
     title:
       "Comment prouver la discrimination dans le cadre des relations de travail ? (2e partie)",
     author: "Pierre Blexmann, avocat",

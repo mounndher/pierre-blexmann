@@ -21,6 +21,9 @@ export function ExternalPublicationsList() {
                 <time dateTime={pub.isoDate} className="mt-1 block text-xs text-mute">
                   {pub.publishedDate}
                 </time>
+                {pub.modifiedDate && (
+                  <p className="mt-1 text-xs text-mute">Modifié le <time dateTime={pub.modifiedIsoDate}>{pub.modifiedDate}</time></p>
+                )}
               </div>
 
               <div className="col-span-12 sm:col-span-7">
@@ -76,19 +79,20 @@ export function ExternalPublicationsList() {
  */
 export default function Actualites() {
   return (
-    <Section id="publications" index="04" label="Publications" tone="paper">
+    <Section id="publications" index="05" label="Publications" tone="paper">
       <div className="grid grid-cols-12 gap-x-6 gap-y-10">
         <Reveal className="col-span-12 lg:col-span-6">
           <h2 id="publications-title" className="display-lg font-display text-navy">
-            Publications externes — droit du travail
+            Publications externes
           </h2>
         </Reveal>
         <Reveal delay={0.1} className="col-span-12 lg:col-span-5 lg:col-start-8">
           <div className="rule-double pt-7">
             <p className="eyebrow text-bronze">Note éditoriale</p>
             <p className="mt-5 text-sm leading-relaxed text-mute">
-              Contenus à portée strictement informative. Ils ne constituent ni une consultation
-              juridique ni un conseil personnalisé.
+              Contributions publiées en 2020 sur la preuve en droit du travail. Elles sont présentées
+              comme travaux antérieurs, non comme description de l’activité principale actuelle du cabinet.
+              Contenus à portée strictement informative.
             </p>
           </div>
         </Reveal>

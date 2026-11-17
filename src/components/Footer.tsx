@@ -53,6 +53,7 @@ export default function Footer() {
                 <li key={exp.id}>
                   <Link
                     href={exp.href}
+                    prefetch={false}
                     className="link-underline text-sm text-ivory/75 transition-colors hover:text-ivory"
                   >
                     {exp.shortLabel}
@@ -69,6 +70,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    prefetch={false}
                     className="link-underline text-sm text-ivory/75 transition-colors hover:text-ivory"
                   >
                     {item.label}
@@ -91,7 +93,7 @@ export default function Footer() {
             </Link>
             {/* [À CONFIRMER] TODO: modalités d'honoraires à valider par l'avocat. */}
             <p className="mt-6 max-w-[30ch] text-xs leading-relaxed text-ivory/65">
-              Les modalités d&apos;honoraires sont présentées avant toute intervention.
+              <Link href="/mentions-legales#honoraires" className="link-underline">Informations relatives aux honoraires</Link>
             </p>
           </div>
         </div>
@@ -106,7 +108,7 @@ export default function Footer() {
           </p>
           <div className="mt-6 flex flex-col gap-3 text-xs text-ivory/60 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              © {year} {SITE.legalName} — {SITE.barreau} · {SITE.registration}
+              © {year} {SITE.legalName} · {SITE.registration}
             </p>
             <p className="flex flex-wrap items-center gap-x-5 gap-y-2">
               <Link href="/mentions-legales" className="link-underline hover:text-ivory">

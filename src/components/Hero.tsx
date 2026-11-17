@@ -120,10 +120,11 @@ export default function Hero() {
         {/* Right — the navy buckram cover, with the vertical spine */}
         <div className="relative col-span-12 order-1 min-h-[42vh] overflow-hidden bg-navy lg:order-2 lg:col-span-5 lg:min-h-[calc(100vh-5.5rem)] xl:col-span-5">
           <Image
-            src="/images/hero-facade.jpg"
-            alt="Façade haussmannienne en pierre de taille à Paris 16ᵉ, à proximité du 53 avenue Victor Hugo où exerce le Cabinet Blexmann Avocats"
+            src="/images/hero-facade.webp"
+            alt="Façade en pierre de taille et balcons en fer forgé — architecture parisienne, visuel d’illustration"
             fill
             priority
+            fetchPriority="high"
             sizes="(max-width: 1024px) 100vw, 42vw"
             className="object-cover object-center opacity-[0.62] mix-blend-luminosity"
           />

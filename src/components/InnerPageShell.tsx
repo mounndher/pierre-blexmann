@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
+import FaqSection from "@/components/FaqSection";
+import { pageMetadata } from "@/lib/seo";
 import Footer from "@/components/Footer";
 import { ExternalPublicationsList } from "@/components/Actualites";
 import { Reveal, Section } from "@/components/ui";
-import { CABINET_FACTS, CTA, OG_IMAGE, SITE } from "@/content/site";
+import { CABINET_FACTS, CTA, SITE } from "@/content/site";
 import type { InnerPage } from "@/content/pages";
 
 /**
@@ -14,30 +16,11 @@ import type { InnerPage } from "@/content/pages";
  * and preserves OG/Twitter image assets.
  */
 export function innerPageMetadata(page: InnerPage): Metadata {
-  return {
-    title: { absolute: page.title },
-    description: page.description,
-    alternates: { canonical: `/${page.slug}` },
-    openGraph: {
-      type: "website",
-      locale: "fr_FR",
-      url: `${SITE.url}/${page.slug}`,
-      siteName: SITE.legalName,
-      title: page.title,
-      description: page.description,
-      images: [OG_IMAGE],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: page.title,
-      description: page.description,
-      images: [OG_IMAGE.url],
-    },
-  };
+  return pageMetadata({ title: page.title, description: page.description, path: `/${page.slug}` });
 }
 
 export default function InnerPageShell({ page }: { page: InnerPage }) {
-  const contactUrl = `/contact?objet=${encodeURIComponent(page.contactSubject)}`;
+  const contactUrl = `/contact?objet=${encodeURIComponent(page.contactSubject)}#formulaire-contact`;
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -58,33 +41,12 @@ export default function InnerPageShell({ page }: { page: InnerPage }) {
     ],
   };
 
-  const faqJsonLd =
-    page.faqs.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: page.faqs.map((faq) => ({
-            "@type": "Question",
-            name: faq.question,
-            acceptedAnswer: { "@type": "Answer", text: faq.answer },
-          })),
-          url: `${SITE.url}/${page.slug}`,
-          inLanguage: "fr-FR",
-        }
-      : null;
-
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
       <a
         href="#main"
         className="eyebrow sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-navy focus:px-4 focus:py-3 focus:text-ivory"
@@ -116,8 +78,8 @@ export default function InnerPageShell({ page }: { page: InnerPage }) {
         {/* Hero band: single H1 + lead + contextual CTAs */}
         <section aria-labelledby="page-title" className="bg-ivory">
           <div className="mx-auto w-full max-w-[92rem] px-5 pb-14 pt-12 sm:px-8 lg:px-12 lg:pb-20 lg:pt-16">
-            <div className="grid grid-cols-12 gap-x-8 gap-y-12">
-              <div className={page.kind === "cabinet" ? "col-span-12 lg:col-span-7" : "col-span-12"}>
+            <div className="grid grid-cols-12 gap-x-4 gap-y-12 sm:gap-x-8">
+              <div className={page.kind === "cabinet" ? "col-span-12 min-w-0 lg:col-span-7" : "col-span-12 min-w-0"}>
                 <p className="eyebrow text-bronze">
                   {SITE.name} — {SITE.tagline}, {SITE.address.locality} 16ᵉ
                 </p>
@@ -173,8 +135,8 @@ export default function InnerPageShell({ page }: { page: InnerPage }) {
                   <figure>
                     <div className="relative aspect-[4/5] overflow-hidden bg-navy">
                       <Image
-                        src="/images/cabinet-salon.jpg"
-                        alt="Salon de réception parisien aux boiseries bleu nuit et parquet à chevrons — Cabinet Blexmann Avocats, Paris 16ᵉ"
+                        src="/images/cabinet-salon.webp"
+                        alt="Salon aux boiseries bleu nuit et parquet à chevrons — visuel d’illustration, non représentatif des bureaux du cabinet"
                         fill
                         loading="lazy"
                         sizes="(max-width: 1024px) 100vw, 38vw"
@@ -182,7 +144,7 @@ export default function InnerPageShell({ page }: { page: InnerPage }) {
                       />
                     </div>
                     <figcaption className="eyebrow mt-3 text-mute">
-                      {SITE.address.locality} 16ᵉ
+                      Visuel d’illustration
                     </figcaption>
                   </figure>
                 </div>
@@ -243,39 +205,7 @@ export default function InnerPageShell({ page }: { page: InnerPage }) {
           );
         })}
 
-        {/* FAQ */}
-        {page.faqs.length > 0 && (
-          <Section id="faq" labelledBy="faq-title" index="FAQ" label="Questions fréquentes" tone="paper">
-            <Reveal>
-              <h2 id="faq-title" className="display-md font-display text-navy">
-                Questions fréquentes
-              </h2>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <div className="rule-double mt-8 border-b border-rule">
-                {page.faqs.map((faq) => (
-                  <details
-                    key={faq.question}
-                    className="group border-t border-rule first:border-t-0"
-                  >
-                    <summary className="flex cursor-pointer list-none items-baseline justify-between gap-6 py-5 font-display text-[1.15rem] leading-snug text-navy transition-colors hover:text-bronze">
-                      <span>{faq.question}</span>
-                      <span
-                        aria-hidden="true"
-                        className="shrink-0 font-display text-xl text-bronze transition-transform duration-300 group-open:rotate-45"
-                      >
-                        +
-                      </span>
-                    </summary>
-                    <p className="measure pb-6 text-[1rem] leading-[1.75] text-ink/80">
-                      {faq.answer}
-                    </p>
-                  </details>
-                ))}
-              </div>
-            </Reveal>
-          </Section>
-        )}
+        <FaqSection questions={page.faqs} path={`/${page.slug}`} />
 
         {/* Internal links + final CTA */}
         <Section id="suite" labelledBy="suite-title" index="→" label="Pour aller plus loin">
@@ -312,7 +242,7 @@ export default function InnerPageShell({ page }: { page: InnerPage }) {
               </h2>
               <p className="measure mt-5 text-[1.0625rem] leading-[1.75] text-ink/80">
                 Quelques lignes sur les faits, les parties concernées et les échéances connues
-                suffisent pour engager un premier échange confidentiel.
+                suffisent pour préparer votre demande. Le courriel n’est adressé au cabinet qu’après votre validation dans la messagerie.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 <Link

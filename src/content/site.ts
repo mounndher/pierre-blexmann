@@ -43,9 +43,9 @@ export const SITE = {
 /** Shared Open Graph image so inner routes inherit rich social previews. */
 export const OG_IMAGE = {
   url: "/images/hero-facade.jpg",
-  width: 1536,
-  height: 1024,
-  alt: "Façade haussmannienne à Paris 16ᵉ, à proximité du 53 avenue Victor Hugo — Cabinet Blexmann Avocats",
+  width: 1248,
+  height: 832,
+  alt: "Architecture parisienne en pierre de taille — visuel d’illustration du Cabinet Blexmann Avocats",
 } as const;
 
 /** Primary and secondary CTAs — consistent across every page. */
@@ -54,7 +54,7 @@ export const CTA = {
   secondary: "Voir les domaines d'intervention",
   /** [À CONFIRMER] TODO: confirmer la possibilité de rendez-vous en visioconférence ou par téléphone. */
   call: "Appeler le cabinet",
-  heroNote: "Premier échange confidentiel. Quelques lignes sur les faits suffisent.",
+  heroNote: "Votre demande est examinée avec discrétion, dans le respect des obligations déontologiques de l’avocat.",
 } as const;
 
 /** Top-level navigation items (Domaines exposes all 7 practice-area pages). */
@@ -112,7 +112,7 @@ export const EXPERTISES: Expertise[] = [
     index: "01",
     domain: "Contentieux commercial et contractuel",
     shortLabel: "Contentieux commercial",
-    title: "Un contrat inexécuté coûte bien plus que son montant.",
+    title: "Un contrat inexécuté engage aussi votre trésorerie et votre activité.",
     problem:
       "Impayé persistant, livraison non conforme, prestation interrompue ou résiliation contestée : le manquement d'un partenaire pèse immédiatement sur la trésorerie et l'exploitation. Sans réaction structurée, le préjudice s'aggrave et votre position s'affaiblit.",
     intervention:
@@ -186,9 +186,9 @@ export const EXPERTISES: Expertise[] = [
     domain: "Rupture brutale et concurrence déloyale",
     shortLabel: "Rupture brutale & concurrence",
     title:
-      "Un partenaire écarté sans préavis, une clientèle détournée : cela se démontre et se répare.",
+      "Rupture d’une relation d’affaires ou clientèle détournée : établir les faits et mesurer le préjudice.",
     problem:
-      "Relation commerciale établie interrompue sans préavis écrit suffisant, détournement de clientèle, dénigrement ou désorganisation : ces pratiques engagent la responsabilité de leur auteur dès lors que les éléments de preuve sont réunis à temps.",
+      "Une relation commerciale interrompue sans préavis adapté, un détournement de clientèle ou des actes de dénigrement peuvent déstabiliser l’entreprise. La qualification des faits, les preuves et leurs conséquences économiques doivent être examinées ensemble.",
     intervention:
       "Évaluation du préavis exigible, constitution du dossier probatoire et chiffrage de la marge perdue en vue d'une indemnisation — ou défense de l'entreprise à laquelle une rupture ou un acte déloyal est imputé.",
     points: [
@@ -226,7 +226,7 @@ export const EXPERTISES: Expertise[] = [
     problem:
       "Contrat soumis à un droit étranger, cocontractant établi hors de France ou décision à faire exécuter dans un autre État : la dimension internationale soulève des questions de compétence, de loi applicable et d'exequatur déterminantes pour l'issue du dossier.",
     intervention:
-      "Vérification des clauses attributives de juridiction ou d'arbitrage, détermination du droit applicable, arbitrage entre juridiction étatique et modes alternatifs, et coordination des écritures sur les fors concernés.",
+      "Vérification des clauses de juridiction ou d’arbitrage, détermination du droit applicable et comparaison des voies possibles, en tenant compte des pays concernés et des conditions d’exécution de la décision.",
     points: [
       "Litiges commerciaux et contractuels transfrontaliers",
       "Compétence juridictionnelle, clauses compromissoires et loi applicable",
@@ -321,11 +321,11 @@ export const WHY: {
     {
       index: "01",
       title: "Implication directe",
-      body: "Un interlocuteur identifié qui connaît les faits, les pièces et le calendrier.",
+      body: "Un dossier examiné au regard de ses faits, de ses pièces et de son calendrier.",
       /** [À CONFIRMER] TODO: valider avec Maître Blexmann la formulation exacte sur l'implication
        *  directe « de la première consultation à l'audience » avant de la publier telle quelle. */
       detail:
-        "Chaque dossier fait l’objet d’un suivi personnel par l’avocat qui en assure l’analyse et la conduite procédurale.",
+        "La relation avec le cabinet repose sur des échanges directs avec Maître Blexmann et une compréhension précise de votre situation.",
     },
     {
       index: "02",
@@ -361,11 +361,11 @@ export const CABINET_FACTS = [
 ] as const;
 
 export const CONTACT = {
-  index: "05",
+  index: "06",
   eyebrow: "Contact",
   title: "Commençons par les faits.",
   pageH1: "Contacter le Cabinet Blexmann Avocats",
-  body: "Quelques lignes suffisent pour engager un premier échange : le contexte du différend, les parties concernées et vos éventuelles échéances procédurales. Après réception de votre demande, le cabinet en prend connaissance et vous indique les suites envisageables.",
+  body: "Exposez brièvement le différend, les parties concernées et les échéances connues. Le formulaire prépare un courriel dans votre propre messagerie ; vous en vérifiez le contenu et décidez de l’envoyer. Après réception, le cabinet vous indique les suites envisageables.",
   formNote:
     "Votre demande est préparée dans votre messagerie électronique, puis adressée au cabinet ; aucune donnée n’est conservée sur ce site. L’envoi d’une demande ne crée pas, en soi, de relation avocat-client : celle-ci suppose l’acceptation expresse du dossier par le cabinet, après vérification notamment de l’absence de conflit d’intérêts.",
   /** [À CONFIRMER] TODO: liste des natures de dossier à valider avec l'avocat. */

@@ -51,8 +51,8 @@ export default function ApprochePourquoi() {
         <div className="grid grid-cols-12 overflow-hidden bg-navy text-ivory">
           <div className="relative col-span-12 min-h-[220px] lg:col-span-4 lg:min-h-[340px]">
             <Image
-              src="/images/cabinet-desk.jpg"
-              alt="Bureau de travail du Cabinet Blexmann Avocats à Paris : dossiers juridiques, stylo et lampe en laiton"
+              src="/images/cabinet-desk.webp"
+              alt="Dossiers juridiques, stylo et lampe en laiton sur un bureau — composition d’illustration"
               fill
               loading="lazy"
               sizes="(max-width: 1024px) 100vw, 34vw"

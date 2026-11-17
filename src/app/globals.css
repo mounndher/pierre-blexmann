@@ -62,9 +62,26 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-gold);
-    outline-offset: 3px;
+    outline: 2px solid var(--color-bronze);
+    outline-offset: 4px;
     border-radius: 1px;
+  }
+
+  :is(.bg-navy, .bg-navytint) :focus-visible {
+    outline-color: var(--color-goldsoft);
+  }
+
+  #formulaire-contact, [id] {
+    scroll-margin-top: 6rem;
+  }
+
+  /* Fix intrinsic sizing rather than hiding horizontal overflow. */
+  .grid > * {
+    min-width: 0;
+  }
+
+  body:has(#contact input:focus, #contact select:focus, #contact textarea:focus) [data-contact-bar] {
+    display: none;
   }
 
   input,
@@ -133,6 +150,19 @@
   .vertical-rl {
     writing-mode: vertical-rl;
   }
+}
+
+@keyframes dossier-enter {
+  from { opacity: 0.5; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+details[open] > .dossier-panel {
+  animation: dossier-enter 0.32s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  details[open] > .dossier-panel { animation: none; }
 }
 
 /* Fine paper grain, so the ivory reads as a sheet rather than a flat fill */

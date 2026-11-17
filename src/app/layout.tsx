@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
+import { pageMetadata } from "@/lib/seo";
 import type { ReactNode } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
-import { OG_IMAGE, SITE } from "@/content/site";
+import { SITE } from "@/content/site";
 import StickyMobileBar from "@/components/StickyMobileBar";
 import LegacyAnchorRedirect from "@/components/LegacyAnchorRedirect";
 import "./globals.css";
@@ -21,14 +22,6 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-/**
- * Mark preview deployments (`*.vercel.app` or `VERCEL_ENV=preview`) as `noindex`
- * so they never compete with the canonical production domain.
- */
-const IS_PREVIEW =
-  process.env.VERCEL_ENV === "preview" ||
-  (process.env.VERCEL_URL?.endsWith("vercel.app") ?? false);
-
 /** Strictly under 60 characters (56 chars). */
 const TITLE = "Avocat contentieux des affaires Paris | Blexmann Avocats";
 /** Strictly under 155 characters (144 chars). */
@@ -36,34 +29,13 @@ const DESCRIPTION =
   "Cabinet Blexmann Avocats, Barreau de Paris : litiges commerciaux, conflits entre associés, responsabilité des dirigeants et référés à Paris 16ᵉ.";
 
 export const metadata: Metadata = {
+  ...pageMetadata({ title: TITLE, description: DESCRIPTION, path: "/" }),
   metadataBase: new URL(SITE.url),
-  title: {
-    default: TITLE,
-    template: `%s — ${SITE.legalName}`,
-  },
-  description: DESCRIPTION,
-  applicationName: SITE.legalName,
-  authors: [{ name: SITE.legalName }],
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    locale: "fr_FR",
-    url: SITE.url,
-    siteName: SITE.legalName,
-    title: TITLE,
-    description: DESCRIPTION,
-    images: [OG_IMAGE],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: TITLE,
-    description: DESCRIPTION,
-    images: [OG_IMAGE.url],
-  },
-  robots: {
-    index: !IS_PREVIEW,
-    follow: !IS_PREVIEW,
-    googleBot: { index: !IS_PREVIEW, follow: !IS_PREVIEW, "max-image-preview": "large" },
+  applicationName: SITE.name,
+  authors: [{ name: SITE.name }],
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }, { url: "/favicon.ico", sizes: "32x32" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
 };
 
