@@ -1,63 +1,56 @@
 import type { Metadata } from "next";
-import { OG_IMAGE, SITE } from "@/content/site";
+import { SITE } from "@/content/site";
 
-type DeploymentEnvironment = {
-  VERCEL_ENV?: string;
-  VERCEL_URL?: string;
-  NEXT_PUBLIC_DEPLOYMENT_ENV?: string;
+const DEFAULT_OG_IMAGE = {
+  url: "/images/hero-facade.jpg",
+  width: 1536,
+  height: 1024,
+  alt: "Façade haussmannienne à Paris 16ᵉ — Blexmann Avocats, contentieux des affaires",
+} as const;
+
+type PageMetadataInput = {
+  /** Exact <title> string (rendered without extra template suffix). */
+  title: string;
+  /** Concise meta description (< 160 characters). */
+  description: string;
+  /** Route path starting with "/" (e.g. "/contentieux-commercial"). */
+  path: string;
+  type?: "website" | "article";
 };
 
-/** A production Vercel build also has a *.vercel.app technical URL: it is NOT a preview. */
-export function isPreviewDeployment(env: DeploymentEnvironment): boolean {
-  const stage = env.NEXT_PUBLIC_DEPLOYMENT_ENV ?? env.VERCEL_ENV;
-  if (stage === "production") return false;
-  if (stage === "preview" || stage === "development") return true;
-  return env.VERCEL_URL?.endsWith(".vercel.app") ?? false;
-}
-
-export const IS_PREVIEW = isPreviewDeployment({
-  VERCEL_ENV: process.env.VERCEL_ENV,
-  VERCEL_URL: process.env.VERCEL_URL,
-  NEXT_PUBLIC_DEPLOYMENT_ENV: process.env.NEXT_PUBLIC_DEPLOYMENT_ENV,
-});
-
-/** One metadata source for canonical, social previews and preview robots on every page. */
-export function pageMetadata({
+export function buildPageMetadata({
   title,
   description,
   path,
-  noindex = false,
-}: {
-  title: string;
-  description: string;
-  path: string;
-  noindex?: boolean;
-}): Metadata {
-  const indexable = !IS_PREVIEW && !noindex;
-  const url = new URL(path, `${SITE.url}/`).toString();
+  type = "website",
+}: PageMetadataInput): Metadata {
+  const canonicalUrl = path === "/" ? SITE.url : `${SITE.url}${path}`;
+
   return {
     title: { absolute: title },
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: path },
     openGraph: {
-      type: "website",
-      locale: "fr_FR",
-      url,
-      siteName: SITE.name,
       title,
       description,
-      images: [OG_IMAGE],
+      url: canonicalUrl,
+      siteName: SITE.name,
+      locale: "fr_FR",
+      type,
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [OG_IMAGE.url],
+      images: [DEFAULT_OG_IMAGE.url],
     },
     robots: {
-      index: indexable,
-      follow: indexable,
-      googleBot: { index: indexable, follow: indexable, "max-image-preview": "large" },
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
     },
   };
 }
+
+export { DEFAULT_OG_IMAGE };

@@ -12,8 +12,8 @@
   /* Champagne darkened for TEXT on ivory — #B49A70 only reaches 2.4:1 on paper */
   --color-bronze: #7a6136;
   --color-ink: #292d32;
-  /* Darkened to achieve > 5.6:1 WCAG AA contrast on both ivory and paper */
-  --color-mute: #595852;
+  /* Warm stone grey tuned for comfortable WCAG AA contrast on both ivory and paper */
+  --color-mute: #5d5c56;
 
   --font-display: var(--font-playfair), "Iowan Old Style", Georgia, serif;
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
@@ -38,6 +38,7 @@
     font-family: var(--font-sans);
     font-size: 1.0625rem;
     line-height: 1.7;
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern" 1;
@@ -45,7 +46,8 @@
 
   h1,
   h2,
-  h3 {
+  h3,
+  h4 {
     font-family: var(--font-display);
     font-weight: 400;
     letter-spacing: -0.02em;
@@ -62,26 +64,9 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-bronze);
-    outline-offset: 4px;
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
     border-radius: 1px;
-  }
-
-  :is(.bg-navy, .bg-navytint) :focus-visible {
-    outline-color: var(--color-goldsoft);
-  }
-
-  #formulaire-contact, [id] {
-    scroll-margin-top: 6rem;
-  }
-
-  /* Fix intrinsic sizing rather than hiding horizontal overflow. */
-  .grid > * {
-    min-width: 0;
-  }
-
-  body:has(#contact input:focus, #contact select:focus, #contact textarea:focus) [data-contact-bar] {
-    display: none;
   }
 
   input,
@@ -89,10 +74,6 @@
   select,
   button {
     font: inherit;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
   }
 }
 
@@ -150,19 +131,6 @@
   .vertical-rl {
     writing-mode: vertical-rl;
   }
-}
-
-@keyframes dossier-enter {
-  from { opacity: 0.5; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-details[open] > .dossier-panel {
-  animation: dossier-enter 0.32s ease-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  details[open] > .dossier-panel { animation: none; }
 }
 
 /* Fine paper grain, so the ivory reads as a sheet rather than a flat fill */

@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { pageMetadata } from "@/lib/seo";
 import type { ReactNode } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
 import { SITE } from "@/content/site";
-import StickyMobileBar from "@/components/StickyMobileBar";
-import LegacyAnchorRedirect from "@/components/LegacyAnchorRedirect";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo";
+import MobileCtaBar from "@/components/MobileCtaBar";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -22,20 +21,39 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-/** Strictly under 60 characters (56 chars). */
 const TITLE = "Avocat contentieux des affaires Paris | Blexmann Avocats";
-/** Strictly under 155 characters (144 chars). */
 const DESCRIPTION =
-  "Cabinet Blexmann Avocats, Barreau de Paris : litiges commerciaux, conflits entre associés, responsabilité des dirigeants et référés à Paris 16ᵉ.";
+  "Blexmann Avocats, avocat en contentieux des affaires à Paris 16ᵉ : litiges commerciaux, conflits entre associés, responsabilité des dirigeants et référés.";
 
 export const metadata: Metadata = {
-  ...pageMetadata({ title: TITLE, description: DESCRIPTION, path: "/" }),
   metadataBase: new URL(SITE.url),
+  title: {
+    default: TITLE,
+    template: `%s | ${SITE.name}`,
+  },
+  description: DESCRIPTION,
   applicationName: SITE.name,
   authors: [{ name: SITE.name }],
-  icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }, { url: "/favicon.ico", sizes: "32x32" }],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    url: SITE.url,
+    siteName: SITE.name,
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE.url],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
 };
 
@@ -45,17 +63,87 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+/**
+ * Site-wide Schema.org @graph using strictly verified factual information.
+ * TODO: Verify with lawyer: Phone, Toque number, SIREN, Founding year 2013.
+ */
+const siteGraphJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["LegalService", "Attorney"],
+      "@id": `${SITE.url}/#organization`,
+      name: SITE.name,
+      url: SITE.url,
+      image: `${SITE.url}${DEFAULT_OG_IMAGE.url}`,
+      description: DESCRIPTION,
+      foundingDate: String(SITE.founded),
+      telephone: SITE.phoneE164,
+      email: SITE.email,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: SITE.address.street,
+        postalCode: SITE.address.postalCode,
+        addressLocality: SITE.address.locality,
+        addressCountry: SITE.address.countryCode,
+      },
+      areaServed: [
+        { "@type": "City", name: "Paris" },
+        { "@type": "AdministrativeArea", name: "Île-de-France" },
+        { "@type": "Country", name: "France" },
+      ],
+      knowsAbout: [
+        "Contentieux des affaires",
+        "Contentieux commercial et contractuel",
+        "Conflits entre associés et actionnaires",
+        "Responsabilité des dirigeants",
+        "Contentieux post-acquisition",
+        "Rupture brutale des relations commerciales et concurrence déloyale",
+        "Référé et procédures d’urgence",
+        "Contentieux commercial international",
+        "Modes alternatifs de règlement des différends",
+      ],
+      founder: { "@id": `${SITE.url}/#founder` },
+    },
+    {
+      "@type": "Person",
+      "@id": `${SITE.url}/#founder`,
+      name: "Pierre Blexmann",
+      jobTitle: "Avocat au Barreau de Paris",
+      worksFor: { "@id": `${SITE.url}/#organization` },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE.url}/#website`,
+      url: SITE.url,
+      name: SITE.name,
+      inLanguage: "fr-FR",
+      publisher: { "@id": `${SITE.url}/#organization` },
+    },
+  ],
+};
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={`${playfair.variable} ${inter.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteGraphJsonLd) }}
+        />
+      </head>
       <body className="min-h-screen bg-ivory text-ink antialiased">
-        {/* Entrance animations set inline opacity:0 — keep content visible if JS is disabled */}
         <noscript>
           <style>{`[style*="opacity:0"]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
-        <LegacyAnchorRedirect />
+        <a
+          href="#main"
+          className="eyebrow sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-navy focus:px-4 focus:py-3 focus:text-ivory"
+        >
+          Aller au contenu
+        </a>
         {children}
-        <StickyMobileBar />
+        <MobileCtaBar />
       </body>
     </html>
   );

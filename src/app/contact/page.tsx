@@ -1,65 +1,130 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo";
-import Link from "next/link";
+import AuditComment from "@/components/AuditComment";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Contact from "@/components/Contact";
-import { SITE } from "@/content/site";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import ContactForm from "@/components/ContactForm";
+import FaqList from "@/components/FaqList";
+import { CONTACT, SITE } from "@/content/site";
+import { buildPageMetadata } from "@/lib/seo";
 
-const CONTACT_TITLE = "Contact | Cabinet Blexmann Avocats à Paris 16ᵉ";
-const CONTACT_DESCRIPTION =
-  "Contacter le Cabinet Blexmann Avocats (53 avenue Victor Hugo, 75116 Paris) : formulaire, téléphone et adresse pour exposer votre litige d'affaires.";
+const TITLE = "Contact — Blexmann Avocats | Paris 16ᵉ";
+const DESCRIPTION =
+  "Contacter Blexmann Avocats à Paris 16ᵉ (53 avenue Victor Hugo) : rendez-vous au cabinet, en visioconférence ou par téléphone en contentieux des affaires.";
+const PATH = "/contact";
 
-export const metadata: Metadata = pageMetadata({
-  title: CONTACT_TITLE,
-  description: CONTACT_DESCRIPTION,
-  path: "/contact",
+export const metadata: Metadata = buildPageMetadata({
+  title: TITLE,
+  description: DESCRIPTION,
+  path: PATH,
+  type: "website",
 });
 
-export default function ContactPage() {
-  const breadcrumbJsonLd = {
+const FAQS = [
+  {
+    q: "Comment fonctionne la préparation de ma demande ?",
+    a: "Un clic sur « Préparer ma demande » ouvre votre application de messagerie électronique avec un courriel pré-rempli à destination de Blexmann Avocats, afin de vous permettre de le relire et de l’adresser directement depuis votre boîte de réception. Merci de ne joindre aucune pièce sensible lors de ce premier envoi. Votre demande est traitée avec discrétion et dans le respect du secret professionnel.",
+  },
+  {
+    q: "Quelles modalités de rendez-vous sont proposées ?",
+    a: "Les consultations peuvent se tenir au cabinet (Paris, 53 avenue Victor Hugo, 75116), en visioconférence ou par téléphone, selon vos disponibilités et la nature du dossier.",
+  },
+  {
+    q: "L’envoi d’une demande crée-t-il automatiquement une relation avocat-client ?",
+    a: "Non. L’envoi d’un courriel de prise de contact ne crée pas, en soi, de relation avocat-client : celle-ci débute uniquement après l’acceptation expresse du dossier par le cabinet, à l’issue des vérifications d’usage — notamment l’absence de conflit d’intérêts — et la conclusion d’une convention d’honoraires.",
+  },
+] as const;
+
+export default function Page() {
+  const faqJsonLd = {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE.url },
-      { "@type": "ListItem", position: 2, name: "Contact", item: `${SITE.url}/contact` },
-    ],
+    "@type": "FAQPage",
+    mainEntity: FAQS.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: { "@type": "Answer", text: faq.a },
+    })),
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <a
-        href="#main"
-        className="eyebrow sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-navy focus:px-4 focus:py-3 focus:text-ivory"
-      >
-        Aller au contenu
-      </a>
       <Header />
-
       <main id="main" className="bg-ivory">
-        <nav aria-label="Fil d'Ariane" className="bg-ivory">
-          <ol className="mx-auto flex w-full max-w-[92rem] flex-wrap items-center gap-x-2.5 gap-y-1 px-5 py-3 sm:px-8 lg:px-12">
-            <li>
-              <Link href="/" className="eyebrow link-underline text-mute hover:text-navy">
-                Accueil
-              </Link>
-            </li>
-            <li aria-hidden="true" className="text-xs text-mute">
-              /
-            </li>
-            <li>
-              <span aria-current="page" className="eyebrow text-navy">
-                Contact
-              </span>
-            </li>
-          </ol>
-        </nav>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <div className="mx-auto w-full max-w-[92rem] px-5 pb-24 pt-10 sm:px-8 lg:px-12 lg:pb-32 lg:pt-14">
+          <Breadcrumbs items={[{ label: "Accueil", href: "/" }, { label: "Contact" }]} />
+          <p className="eyebrow mt-10 text-bronze">{SITE.name}</p>
+          <h1 className="display-lg mt-6 max-w-[22ch] font-display text-navy">
+            Contacter le cabinet
+          </h1>
+          <div aria-hidden="true" className="mt-8 h-px w-full max-w-[28rem] bg-gold" />
+          <p className="measure mt-8 text-[1.0625rem] leading-[1.75] text-ink/85">{CONTACT.body}</p>
 
-        <Contact mode="page" />
+          <div className="mt-12 grid grid-cols-12 gap-x-6 gap-y-12">
+            <div className="col-span-12 lg:col-span-4">
+              <dl className="rule-double space-y-6 pt-7">
+                <div>
+                  <dt className="eyebrow text-mute">Adresse</dt>
+                  <dd className="mt-2 font-display text-lg leading-snug text-navy">
+                    {SITE.name}
+                    <br />
+                    {SITE.address.street}
+                    <br />
+                    {SITE.address.postalCode} {SITE.address.locality}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="eyebrow text-mute">Téléphone</dt>
+                  <dd className="mt-2">
+                    {/* TODO: Verify with lawyer: Phone */}
+                    <AuditComment text="TODO: Verify with lawyer: Phone" />
+                    <a
+                      href={SITE.phoneHref}
+                      className="link-underline font-display text-lg text-navy hover:text-bronze"
+                    >
+                      {SITE.phone}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="eyebrow text-mute">Adresse électronique</dt>
+                  <dd className="mt-2">
+                    <a
+                      href={`mailto:${SITE.email}`}
+                      className="link-underline break-all font-display text-lg text-navy hover:text-bronze"
+                    >
+                      {SITE.email}
+                    </a>
+                  </dd>
+                </div>
+                <div>
+                  <dt className="eyebrow text-mute">Modalités de rendez-vous</dt>
+                  <dd className="mt-2">
+                    <ul className="space-y-1.5 font-display text-lg leading-snug text-navy">
+                      {SITE.appointmentOptions.map((option) => (
+                        <li key={option} className="flex items-center gap-3">
+                          <span aria-hidden="true" className="h-px w-4 shrink-0 bg-gold" />
+                          <span>{option}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div className="col-span-12 lg:col-span-7 lg:col-start-6">
+              <ContactForm formId="c" />
+            </div>
+          </div>
+
+          <h2 className="mt-20 font-display text-[1.6rem] leading-snug text-navy">
+            Questions pratiques avant votre envoi
+          </h2>
+          <FaqList items={FAQS} maxWidth />
+        </div>
       </main>
       <Footer />
     </>

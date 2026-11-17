@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
@@ -56,11 +55,10 @@ export function DrawRule({
 
 /**
  * Editorial section shell: the index rail hangs outside the text measure,
- * giving the page its asymmetric print grid.
+ * which is what gives the page its asymmetric print grid.
  */
 export function Section({
   id,
-  labelledBy,
   index,
   label,
   children,
@@ -68,7 +66,6 @@ export function Section({
   className = "",
 }: {
   id?: string;
-  labelledBy?: string;
   index: string;
   label: string;
   children: ReactNode;
@@ -82,28 +79,23 @@ export function Section({
         ? "bg-paper text-ink"
         : "bg-ivory text-ink";
   const railColor = tone === "navy" ? "text-goldsoft" : "text-bronze";
-  const railLabel = tone === "navy" ? "text-ivory/65" : "text-mute";
+  const railLabel = tone === "navy" ? "text-ivory/60" : "text-mute";
   const borderColor = tone === "navy" ? "border-ivory/15" : "border-rule";
-  const resolvedLabelledBy = labelledBy ?? (id ? `${id}-title` : undefined);
 
   return (
     <section
       id={id}
       className={`relative border-t ${borderColor} ${bg} ${className}`}
-      aria-labelledby={resolvedLabelledBy}
+      aria-labelledby={id ? `${id}-title` : undefined}
     >
       <div className="mx-auto w-full max-w-[92rem] px-5 sm:px-8 lg:px-12">
         <div className="grid grid-cols-12 gap-x-6 lg:gap-x-10">
           <div className="col-span-12 pt-10 md:col-span-3 md:pt-16 lg:col-span-2">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 md:sticky md:top-28 md:block">
-              <div
-                aria-hidden="true"
-                className={`font-display text-2xl italic leading-none ${railColor}`}
-              >
+              <div className={`font-display text-2xl italic leading-none ${railColor}`}>
                 {index}
               </div>
               <div
-                aria-hidden="true"
                 className={`h-px w-8 md:my-3 md:h-8 md:w-px ${
                   tone === "navy" ? "bg-goldsoft/50" : "bg-gold"
                 }`}
@@ -117,51 +109,5 @@ export function Section({
         </div>
       </div>
     </section>
-  );
-}
-
-type CTAProps = {
-  href: string;
-  children: ReactNode;
-  variant?: "solid" | "outline" | "light";
-  className?: string;
-  onClick?: () => void;
-};
-
-export function Cta({ href, children, variant = "solid", className = "", onClick }: CTAProps) {
-  const base =
-    "group inline-flex items-center justify-center gap-3 px-7 py-4 eyebrow transition-colors duration-300";
-  const styles = {
-    solid: "bg-navy text-ivory hover:bg-navytint",
-    outline: "border border-ink/30 text-ink hover:border-ink hover:bg-ink hover:text-ivory",
-    light: "bg-ivory text-navy hover:bg-goldsoft",
-  }[variant];
-
-  const isInternal = href.startsWith("/");
-
-  if (isInternal) {
-    return (
-      <Link href={href} onClick={onClick} className={`${base} ${styles} ${className}`}>
-        {children}
-        <span
-          aria-hidden="true"
-          className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-        >
-          →
-        </span>
-      </Link>
-    );
-  }
-
-  return (
-    <a href={href} onClick={onClick} className={`${base} ${styles} ${className}`}>
-      {children}
-      <span
-        aria-hidden="true"
-        className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-      >
-        →
-      </span>
-    </a>
   );
 }
